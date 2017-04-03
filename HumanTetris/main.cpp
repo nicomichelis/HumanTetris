@@ -1,32 +1,3 @@
-////////////////////////////////////////////////////////////////////////
-//	From http://nehe.gamedev.net/ "Legacy Tutorials"
-//
-//	You can find several tutorials with help (in english),
-//	please explore them...
-////////////////////////////////////////////////////////////////////////
-//
-//  Esercitazione sulle OPENGL n. 1
-//
-//  1)  capire il codice (l'help si attiva con tasto F1 e comprende
-//      le funzioni OpenGL
-//  2)  attivare la rotella del mouse
-//  3)  cambiare qualcosa: ad esempio i colori del cubo o dei punti
-//	4)  cambiare il fron e back clipping planes per "tagliare" il cubo
-//  5)  cambiare qualcosa d'altro: ad esempio trasformare il
-//      cubo in piramide tronca (o, se siete abili, in cilindro)
-//
-////////////////////////////////////////////////////////////////////////
-//	OPENGL tutorial n. 1
-//
-//	1) understand the code, and use the F1 key for the help (the microsoft
-//     visual studio has the help for OpenGL, but NOT for DirectX !
-//	2) activate the mouse wheel
-//	3) change something, for example the cube or the points colors
-//	4) change the front and back clipping planes to "crop" the cube
-//	5) change something other: for example transform the cube in a pyramid
-//	   or (more difficult) in a cylinder.
-///////////////////////////////////////////////////////////////////////
-
 //	Cosi` vede la rotella del mouse ...
 //	needed to operate the mouse wheel..
 #if(_WIN32_WINNT < 0x400)
@@ -268,11 +239,11 @@ GLvoid DrawGLScene(GLvoid)
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
 	glPushMatrix();
-	glTranslatef(0.0, 0.0, -5.0);
+	glTranslatef(0.0, 0.0, -15.0);
 	glRotatef(CS.RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(CS.RotY_a, 0.0, 1.0, 0.0);
 	//	QUADS: every 4 vertex OpenGL draw a 4 edge polygon.
-	glBegin(GL_QUADS);
+	glBegin(GL_TRIANGLES);
 	// Front Face
 	glColor3f(1.0, 0.0, 0.0);
 	glVertex3f(-1.0, -1.0, 1.0);	// Bottom Left
