@@ -11,6 +11,8 @@
 #include <gl\glu.h>       // OPENGL
 #include <stdio.h>        // io standard
 #include <stdlib.h>       // librerie standard
+#include "vertex.h"
+#include "model.h"
 // resources (menu, icons...)
 
 //  LIBRERIE OPENGL e multimendia
@@ -239,20 +241,46 @@ GLvoid DrawGLScene(GLvoid)
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
 	glPushMatrix();
-	glTranslatef(0.0, 0.0, -15.0);
+	glTranslatef(0.0, 0.0, -5.0);
 	glRotatef(CS.RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(CS.RotY_a, 0.0, 1.0, 0.0);
 	//	QUADS: every 4 vertex OpenGL draw a 4 edge polygon.
-	glBegin(GL_TRIANGLES);
+
+
+
+	glBegin(GL_QUADS);
 	// Front Face
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(-1.0, -1.0, 1.0);	// Bottom Left
+	Vertex v(-1.0, -1.0, 1.0);
+	v.SetColor(1.0, 0.0, 0.0);
+	glColor3f(v.r, v.g, v.b);
+	glVertex3f(v.x, v.y, v.z);	// Bottom Left
 	glColor3f(1.0, 0.0, 0.0);
 	glVertex3f(1.0, -1.0, 1.0);	// Bottom Right
 	glColor3f(1.0, 0.0, 0.0);
 	glVertex3f(0.5, 1.0, 0.5);	// Top Right
 	glColor3f(1.0, 0.0, 0.0);
 	glVertex3f(-0.5, 1.0, 0.5);	// Top Left
+	glEnd();
+	
+
+	Vertex l(-10.0, 0.0, 0.0);
+	l.SetColor(1.0, 0.0, 0.0);
+	Vertex m(-10.0, -10.0, 10.0);
+	m.SetColor(1.0, 0.0, 0.0);
+	Vertex n(0.0, 0.0, 0.0);
+	n.SetColor(1.0, 0.0, 0.0);
+	Vertex o(0.0, 10.0, 0.0);
+	o.SetColor(0.0, 1.0, 0.0);
+	//MyModel Model;
+	//Model.DrawTriangle(l,m,n);
+	//Triangle a(l, m, n);
+	//a.Draw();
+	Rect a(l, m, n, o);
+	a.Draw();
+
+
+
+	glBegin(GL_QUADS);
 								// Back Face
 	glColor3f(1.0, 0.0, 0.0);
 	glVertex3f(-1.0, -1.0, -1.0);	// Bottom Right

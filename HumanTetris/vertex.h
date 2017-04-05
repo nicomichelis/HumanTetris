@@ -1,4 +1,7 @@
 #pragma once
+#include <Windows.h>
+#include <gl\gl.h>
+#include <gl\glu.h>
 
 class Vertex {
 public:
@@ -28,5 +31,54 @@ public:
 		r = rr;
 		g = gg;
 		b = bb;
+	}
+};
+
+class Triangle {
+public:
+	Vertex a, b, c;
+
+	Triangle() {}
+	Triangle(Vertex x, Vertex y, Vertex z) {
+		a = x;
+		b = y;
+		c = z;
+	}
+	void Draw()
+	{
+		glBegin(GL_TRIANGLES);
+		glColor3f(a.r, a.g, a.b);
+		glVertex3f(a.x, a.y, a.z);
+		glColor3f(b.r, b.g, b.b);
+		glVertex3f(b.x, b.y, b.z);
+		glColor3f(c.r, c.g, c.b);
+		glVertex3f(c.x, c.y, c.z);
+		glEnd();
+	}
+};
+
+class Rect {
+public:
+	Vertex a, b, c, d;
+
+	Rect() { }
+	Rect(Vertex x, Vertex y, Vertex z, Vertex w) {
+		a = x;
+		b = y;
+		c = z;
+		d = w;
+	}
+	void Draw()
+	{
+		glBegin(GL_QUADS);
+		glColor3f(a.r, a.g, a.b);
+		glVertex3f(a.x, a.y, a.z);
+		glColor3f(b.r, b.g, b.b);
+		glVertex3f(b.x, b.y, b.z);
+		glColor3f(c.r, c.g, c.b);
+		glVertex3f(c.x, c.y, c.z);
+		glColor3f(d.r, d.g, d.b);
+		glVertex3f(d.x, d.y, d.z);
+		glEnd();
 	}
 };
