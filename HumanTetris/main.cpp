@@ -269,7 +269,7 @@ GLvoid DrawGLScene(GLvoid)
 
 	// MURO
 	float muroLargh = 5.0;
-	float muroProf = 2.0;
+	float muroProf = 1.0;
 	float muroAltezza = 7.0;
 	float posizioneMuro = -10.0; // da non lasciare qua quando si vuole muovere
 	Vertex posMuro(0.0, 0.0, posizioneMuro);
@@ -303,6 +303,8 @@ GLvoid DrawGLScene(GLvoid)
 	muroLatoA.Draw();
 	Rect muroLatoB(me, ma, md, mh);
 	muroLatoB.Draw();
+	Rect muroBottom(me, mf, mb, ma);
+	muroBottom.Draw();
 
 	glPopMatrix();
 }
