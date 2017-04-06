@@ -50,6 +50,11 @@ public:
 		b = y;
 		c = z;
 	}
+	inline void SetP(Vertex a, Vertex b, Vertex c) {
+		this->a = a;
+		this->b = b;
+		this->c = c;
+	}
 	void Draw()
 	{
 		glBegin(GL_TRIANGLES);
@@ -73,6 +78,12 @@ public:
 		b = y;
 		c = z;
 		d = w;
+	}
+	inline void SetP(Vertex a, Vertex b, Vertex c, Vertex d) {
+		this->a = a;
+		this->b = b;
+		this->c = c;
+		this->d = d;
 	}
 	void Draw()
 	{

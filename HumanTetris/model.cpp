@@ -1,4 +1,5 @@
 #include "model.h"
+#include "vertex.h"
 #include <windows.h>
 #include <gl\gl.h>
 #include <gl\glu.h> 
@@ -7,14 +8,21 @@
 #pragma comment( lib, "glu32.lib" )					
 #pragma comment( lib, "winmm.lib" )					
 
-void MyModel::DrawTriangle(Vertex a, Vertex b, Vertex c)
-{
-	glBegin(GL_TRIANGLES);
-	glColor3f(a.r, a.g, a.b);
-	glVertex3f(a.x, a.y, a.z);
-	glColor3f(b.r, b.g, b.b);
-	glVertex3f(b.x, b.y, b.z);
-	glColor3f(c.r, c.g, c.b);
-	glVertex3f(c.x, c.y, c.z);
-	glEnd();
+
+void MyModel::DrawFloor(){
+	floorFront.Draw();
+	floorBack.Draw();
+	floorTop.Draw();
+	floorBottom.Draw();
+	floorSideA.Draw();
+	floorSideB.Draw();
+}
+
+void MyModel::DrawWall(){
+	wallFront.Draw();
+	wallBack.Draw();
+	wallTop.Draw();
+	wallSideA.Draw();
+	wallSideB.Draw();
+	wallBottom.Draw();
 }

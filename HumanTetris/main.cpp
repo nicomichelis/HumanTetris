@@ -40,6 +40,7 @@ typedef struct CommonData {
 	CommonData() : lCaptured(false), RotX_a(0), RotY_a(0),
 		fovy(45.0)
 	{}
+	MyModel modello;
 } CoDa;
 
 static CoDa CS;
@@ -231,80 +232,9 @@ GLvoid DrawGLScene(GLvoid)
 	glRotatef(CS.RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(CS.RotY_a, 0.0, 1.0, 0.0);
 
-	// BASE
-	float baseLargh = 5.0;
-	float baseProf = 20.0;
-	float baseAltezza = 1.0;
-
-	Vertex ba(-(baseLargh / 2), 0.0, (baseProf / 2));
-	ba.SetColor(0.0, 0.0, 1.0);
-	Vertex bb((baseLargh / 2), 0.0, (baseProf / 2));
-	bb.SetColor(0.0, 0.0, 1.0);
-	Vertex bc((baseLargh / 2), 0.0, -(baseProf / 2));
-	bc.SetColor(0.0, 0.0, 1.0);
-	Vertex bd(-(baseLargh / 2), 0.0, -(baseProf / 2));
-	bd.SetColor(0.0, 0.0, 1.0);
-	Rect baseTop(ba, bb, bc, bd);
-	baseTop.Draw();
-
-	Vertex be(-(baseLargh / 2), -baseAltezza, (baseProf / 2));
-	be.SetColor(0.0, 1.0, 1.0);
-	Vertex bf((baseLargh / 2), -baseAltezza, (baseProf / 2));
-	bf.SetColor(0.0, 1.0, 1.0);
-	Vertex bg((baseLargh / 2), -baseAltezza, -(baseProf / 2));
-	bg.SetColor(0.0, 1.0, 1.0);
-	Vertex bh(-(baseLargh / 2), -baseAltezza, -(baseProf / 2));
-	bh.SetColor(0.0, 1.0, 1.0);
-	Rect baseBottom(bh, bg, bf, be);
-	baseBottom.Draw();
-
-	Rect latoA(be, bf, bb, ba);
-	latoA.Draw();
-	Rect latoB(bf, bg, bc, bb);
-	latoB.Draw();
-	Rect latoC(bg, bh, bd, bc);
-	latoC.Draw();
-	Rect latoD(bh, be, ba, bd);
-	latoD.Draw();
-
-	// MURO
-	float muroLargh = 5.0;
-	float muroProf = 1.0;
-	float muroAltezza = 7.0;
-	float posizioneMuro = -10.0; // da non lasciare qua quando si vuole muovere
-	Vertex posMuro(0.0, 0.0, posizioneMuro);
-	posMuro.SetColor(1.0, 0, 0);
-
-	Vertex ma(-(muroLargh / 2), 0.0, posizioneMuro + muroProf);
-	ma.SetColor(0.0, 1.0, 0.0);
-	Vertex mb(+(muroLargh / 2), 0.0, posizioneMuro + muroProf);
-	mb.SetColor(0.0, 1.0, 0.0);
-	Vertex mc(+(muroLargh / 2), muroAltezza, posizioneMuro + muroProf);
-	mc.SetColor(0.0, 1.0, 0.0);
-	Vertex md(-(baseLargh / 2), muroAltezza, posizioneMuro + muroProf);
-	md.SetColor(0.0, 1.0, 0.0);
-	Rect muroFronte(ma, mb, mc, md);
-	muroFronte.Draw();
-
-	Vertex me(-(muroLargh / 2), 0.0, posizioneMuro);
-	me.SetColor(0.0, 1.0, 0.0);
-	Vertex mf(+(muroLargh / 2), 0.0, posizioneMuro);
-	mf.SetColor(0.0, 1.0, 0.0);
-	Vertex mg(+(muroLargh / 2), muroAltezza, posizioneMuro);
-	mg.SetColor(0.0, 1.0, 0.0);
-	Vertex mh(-(baseLargh / 2), muroAltezza, posizioneMuro);
-	mh.SetColor(0.0, 1.0, 0.0);
-	Rect muroRetro(mf, me, mh, mg);
-	muroRetro.Draw();
-
-	Rect muroTop(md, mc, mg, mh);
-	muroTop.Draw();
-	Rect muroLatoA(mb, mf, mg, mc);
-	muroLatoA.Draw();
-	Rect muroLatoB(me, ma, md, mh);
-	muroLatoB.Draw();
-	Rect muroBottom(me, mf, mb, ma);
-	muroBottom.Draw();
-
+	// Floor
+	CS.modello.DrawFloor();
+	// Wall
+	CS.modello.DrawWall();
 	glPopMatrix();
 }
