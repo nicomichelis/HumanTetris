@@ -231,7 +231,7 @@ GLvoid DrawGLScene(GLvoid)
 	glTranslatef(0.0, -1.0, -20.0);
 	glRotatef(CS.RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(CS.RotY_a, 0.0, 1.0, 0.0);
-
+	CS.modello.SetWallPosition(-5.0);
 	// Floor
 	CS.modello.DrawFloor();
 	// Wall
