@@ -32,6 +32,12 @@ public:
 		g = gg;
 		b = bb;
 	}
+	inline void Draw() {
+		glBegin(GL_POINTS);
+		glColor3f(r, g, b);
+		glVertex3f(x, y, z);
+		glEnd();
+	}
 };
 
 class Triangle {

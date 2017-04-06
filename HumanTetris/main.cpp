@@ -13,6 +13,8 @@
 #include <stdlib.h>       // librerie standard
 #include "vertex.h"
 #include "model.h"
+#include <iostream>
+
 // resources (menu, icons...)
 
 //  LIBRERIE OPENGL e multimendia
@@ -42,8 +44,6 @@ typedef struct CommonData {
 
 static CoDa CS;
 
-//  Funzioni usate prima della definizione
-//	Two routines declared before they are defined
 GLvoid InitGL();
 GLvoid SetProjection(GLsizei iWidth, GLsizei iHeight);
 GLvoid DrawGLScene(GLvoid);
@@ -72,18 +72,11 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		return 0;
 	}
 
-/*	case WM_COMMAND:
-		switch (LOWORD(wParam)) {
-		case CM_FILE_EXIT:	//  FILE -> exit
-			PostMessage(hwnd, WM_CLOSE, 0, 0);
-			break;
-		}
-		break;*/
-
 	case WM_LBUTTONDOWN:
 		if (!CS.lCaptured) {
 			CS.lCaptured = true;
-			CS.lxs = LOWORD(lParam); CS.lys = HIWORD(lParam);
+			CS.lxs = LOWORD(lParam);
+			CS.lys = HIWORD(lParam);
 			SetCapture(hwnd);
 			InvalidateRect(hwnd, NULL, FALSE);
 		}
@@ -93,6 +86,7 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		if (CS.lCaptured) {
 			CS.ldx = LOWORD(lParam) - CS.lxs;
 			CS.ldy = HIWORD(lParam) - CS.lys;
+
 			CS.lxs = LOWORD(lParam);
 			CS.lys = HIWORD(lParam);
 			CS.RotX_a += (GLfloat)(CS.ldy * 0.4);
@@ -112,23 +106,23 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		wglDeleteContext(CS.hRC);
 		break;
 
-	case WM_MOUSEWHEEL:
-	{	int t, z;
-	z = (short)HIWORD(wParam);
-	t = (z / WHEEL_DELTA);
-	//	Mouse wheel "activation"
-	CS.fovy += t * 0.5;
-	InvalidateRect(hwnd, NULL, FALSE);
-	return 0;
+	case WM_MOUSEWHEEL: {
+		int t, z;
+		z = (short)HIWORD(wParam);
+		t = (z / WHEEL_DELTA);
+		//	Mouse wheel "activation"
+		CS.fovy += t * 0.5;
+		InvalidateRect(hwnd, NULL, FALSE);
+		return 0;
 	}
-	break;
+						break;
 
 	case WM_PAINT:
 	{
 		PAINTSTRUCT ps;
 		HDC hdc;
 		hdc = BeginPaint(hwnd, &ps);
-		wglMakeCurrent(hdc, CS.hRC);  // inutile / not necessary in this program
+		wglMakeCurrent(hdc, CS.hRC);
 		RECT R;
 		GetClientRect(CS.MainW, &R);
 		if (R.right > 0 && R.bottom > 0) SetProjection(R.right, R.bottom);
@@ -143,12 +137,6 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 	return DefWindowProc(hwnd, message, wParam, lParam);
 }
 
-
-//  Registra il tipo di classe per la finestra principale (l'unica)
-//  compatibile con il disegno in OPENGL
-// Before creating a window you need to define it
-// This function return true if all is ok, or false in case of errors.
-// Some style is for OpenGL (see also the WM_CREATE message)
 bool RegistraClasse(HINSTANCE hInstance)
 {
 	WNDCLASSEX wc;
@@ -161,7 +149,7 @@ bool RegistraClasse(HINSTANCE hInstance)
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
 	wc.hInstance = hInstance;
-	wc.hIcon = LoadIcon(hInstance,  IDI_WINLOGO);
+	wc.hIcon = LoadIcon(hInstance, IDI_WINLOGO);
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
 	wc.hbrBackground = (HBRUSH)(COLOR_3DSHADOW + 1);
 	wc.lpszMenuName = "MAIN";
@@ -181,7 +169,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	if (!RegistraClasse(hInstance)) exit(1);
 	CS.Shinstance = hInstance;
 
-	CS.MainW = CreateWindowEx(WS_EX_LEFT, "MainWindow", "OpenGL 1 Tutorial",
+	CS.MainW = CreateWindowEx(WS_EX_LEFT, "MainWindow", "HumanTetris",
 		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
 		100, 100, 900, 600, NULL, NULL, hInstance, NULL);
 
@@ -206,8 +194,6 @@ GLvoid SetProjection(GLsizei iWidth, GLsizei iHeight)
 		0.0, 0.0, -1.0,
 		0.0, 1.0, 0.0);
 	gluPerspective(CS.fovy, (GLfloat)iWidth / (GLfloat)iHeight, 0.1, 200.0);
-	//	Try to change the front clipping plane, for example:
-	//gluPerspective(CS.fovy,(GLfloat)iWidth/(GLfloat)iHeight,4,200.0);
 }
 
 /* Set the rendering options for OpenGL */
@@ -241,99 +227,82 @@ GLvoid DrawGLScene(GLvoid)
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
 	glPushMatrix();
-	glTranslatef(0.0, 0.0, -5.0);
+	glTranslatef(0.0, -1.0, -20.0);
 	glRotatef(CS.RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(CS.RotY_a, 0.0, 1.0, 0.0);
-	//	QUADS: every 4 vertex OpenGL draw a 4 edge polygon.
 
+	// BASE
+	float baseLargh = 5.0;
+	float baseProf = 20.0;
+	float baseAltezza = 1.0;
 
+	Vertex ba(-(baseLargh / 2), 0.0, (baseProf / 2));
+	ba.SetColor(0.0, 0.0, 1.0);
+	Vertex bb((baseLargh / 2), 0.0, (baseProf / 2));
+	bb.SetColor(0.0, 0.0, 1.0);
+	Vertex bc((baseLargh / 2), 0.0, -(baseProf / 2));
+	bc.SetColor(0.0, 0.0, 1.0);
+	Vertex bd(-(baseLargh / 2), 0.0, -(baseProf / 2));
+	bd.SetColor(0.0, 0.0, 1.0);
+	Rect baseTop(ba, bb, bc, bd);
+	baseTop.Draw();
 
-	glBegin(GL_QUADS);
-	// Front Face
-	Vertex v(-1.0, -1.0, 1.0);
-	v.SetColor(1.0, 0.0, 0.0);
-	glColor3f(v.r, v.g, v.b);
-	glVertex3f(v.x, v.y, v.z);	// Bottom Left
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(1.0, -1.0, 1.0);	// Bottom Right
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(0.5, 1.0, 0.5);	// Top Right
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(-0.5, 1.0, 0.5);	// Top Left
-	glEnd();
-	
+	Vertex be(-(baseLargh / 2), -baseAltezza, (baseProf / 2));
+	be.SetColor(0.0, 1.0, 1.0);
+	Vertex bf((baseLargh / 2), -baseAltezza, (baseProf / 2));
+	bf.SetColor(0.0, 1.0, 1.0);
+	Vertex bg((baseLargh / 2), -baseAltezza, -(baseProf / 2));
+	bg.SetColor(0.0, 1.0, 1.0);
+	Vertex bh(-(baseLargh / 2), -baseAltezza, -(baseProf / 2));
+	bh.SetColor(0.0, 1.0, 1.0);
+	Rect baseBottom(bh, bg, bf, be);
+	baseBottom.Draw();
 
-	Vertex l(-10.0, 0.0, 0.0);
-	l.SetColor(1.0, 0.0, 0.0);
-	Vertex m(-10.0, -10.0, 10.0);
-	m.SetColor(1.0, 0.0, 0.0);
-	Vertex n(0.0, 0.0, 0.0);
-	n.SetColor(1.0, 0.0, 0.0);
-	Vertex o(0.0, 10.0, 0.0);
-	o.SetColor(0.0, 1.0, 0.0);
-	//MyModel Model;
-	//Model.DrawTriangle(l,m,n);
-	//Triangle a(l, m, n);
-	//a.Draw();
-	Rect a(l, m, n, o);
-	a.Draw();
+	Rect latoA(be, bf, bb, ba);
+	latoA.Draw();
+	Rect latoB(bf, bg, bc, bb);
+	latoB.Draw();
+	Rect latoC(bg, bh, bd, bc);
+	latoC.Draw();
+	Rect latoD(bh, be, ba, bd);
+	latoD.Draw();
 
+	// MURO
+	float muroLargh = 5.0;
+	float muroProf = 2.0;
+	float muroAltezza = 7.0;
+	float posizioneMuro = -10.0; // da non lasciare qua quando si vuole muovere
+	Vertex posMuro(0.0, 0.0, posizioneMuro);
+	posMuro.SetColor(1.0, 0, 0);
 
+	Vertex ma(-(muroLargh / 2), 0.0, posizioneMuro + muroProf);
+	ma.SetColor(0.0, 1.0, 0.0);
+	Vertex mb(+(muroLargh / 2), 0.0, posizioneMuro + muroProf);
+	mb.SetColor(0.0, 1.0, 0.0);
+	Vertex mc(+(muroLargh / 2), muroAltezza, posizioneMuro + muroProf);
+	mc.SetColor(0.0, 1.0, 0.0);
+	Vertex md(-(baseLargh / 2), muroAltezza, posizioneMuro + muroProf);
+	md.SetColor(0.0, 1.0, 0.0);
+	Rect muroFronte(ma, mb, mc, md);
+	muroFronte.Draw();
 
-	glBegin(GL_QUADS);
-								// Back Face
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(-1.0, -1.0, -1.0);	// Bottom Right
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(-0.5, 1.0, -0.5);	// Top Right
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(0.5, 1.0, -0.5);	// Top Left
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(1.0, -1.0, -1.0);	// Bottom Left
-									// Top Face
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(-0.5, 1.0, -0.5);	// Top Left
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(-0.5, 1.0, 0.5);	// Bottom Left
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(0.5, 1.0, 0.5);	// Bottom Right
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(0.5, 1.0, -0.5);	// Top Right
-								// Bottom Face
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(-1.0, -1.0, -1.0);	// Top Right
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(1.0, -1.0, -1.0);	// Top Left
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(1.0, -1.0, 1.0);	// Bottom Left
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(-1.0, -1.0, 1.0);	// Bottom Right
-									// Right face
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(1.0, -1.0, -1.0);	// Bottom Right
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(0.5, 1.0, -0.5);	// Top Right
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(0.5, 1.0, 0.5);	// Top Left
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(1.0, -1.0, 1.0);	// Bottom Left
-								// Left Face
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(-1.0, -1.0, -1.0);	// Bottom Left
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(-1.0, -1.0, 1.0);	// Bottom Right
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(-0.5, 1.0, 0.5);	// Top Right
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(-0.5, 1.0, -0.5);	// Top Left
-	glEnd();
-	//  prova punti gialli
-	glBegin(GL_POINTS);     //  AAAA
-	glColor3f(1.0, 1.0, 0.0);
-	glVertex3d(-1.2, 1.2, -1.2);
-	glVertex3d(1.2, 1.2, 1.2);
-	glVertex3d(1.2, -1.2, 1.2);
-	glEnd();          //  AAAA
+	Vertex me(-(muroLargh / 2), 0.0, posizioneMuro);
+	me.SetColor(0.0, 1.0, 0.0);
+	Vertex mf(+(muroLargh / 2), 0.0, posizioneMuro);
+	mf.SetColor(0.0, 1.0, 0.0);
+	Vertex mg(+(muroLargh / 2), muroAltezza, posizioneMuro);
+	mg.SetColor(0.0, 1.0, 0.0);
+	Vertex mh(-(baseLargh / 2), muroAltezza, posizioneMuro);
+	mh.SetColor(0.0, 1.0, 0.0);
+	Rect muroRetro(mf, me, mh, mg);
+	muroRetro.Draw();
+
+	Rect muroTop(md, mc, mg, mh);
+	muroTop.Draw();
+	Rect muroLatoA(mb, mf, mg, mc);
+	muroLatoA.Draw();
+	Rect muroLatoB(me, ma, md, mh);
+	muroLatoB.Draw();
 
 	glPopMatrix();
 }
