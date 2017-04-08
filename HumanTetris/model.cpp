@@ -33,13 +33,13 @@ void MyModel::DrawFloor(){
 	fd.SetP(-(floorLargh / 2), 0.0, -(floorProf / 2));
 	fd.SetColor(0.0, 0.0, 1.0);
 	fe.SetP(-(floorLargh / 2), -floorAltezza, (floorProf / 2));
-	fe.SetColor(0.0, 1.0, 1.0);
+	fe.SetColor(0.0, 0.0, 1.0);
 	ff.SetP((floorLargh / 2), -floorAltezza, (floorProf / 2));
-	ff.SetColor(0.0, 1.0, 1.0);
+	ff.SetColor(0.0, 0.0, 1.0);
 	fg.SetP((floorLargh / 2), -floorAltezza, -(floorProf / 2));
-	fg.SetColor(0.0, 1.0, 1.0);
+	fg.SetColor(0.0, 0.0, 1.0);
 	fh.SetP(-(floorLargh / 2), -floorAltezza, -(floorProf / 2));
-	fh.SetColor(0.0, 1.0, 1.0);
+	fh.SetColor(0.0, 0.0, 1.0);
 	floorTop.SetP(fa, fb, fc, fd);
 	floorBottom.SetP(fh, fg, ff, fe);
 	floorFront.SetP(fe, ff, fb, fa);
