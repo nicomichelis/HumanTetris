@@ -20,10 +20,12 @@ private:
 	Vertex wa, wb, wc, wd, we, wf, wg, wh;
 	Rect wallFront, wallBack, wallSideA, wallSideB, wallTop, wallBottom;
 
+	// Player
+
 public:
 	MyModel();
 	void DrawFloor();
 	void DrawWall();
 	void SetWallPosition(float x);
-	
+	float GetWallPosition();
 };

@@ -41,6 +41,7 @@ typedef struct CommonData {
 		fovy(45.0)
 	{}
 	MyModel modello;
+	bool keys[256];
 } CoDa;
 
 static CoDa CS;
@@ -53,7 +54,7 @@ GLvoid DrawGLScene(GLvoid);
 LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
-	case WM_CREATE:	// here we must make the window suitable for OpenGL rendering
+	case WM_CREATE:
 	{
 		CS.dc = GetDC(hwnd);
 		PIXELFORMATDESCRIPTOR pfd;
@@ -72,6 +73,14 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		InitGL();
 		return 0;
 	}
+	case WM_KEYDOWN:
+		CS.keys[wParam] = TRUE;
+		InvalidateRect(hwnd, NULL, FALSE);
+		break;
+	case WM_KEYUP:
+		CS.keys[wParam] = FALSE;
+		InvalidateRect(hwnd, NULL, FALSE);
+		break;
 
 	case WM_LBUTTONDOWN:
 		if (!CS.lCaptured) {
@@ -126,14 +135,19 @@ LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lPar
 		wglMakeCurrent(hdc, CS.hRC);
 		RECT R;
 		GetClientRect(CS.MainW, &R);
-		if (R.right > 0 && R.bottom > 0) SetProjection(R.right, R.bottom);
-		DrawGLScene(); glFlush(); SwapBuffers(hdc);
+		if (R.right > 0 && R.bottom > 0)
+			SetProjection(R.right, R.bottom);
+		DrawGLScene();
+		glFlush();
+		SwapBuffers(hdc);
 		EndPaint(hwnd, &ps);
 	}
 	return 0;
 
 	case WM_DESTROY:
-		PostQuitMessage(0); break;
+		PostQuitMessage(0);
+		break;
+	
 	}
 	return DefWindowProc(hwnd, message, wParam, lParam);
 }
@@ -167,6 +181,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PSTR szCmdLine, int iCmdShow)
 {
 	MSG Msg;
+	BOOL done = FALSE;
 	if (!RegistraClasse(hInstance)) exit(1);
 	CS.Shinstance = hInstance;
 
@@ -176,10 +191,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	ShowWindow(CS.MainW, iCmdShow);
 	UpdateWindow(CS.MainW);
+	while (!done) {
+		if (PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE)) {
+			if (Msg.message == WM_QUIT) {
+				// When x to close the window is pressed
+				done = TRUE;
+			}
+			else {
+				TranslateMessage(&Msg);
+				DispatchMessage(&Msg);
+			}
+		}
+		else {
+			if (CS.keys[VK_UP]) {
+				CS.keys[VK_UP] = FALSE;
+				CS.modello.SetWallPosition(CS.modello.GetWallPosition() - 0.1);
+			}
+			if (CS.keys[VK_DOWN]) {
+				CS.keys[VK_DOWN] = FALSE;
+				CS.modello.SetWallPosition(CS.modello.GetWallPosition() + 0.1);
+			}
 
-	while (GetMessage(&Msg, NULL, 0, 0)) {
-		TranslateMessage(&Msg);
-		DispatchMessage(&Msg);
+		}
 	}
 	return Msg.wParam;
 }
@@ -197,41 +230,30 @@ GLvoid SetProjection(GLsizei iWidth, GLsizei iHeight)
 	gluPerspective(CS.fovy, (GLfloat)iWidth / (GLfloat)iHeight, 0.1, 200.0);
 }
 
-/* Set the rendering options for OpenGL */
 GLvoid InitGL()
 {
-	// COSE
 	glCullFace(GL_BACK);
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClearDepth(1.0);
 	glDepthFunc(GL_LESS);
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
-	//glShadeModel(GL_FLAT);
-
-
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_CULL_FACE);
 	glPointSize(2); // !!
 }
-
-//	The cube dimensions are a 2 x 2 x 2, defined around the origin
-//	then rotated around the x and the y axes
-//	then the center is transalated in (0,0,-5)
 
 GLvoid DrawGLScene(GLvoid)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
 	glPushMatrix();
-	glTranslatef(0.0, -1.0, -20.0);
+	glTranslatef(0.0, -1.0, -20.0); // POW
 	glRotatef(CS.RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(CS.RotY_a, 0.0, 1.0, 0.0);
-	CS.modello.SetWallPosition(-5.0);
 	// Floor
 	CS.modello.DrawFloor();
 	// Wall

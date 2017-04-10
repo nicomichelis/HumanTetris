@@ -92,3 +92,8 @@ void MyModel::DrawWall(){
 void MyModel::SetWallPosition(float x){
 	this->wallPosition = x;
 }
+
+float MyModel::GetWallPosition()
+{
+	return wallPosition;
+}
