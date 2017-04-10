@@ -21,11 +21,18 @@ private:
 	Rect wallFront, wallBack, wallSideA, wallSideB, wallTop, wallBottom;
 
 	// Player
+	float PlayerPosition;
+	float PlayerRotation;
 
 public:
 	MyModel();
 	void DrawFloor();
 	void DrawWall();
+	void DrawPlayer();
 	void SetWallPosition(float x);
 	float GetWallPosition();
+	float GetPlayerPosition();
+	void SetPlayerPosition(float x);
+	float GetPlayerRotation();
+	void SetPlayerRotation(float x);
 };

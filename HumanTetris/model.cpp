@@ -20,6 +20,9 @@ MyModel::MyModel() {
 	wallProf = 1.0;
 	wallAltezza = 7.0;
 	wallPosition = -10.0;
+
+	// Player
+
 	
 }
 
@@ -89,6 +92,10 @@ void MyModel::DrawWall(){
 	wallBottom.Draw();
 }
 
+void MyModel::DrawPlayer()
+{
+}
+
 void MyModel::SetWallPosition(float x){
 	this->wallPosition = x;
 }
@@ -96,4 +103,22 @@ void MyModel::SetWallPosition(float x){
 float MyModel::GetWallPosition()
 {
 	return wallPosition;
+}
+
+float MyModel::GetPlayerPosition()
+{
+	return PlayerPosition;
+}
+
+void MyModel::SetPlayerPosition(float x) {
+	this->PlayerPosition = x;
+}
+
+float MyModel::GetPlayerRotation()
+{
+	return this->PlayerRotation;
+}
+
+void MyModel::SetPlayerRotation(float x) {
+	this->PlayerRotation = x;
 }
