@@ -26,8 +26,9 @@ MyModel::MyModel() {
 	initPlayer.SetColor(1.0, 0.5, 0.5);
 	PlayerPosition = initPlayer;
 	PlayerRotation = 0.0;
-	PlayerHeadSize = 0.1;
-
+	PlayerHeadSize = 0.2;
+	PlayerThickness = 0.1;
+	PlayerBodyHeight = 1.0;
 }
 
 void MyModel::DrawFloor() {
@@ -97,9 +98,69 @@ void MyModel::DrawWall() {
 }
 
 void MyModel::DrawPlayer() {
+	// Tutto sbagliato perchè non tiene conto dell'angolo di rotazione!
 	// Head
-	Cylinder Head(PlayerPosition, PlayerHeadSize, 0.1); //0.1 spessore
+	Vertex HeadPosition = PlayerPosition;
+	HeadPosition.y += 0.7;
+	Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
 	Head.Draw();
+	// Body
+	ba = bb = bc = bd = be = bf = bg = bh = PlayerPosition;
+	bb.x = bg.x = bf.x = bc.x = PlayerPosition.x + PlayerThickness / 2; // larghezza corpo
+	ba.x = be.x = bd.x = bh.x = PlayerPosition.x - PlayerThickness / 2;
+	bd.y = bc.y = bg.y = bh.y = PlayerPosition.y + PlayerBodyHeight / 2;	// Altezza corpo
+	ba.y = bb.y = bf.y = be.y = PlayerPosition.y - PlayerBodyHeight / 2;
+	ba.z = bb.z = bc.z = bd.z = PlayerPosition.z - PlayerThickness / 2; //Spessore corpo
+	be.z = bf.z = bg.z = bh.z = PlayerPosition.z + PlayerThickness / 2;
+	Rect FrontBody(ba, bb, bc, bd);
+	FrontBody.Draw();
+	Rect BackBody(bf, be, bh, bg);
+	BackBody.Draw();
+	Rect SideA(bb, bf, bg, bc);
+	SideA.Draw();
+	Rect SideB(be, ba, bd, bh);
+	SideB.Draw();
+	Rect Top(bd, bc, bg, bh);
+	Top.Draw();
+	Rect Bottom(be, bf, bb, ba);
+	Bottom.Draw();
+
+	// Arms (45 degrees)
+	for (int i = 0; i < 4; i++) {
+		Vertex armPos = PlayerPosition;
+		float theta = 2.0f * 3.1415926f * float(i) / float(4) + 3.1415926f / float(4); // 45°*i
+		float distArmBody = PlayerBodyHeight; // Distanza dal corpo al braccio (da cambiare)
+		float x = distArmBody * cosf(theta) * sin(3.1415926f / float(4));	//calculate the x component 
+		float y = distArmBody * sinf(theta) * cos(3.1415926f / float(4));	//calculate the y component
+		armPos.SetP(armPos.x+x, armPos.y+y, armPos.z);
+		armPos.Draw();
+
+		/*
+		float radius = PlayerBodyHeight;
+		float theta = 2.0f * 3.1415926f * float(i) / float(4) + 3.1415926f / float(4);	// 45° 
+		float x = radius * cosf(theta) * sin(3.1415926f / float(4)) + PlayerPosition.x;	//calculate the x component 
+		float y = radius * sinf(theta) * cos(3.1415926f / float(4)) + PlayerPosition.y;	//calculate the y component
+		ba = bb = bc = bd = be = bf = bg = bh = PlayerPosition;
+		bb.x = bg.x = bf.x = bc.x = x + PlayerThickness / 2; // larghezza corpo
+		ba.x = be.x = bd.x = bh.x = x - PlayerThickness / 2;
+		bd.y = bc.y = bg.y = bh.y = y + PlayerBodyHeight / 2;	// Altezza corpo
+		ba.y = bb.y = bf.y = be.y = y - PlayerBodyHeight / 2;
+		ba.z = bb.z = bc.z = bd.z = PlayerPosition.z - PlayerThickness / 2; //Spessore corpo
+		be.z = bf.z = bg.z = bh.z = PlayerPosition.z + PlayerThickness / 2;
+		*/
+		Rect FrontBody(ba, bb, bc, bd);
+		FrontBody.Draw();
+		Rect BackBody(bf, be, bh, bg);
+		BackBody.Draw();
+		Rect SideA(bb, bf, bg, bc);
+		SideA.Draw();
+		Rect SideB(be, ba, bd, bh);
+		SideB.Draw();
+		Rect Top(bd, bc, bg, bh);
+		Top.Draw();
+		Rect Bottom(be, bf, bb, ba);
+		Bottom.Draw();
+	}
 }
 
 void MyModel::SetWallPosition(float x) {

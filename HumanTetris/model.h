@@ -24,6 +24,9 @@ private:
 	Vertex PlayerPosition;
 	float PlayerRotation;
 	float PlayerHeadSize;
+	float PlayerThickness;
+	float PlayerBodyHeight;
+	Vertex ba, bb, bc, bd, be, bf, bg, bh;
 
 public:
 	MyModel();
