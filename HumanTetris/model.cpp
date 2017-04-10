@@ -13,7 +13,7 @@ MyModel::MyModel() {
 	floorLargh = 5.0;
 	floorProf = 20.0;
 	floorAltezza = 1.0;
-	
+
 
 	// Wall
 	wallLargh = 5.0;
@@ -26,11 +26,11 @@ MyModel::MyModel() {
 	initPlayer.SetColor(1.0, 0.5, 0.5);
 	PlayerPosition = initPlayer;
 	PlayerRotation = 0.0;
-	PlayerHeadSize = 0.5;
-	
+	PlayerHeadSize = 0.1;
+
 }
 
-void MyModel::DrawFloor(){
+void MyModel::DrawFloor() {
 	fa.SetP(-(floorLargh / 2), 0.0, (floorProf / 2));
 	fa.SetColor(0.0, 0.0, 1.0);
 	fb.SetP((floorLargh / 2), 0.0, (floorProf / 2));
@@ -61,8 +61,8 @@ void MyModel::DrawFloor(){
 	floorSideB.Draw();
 }
 
-void MyModel::DrawWall(){
-	
+void MyModel::DrawWall() {
+
 	wallPositionPoint.SetP(0.0, 0.0, wallPosition);
 	wallPositionPoint.SetColor(1.0, 0, 0);
 
@@ -96,20 +96,21 @@ void MyModel::DrawWall(){
 	wallBottom.Draw();
 }
 
-void MyModel::DrawPlayer(){
-	Circle head(PlayerPosition, PlayerHeadSize);
-	head.Draw();
+void MyModel::DrawPlayer() {
+	// Head
+	Cylinder Head(PlayerPosition, PlayerHeadSize, 0.1); //0.1 spessore
+	Head.Draw();
 }
 
-void MyModel::SetWallPosition(float x){
+void MyModel::SetWallPosition(float x) {
 	this->wallPosition = x;
 }
 
-float MyModel::GetWallPosition(){
+float MyModel::GetWallPosition() {
 	return wallPosition;
 }
 
-Vertex MyModel::GetPlayerPosition(){
+Vertex MyModel::GetPlayerPosition() {
 	return PlayerPosition;
 }
 
@@ -117,7 +118,7 @@ void MyModel::SetPlayerPosition(Vertex x) {
 	this->PlayerPosition = x;
 }
 
-float MyModel::GetPlayerRotation(){
+float MyModel::GetPlayerRotation() {
 	return this->PlayerRotation;
 }
 
