@@ -140,3 +140,48 @@ public:
 		glEnd();
 	}
 };
+
+class Cylinder {
+public:
+	Vertex center;
+	float radius;
+	float width;
+	Cylinder() {
+	}
+	Cylinder(Vertex c, float r, float w) {
+		center = c;
+		radius = r;
+		width = w;
+	}
+	void Draw() {
+		glBegin(GL_TRIANGLES);
+		int res = 1000;
+		Vertex last;
+		for (int i = 0; i < res + 1; i++) {
+			float theta = 2.0f * 3.1415926f * float(i) / float(res);	//get the current angle 
+			float x = radius * cosf(theta) + center.x;	//calculate the x component 
+			float y = radius * sinf(theta) + center.y;	//calculate the y component 
+			Vertex current(x, y, center.z);
+			current.SetColor(center.r, center.b, center.g);
+			if (i != 0) {
+				Triangle tri(center, last, current);
+				tri.Draw();
+				Vertex a = center;
+				a.z -= width;
+				Vertex b = last;
+				b.z -= width;
+				Vertex c = current;
+				c.z -= width;
+				tri.SetP(b, a, c);
+				tri.Draw();
+				tri.SetP(last, b, current);
+				tri.Draw();
+				tri.SetP(b, c, current);
+				tri.Draw();
+			}
+			last.SetP(x, y, center.z);
+			last.SetColor(center.r, center.b, center.g);
+		}
+		glEnd();
+	}
+};

@@ -26,7 +26,7 @@ MyModel::MyModel() {
 	initPlayer.SetColor(1.0, 0.5, 0.5);
 	PlayerPosition = initPlayer;
 	PlayerRotation = 0.0;
-	PlayerHeadSize = 0.5;
+	PlayerHeadSize = 0.1;
 	
 }
 
@@ -97,8 +97,9 @@ void MyModel::DrawWall(){
 }
 
 void MyModel::DrawPlayer(){
-	Circle head(PlayerPosition, PlayerHeadSize);
-	head.Draw();
+	// Head
+	Cylinder Head(PlayerPosition, PlayerHeadSize, 0.1); //0.1 spessore
+	Head.Draw();
 }
 
 void MyModel::SetWallPosition(float x){
