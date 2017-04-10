@@ -13,21 +13,12 @@ MyModel::MyModel() {
 	floorLargh = 5.0;
 	floorProf = 20.0;
 	floorAltezza = 1.0;
-	
 
 	// Wall
 	wallLargh = 5.0;
 	wallProf = 1.0;
 	wallAltezza = 7.0;
 	wallPosition = -10.0;
-
-	// Player
-	Vertex initPlayer(0.0, 5.0, 10.0);
-	initPlayer.SetColor(1.0, 0.5, 0.5);
-	PlayerPosition = initPlayer;
-	PlayerRotation = 0.0;
-	PlayerHeadSize = 0.5;
-	
 }
 
 void MyModel::DrawFloor(){
@@ -47,18 +38,10 @@ void MyModel::DrawFloor(){
 	fg.SetColor(0.0, 0.0, 1.0);
 	fh.SetP(-(floorLargh / 2), -floorAltezza, -(floorProf / 2));
 	fh.SetColor(0.0, 0.0, 1.0);
-	floorTop.SetP(fa, fb, fc, fd);
-	floorBottom.SetP(fh, fg, ff, fe);
-	floorFront.SetP(fe, ff, fb, fa);
-	floorBack.SetP(fg, fh, fd, fc);
-	floorSideA.SetP(fh, fe, fa, fd);
-	floorSideB.SetP(ff, fg, fc, fb);
-	floorFront.Draw();
-	floorBack.Draw();
-	floorTop.Draw();
-	floorBottom.Draw();
-	floorSideA.Draw();
-	floorSideB.Draw();
+
+	// Drawing
+
+
 }
 
 void MyModel::DrawWall(){
@@ -82,24 +65,8 @@ void MyModel::DrawWall(){
 	wg.SetColor(0.0, 1.0, 0.0);
 	wh.SetP(-(wallLargh / 2), wallAltezza, wallPosition);
 	wh.SetColor(0.0, 1.0, 0.0);
-	wallFront.SetP(wa, wb, wc, wd);
-	wallBack.SetP(wf, we, wh, wg);
-	wallTop.SetP(wd, wc, wg, wh);
-	wallSideA.SetP(wb, wf, wg, wc);
-	wallSideB.SetP(we, wa, wd, wh);
-	wallBottom.SetP(we, wf, wb, wa);
-	wallFront.Draw();
-	wallBack.Draw();
-	wallTop.Draw();
-	wallSideA.Draw();
-	wallSideB.Draw();
-	wallBottom.Draw();
 }
 
-void MyModel::DrawPlayer(){
-	Circle head(PlayerPosition, PlayerHeadSize);
-	head.Draw();
-}
 
 void MyModel::SetWallPosition(float x){
 	this->wallPosition = x;
@@ -107,20 +74,4 @@ void MyModel::SetWallPosition(float x){
 
 float MyModel::GetWallPosition(){
 	return wallPosition;
-}
-
-Vertex MyModel::GetPlayerPosition(){
-	return PlayerPosition;
-}
-
-void MyModel::SetPlayerPosition(Vertex x) {
-	this->PlayerPosition = x;
-}
-
-float MyModel::GetPlayerRotation(){
-	return this->PlayerRotation;
-}
-
-void MyModel::SetPlayerRotation(float x) {
-	this->PlayerRotation = x;
 }

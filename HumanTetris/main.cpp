@@ -258,7 +258,5 @@ GLvoid DrawGLScene(GLvoid)
 	CS.modello.DrawFloor();
 	// Wall
 	CS.modello.DrawWall();
-	// Player
-	CS.modello.DrawPlayer();
 	glPopMatrix();
 }
