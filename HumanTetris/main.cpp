@@ -36,6 +36,7 @@ typedef struct CommonData {
 
 	GLdouble fovy;    // angolo di vista in y (gradi, init a 45.0)
 					  // view angle in y (degrees)
+	float movement = 0.1; // Di quanto si muove l'omino ogni volta che premo un tasto
 
 	CommonData() : lCaptured(false), RotX_a(0), RotY_a(0),
 		fovy(45.0)
@@ -205,11 +206,27 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		else {
 			if (CS.keys[VK_UP]) {
 				CS.keys[VK_UP] = FALSE;
-				CS.modello.SetWallPosition(CS.modello.GetWallPosition() - 0.1);
+				Vertex temp = CS.modello.GetPlayerPosition();
+				temp.y += CS.movement;
+				CS.modello.SetPlayerPosition(temp);
 			}
 			if (CS.keys[VK_DOWN]) {
 				CS.keys[VK_DOWN] = FALSE;
-				CS.modello.SetWallPosition(CS.modello.GetWallPosition() + 0.1);
+				Vertex temp = CS.modello.GetPlayerPosition();
+				temp.y -= CS.movement;
+				CS.modello.SetPlayerPosition(temp);
+			}
+			if (CS.keys[VK_LEFT]) {
+				CS.keys[VK_LEFT] = FALSE;
+				Vertex temp = CS.modello.GetPlayerPosition();
+				temp.x -= CS.movement;
+				CS.modello.SetPlayerPosition(temp);
+			}
+			if (CS.keys[VK_RIGHT]) {
+				CS.keys[VK_RIGHT] = FALSE;
+				Vertex temp = CS.modello.GetPlayerPosition();
+				temp.x += CS.movement;
+				CS.modello.SetPlayerPosition(temp);
 			}
 
 		}

@@ -22,11 +22,11 @@ MyModel::MyModel() {
 	wallPosition = -10.0;
 
 	// Player
-	Vertex initPlayer(10.0, 10.0, 10.0);
+	Vertex initPlayer(0.0, 5.0, 10.0);
 	initPlayer.SetColor(1.0, 0.5, 0.5);
 	PlayerPosition = initPlayer;
 	PlayerRotation = 0.0;
-	PlayerHeadSize = 1.0;
+	PlayerHeadSize = 0.1;
 	
 }
 
@@ -97,7 +97,9 @@ void MyModel::DrawWall(){
 }
 
 void MyModel::DrawPlayer(){
-
+	// Head
+	Cylinder Head(PlayerPosition, PlayerHeadSize, 0.1); //0.1 spessore
+	Head.Draw();
 }
 
 void MyModel::SetWallPosition(float x){
