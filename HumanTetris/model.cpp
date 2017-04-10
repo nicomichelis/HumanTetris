@@ -22,7 +22,11 @@ MyModel::MyModel() {
 	wallPosition = -10.0;
 
 	// Player
-
+	Vertex initPlayer(10.0, 10.0, 10.0);
+	initPlayer.SetColor(1.0, 0.5, 0.5);
+	PlayerPosition = initPlayer;
+	PlayerRotation = 0.0;
+	PlayerHeadSize = 1.0;
 	
 }
 
@@ -92,30 +96,27 @@ void MyModel::DrawWall(){
 	wallBottom.Draw();
 }
 
-void MyModel::DrawPlayer()
-{
+void MyModel::DrawPlayer(){
+
 }
 
 void MyModel::SetWallPosition(float x){
 	this->wallPosition = x;
 }
 
-float MyModel::GetWallPosition()
-{
+float MyModel::GetWallPosition(){
 	return wallPosition;
 }
 
-float MyModel::GetPlayerPosition()
-{
+Vertex MyModel::GetPlayerPosition(){
 	return PlayerPosition;
 }
 
-void MyModel::SetPlayerPosition(float x) {
+void MyModel::SetPlayerPosition(Vertex x) {
 	this->PlayerPosition = x;
 }
 
-float MyModel::GetPlayerRotation()
-{
+float MyModel::GetPlayerRotation(){
 	return this->PlayerRotation;
 }
 

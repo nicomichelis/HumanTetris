@@ -21,8 +21,9 @@ private:
 	Rect wallFront, wallBack, wallSideA, wallSideB, wallTop, wallBottom;
 
 	// Player
-	float PlayerPosition;
+	Vertex PlayerPosition;
 	float PlayerRotation;
+	float PlayerHeadSize;
 
 public:
 	MyModel();
@@ -31,8 +32,8 @@ public:
 	void DrawPlayer();
 	void SetWallPosition(float x);
 	float GetWallPosition();
-	float GetPlayerPosition();
-	void SetPlayerPosition(float x);
+	Vertex GetPlayerPosition();
+	void SetPlayerPosition(Vertex x);
 	float GetPlayerRotation();
 	void SetPlayerRotation(float x);
 };
