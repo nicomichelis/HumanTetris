@@ -25,7 +25,7 @@ MyModel::MyModel() {
 	Vertex initPlayer(0.0, 5.0, 10.0);
 	initPlayer.SetColor(1.0, 0.5, 0.5);
 	PlayerPosition = initPlayer;
-	PlayerRotation = 3.14/4;
+	PlayerRotation = 0.0;
 	PlayerHeadSize = 0.2;
 	PlayerThickness = 0.1;
 	PlayerBodyHeight = 1.0;
@@ -108,26 +108,29 @@ void MyModel::DrawPlayer() {
 	*/
 	PlayerPosition.Draw();
 	// Body
+	float diag = sqrt(pow((PlayerBodyHeight / 2),2.0) + pow((PlayerThickness / 2),2.0));
 	ba = bb = bc = bd = be = bf = bg = bh = PlayerPosition;
-	ba.x = (PlayerPosition.x)*cosf(PlayerRotation) - (PlayerThickness / 2);
-	ba.y = (PlayerPosition.y)*sinf(PlayerRotation) - (PlayerBodyHeight / 2);
+	float angle = asin((PlayerBodyHeight / 2) / diag) + PlayerRotation;
+	ba.x = PlayerPosition.x + (diag)*cos(3.14+angle);
+	ba.y = PlayerPosition.y + (diag)*sin(3.14+angle);
 	ba.z = PlayerPosition.z - PlayerThickness / 2;
+	ba.Draw();
 
-	bb.x = (PlayerPosition.x)*cosf(PlayerRotation) + (PlayerThickness / 2);
-	bb.y = (PlayerPosition.y)*sinf(PlayerRotation) - (PlayerBodyHeight / 2);
-	bb.z = PlayerPosition.z - PlayerThickness / 2;
-	
-	bc.x = (PlayerPosition.x)*cosf(PlayerRotation) + (PlayerThickness / 2);
-	bc.y = (PlayerPosition.y)*sinf(PlayerRotation) + (PlayerBodyHeight / 2);
+	bb.x = PlayerPosition.x + (diag)*cos(-6.28+angle);
+	bb.y = PlayerPosition.y + (diag)*sin(-angle+6.28);
+	bb.z = PlayerPosition.z + PlayerThickness / 2;
+	bb.Draw();
+
+	bc.x = PlayerPosition.x + (diag)*cos(angle);
+	bc.y = PlayerPosition.y + (diag)*sin(angle);
 	bc.z = PlayerPosition.z - PlayerThickness / 2;
-
-	bd.x = (PlayerPosition.x)*cosf(PlayerRotation) - (PlayerThickness / 2);
-	bd.y = (PlayerPosition.y)*sinf(PlayerRotation) + (PlayerBodyHeight / 2);
+	bc.Draw();
+	/*
+	bd.x = PlayerPosition.x + (diag)*cos(3.14 - angle);
+	bd.y = PlayerPosition.y + (diag)*sin(3.14 - angle);
 	bd.z = PlayerPosition.z - PlayerThickness / 2;
-	
-	Rect BodyFront(ba, bb, bc, bd);
-	BodyFront.Draw();
-
+	bd.Draw();
+	*/
 	/*
 	ba = bb = bc = bd = be = bf = bg = bh = PlayerPosition;
 	bb.x = bg.x = bf.x = bc.x = (PlayerPosition.x + PlayerThickness / 2); // larghezza corpo
