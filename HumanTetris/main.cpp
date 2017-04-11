@@ -228,6 +228,19 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				temp.x += CS.movement;
 				CS.modello.SetPlayerPosition(temp);
 			}
+			if (CS.keys['A']) {
+				CS.keys['A'] = FALSE;
+				float temp = CS.modello.GetPlayerRotation();
+				temp -= 0.26;
+				CS.modello.SetPlayerRotation(temp);
+			}
+			if (CS.keys['S']) {
+				CS.keys['S'] = FALSE;
+				float temp = CS.modello.GetPlayerRotation();
+				temp += 0.26;
+				CS.modello.SetPlayerRotation(temp);
+			}
+
 
 		}
 	}
