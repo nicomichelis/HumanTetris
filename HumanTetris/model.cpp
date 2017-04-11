@@ -110,27 +110,32 @@ void MyModel::DrawPlayer() {
 	// Body
 	float diag = sqrt(pow((PlayerBodyHeight / 2),2.0) + pow((PlayerThickness / 2),2.0));
 	ba = bb = bc = bd = be = bf = bg = bh = PlayerPosition;
-	float angle = asin((PlayerBodyHeight / 2) / diag) + PlayerRotation;
-	ba.x = PlayerPosition.x + (diag)*cos(3.14+angle);
-	ba.y = PlayerPosition.y + (diag)*sin(3.14+angle);
+	float angle = asin((PlayerBodyHeight / 2) / diag) ;
+
+	ba.x = PlayerPosition.x + ((diag)*cos(3.14 + angle + PlayerRotation));// *cos(PlayerRotation);
+	ba.y = PlayerPosition.y + ((diag)*sin(3.14 + angle + PlayerRotation));// *cos(PlayerRotation);
 	ba.z = PlayerPosition.z - PlayerThickness / 2;
 	ba.Draw();
 
-	bb.x = PlayerPosition.x + (diag)*cos(-6.28+angle);
-	bb.y = PlayerPosition.y + (diag)*sin(-angle+6.28);
+	bb.x = PlayerPosition.x + ((diag)*cos(6.28 - angle + PlayerRotation));// *cos(PlayerRotation);
+	bb.y = PlayerPosition.y + ((diag)*sin(-angle + 6.28 + PlayerRotation));// *cos(PlayerRotation);
 	bb.z = PlayerPosition.z + PlayerThickness / 2;
 	bb.Draw();
-
-	bc.x = PlayerPosition.x + (diag)*cos(angle);
-	bc.y = PlayerPosition.y + (diag)*sin(angle);
+	
+	bc.x = PlayerPosition.x + ((diag)*cos(angle + PlayerRotation));//*cos(PlayerRotation);
+	bc.y = PlayerPosition.y + ((diag)*sin(angle + PlayerRotation));//*cos(PlayerRotation);
 	bc.z = PlayerPosition.z - PlayerThickness / 2;
 	bc.Draw();
-	/*
-	bd.x = PlayerPosition.x + (diag)*cos(3.14 - angle);
-	bd.y = PlayerPosition.y + (diag)*sin(3.14 - angle);
+
+	bd.x = (diag)*cos(3.14 - angle + PlayerRotation);
+	bd.y = (diag)*sin(3.14 - angle + PlayerRotation);
+	bd.x = PlayerPosition.x + bd.x;
+	bd.y = PlayerPosition.y + bd.y;
 	bd.z = PlayerPosition.z - PlayerThickness / 2;
+
 	bd.Draw();
-	*/
+	Rect a(ba, bb, bc, bd);
+	a.Draw();
 	/*
 	ba = bb = bc = bd = be = bf = bg = bh = PlayerPosition;
 	bb.x = bg.x = bf.x = bc.x = (PlayerPosition.x + PlayerThickness / 2); // larghezza corpo
