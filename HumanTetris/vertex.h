@@ -100,13 +100,13 @@ public:
 		glEnd();
 	}
 };
-
+/*
 class Circle {
 public:
 	Vertex center;
 	float radius;
 	Circle() {
-		Vertex temp(0.0, 0.0, 0.0);
+		Vertex temp(0, 0, 0);
 		temp.SetColor(0.0, 0.0, 0.0);
 		center = temp;
 		radius = 0.0;
@@ -131,6 +131,7 @@ public:
 			Vertex current(x, y, center.z);
 			current.SetColor(center.r, center.b, center.g);
 			if (i != 0) {
+				
 				Triangle tri(center, last, current);
 				tri.Draw();
 			}
@@ -140,6 +141,7 @@ public:
 		glEnd();
 	}
 };
+*/
 
 class Cylinder {
 public:
@@ -164,6 +166,7 @@ public:
 			Vertex current(x, y, center.z + width/2);
 			current.SetColor(center.r, center.b, center.g);
 			if (i != 0) {
+				
 				Triangle tri(center, last, current);
 				tri.Draw();
 				Vertex a = center;
@@ -178,6 +181,12 @@ public:
 				tri.Draw();
 				tri.SetP(b, c, current);
 				tri.Draw();
+				//current.Draw();
+				//last.Draw();
+				//center.Draw();
+				//a.Draw();
+				//b.Draw();
+				//c.Draw();
 			}
 			last = current;
 		}
