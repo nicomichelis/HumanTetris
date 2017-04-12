@@ -106,8 +106,8 @@ void MyModel::DrawPlayer() {
 	HeadPosition.y += (PlayerBodyHeight / 2 + PlayerHeadSize)*sin(3.14 / 2 + PlayerRotation);
 	HeadPosition.x += (PlayerBodyHeight / 2 + PlayerHeadSize)*cos(3.14 / 2 + PlayerRotation);
 	HeadPosition.Draw();
-	/*Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
-	Head.Draw();*/
+	Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
+	//Head.Draw();
 	
 	// PlayerPosition.Draw();
 	// Body
@@ -145,7 +145,7 @@ void MyModel::DrawPlayer() {
 	bh = bd;
 	bh.z = PlayerPosition.z + PlayerThickness / 2;
 	
-	/*
+	
 	Rect corpo_back(bf, be, bh, bg);
 	corpo_back.Draw();
 
@@ -153,35 +153,63 @@ void MyModel::DrawPlayer() {
 	corpo_right.Draw();
 
 	Rect corpo_left(be, ba, bd, bh);
-	corpo_left.Draw();*/
+	corpo_left.Draw();
 	
 	
 	// Arms (45 degrees)
 
-	float ArmDist = 2 * diag;
+	float ArmDist = 2 * diag ;
 	float ArmDiag = diag;
 	float alpha = 3.14 / 4;
+	float ArmThickness = PlayerThickness / 2;
+	float PlayerArmHeight = PlayerBodyHeight / 5 * 3;
 	float beta = 3.14 / 6;
+	ArmDiag =  sqrt(pow((PlayerArmHeight / 2), 2.0) + pow((ArmThickness / 2), 2.0));
+	for (int i = 0; i < 4; i++) {
+		//ArmDist = ArmDiag*4/3;
+		alpha += i*3.14/2;
+		Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
+		xa.SetColor(1.0, 0.5, 0.3);
+		xb.SetColor(1.0, 0.5, 0.3);
+		xc.SetColor(1.0, 0.5, 0.3);
+		xd.SetColor(1.0, 0.5, 0.3);
+		xe.SetColor(1.0, 0.5, 0.3);
+		xf.SetColor(1.0, 0.5, 0.3);
+		xg.SetColor(1.0, 0.5, 0.3);
+		xh.SetColor(1.0, 0.5, 0.3);
+		xa.x = PlayerPosition.x + ArmDist*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(3.14 + angle + PlayerRotation - alpha));
+		xa.y = PlayerPosition.y + ArmDist*sin(alpha + PlayerRotation) + ((ArmDiag)*sin(3.14 + angle + PlayerRotation - alpha));
+		xa.z = PlayerPosition.z + ArmThickness / 2;
+		
+		xb.x = PlayerPosition.x + ArmDist*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(6.28 - angle + PlayerRotation - alpha));
+		xb.y = PlayerPosition.y + ArmDist*sin(alpha + PlayerRotation) + ((ArmDiag)*sin(-angle + 6.28 + PlayerRotation - alpha));
+		xb.z = PlayerPosition.z + ArmThickness / 2;
+		
+		xc.x = PlayerPosition.x + ArmDist*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(angle + PlayerRotation - alpha));
+		xc.y = PlayerPosition.y + ArmDist*sin(alpha + PlayerRotation) + ((ArmDiag)*sin(angle + PlayerRotation - alpha));
+		xc.z = PlayerPosition.z + ArmThickness / 2;
+		
+		xd.x = PlayerPosition.x + ArmDist*cos(alpha + PlayerRotation) + (ArmDiag)*cos(3.14 - angle + PlayerRotation - alpha);
+		xd.y = PlayerPosition.y + ArmDist*sin(alpha + PlayerRotation) + (ArmDiag)*sin(3.14 - angle + PlayerRotation - alpha);
+		xd.z = PlayerPosition.z + ArmThickness / 2;
+		
 
-	Vertex ArmPos;
-	ArmPos.SetColor(1.0, 0.5, 0.3);
-	ArmPos.x = PlayerPosition.x + ArmDist*cos(alpha + PlayerRotation) + ((diag)*cos(3.14 + angle + PlayerRotation - 3.14/4));
-	ArmPos.y = PlayerPosition.y + ArmDist*sin(alpha + PlayerRotation) + ((diag)*sin(3.14 + angle + PlayerRotation - 3.14/4));
-	ArmPos.z = PlayerPosition.z + PlayerThickness / 2;
-	ArmPos.Draw();
-	ArmPos.x = PlayerPosition.x + ArmDist*cos(alpha + PlayerRotation) + ((diag)*cos(6.28 - angle + PlayerRotation - 3.14 / 4));
-	ArmPos.y = PlayerPosition.y + ArmDist*sin(alpha + PlayerRotation) + ((diag)*sin(-angle + 6.28 + PlayerRotation - 3.14/4));
-	ArmPos.z = PlayerPosition.z + PlayerThickness / 2;
-	ArmPos.Draw();
-	ArmPos.x = PlayerPosition.x + ArmDist*cos(alpha + PlayerRotation) + ((diag)*cos(angle + PlayerRotation - 3.14/4));
-	ArmPos.y = PlayerPosition.y + ArmDist*sin(alpha + PlayerRotation) + ((diag)*sin(angle + PlayerRotation - 3.14/4));
-	ArmPos.z = PlayerPosition.z + PlayerThickness / 2;
-	ArmPos.Draw();
-	ArmPos.x = PlayerPosition.x + ArmDist*cos(alpha + PlayerRotation) + (diag)*cos(3.14 - angle + PlayerRotation -3.14/4);
-	ArmPos.y = PlayerPosition.y + ArmDist*sin(alpha + PlayerRotation) + (diag)*sin(3.14 - angle + PlayerRotation - 3.14/4);
-	ArmPos.z = PlayerPosition.z + PlayerThickness / 2;
-	ArmPos.Draw();
+		Rect rightArm_front(xa, xb, xc, xd);
+		rightArm_front.Draw();
+		xe = xa;
+		xf = xb;
+		xg = xc;
+		xh = xd;
+		xe.z = xf.z = xg.z = xh.z = PlayerPosition.z - ArmThickness / 2;
+		Rect rightArm_back(xe, xf, xh, xg);
+		rightArm_back.Draw();
 
+		Rect rightArm_a(xb, xf, xg, xc);
+		rightArm_a.Draw();
+
+		Rect rightArm_b(xe, xa, xd, xh);
+		rightArm_b.Draw();
+	}
 	/*
 	float ArmDist = 2 * diag;
 	float ArmDiag = diag;
