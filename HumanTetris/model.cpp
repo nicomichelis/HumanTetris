@@ -108,7 +108,7 @@ void MyModel::DrawPlayer() {
 	Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
 	Head.Draw();*/
 	
-	PlayerPosition.Draw();
+	//PlayerPosition.Draw();
 	// Body
 	float diag = sqrt(pow((PlayerBodyHeight / 2),2.0) + pow((PlayerThickness / 2),2.0));
 	ba = bb = bc = bd = be = bf = bg = bh = PlayerPosition;
@@ -133,7 +133,7 @@ void MyModel::DrawPlayer() {
 	bd.z = PlayerPosition.z - PlayerThickness / 2;
 	
 	Rect corpo(ba, bb, bc, bd);
-	corpo.Draw();
+	//corpo.Draw();
 	
 	be = ba;
 	be.z = PlayerPosition.z + PlayerThickness / 2;
@@ -144,10 +144,7 @@ void MyModel::DrawPlayer() {
 	bh = bd;
 	bh.z = PlayerPosition.z + PlayerThickness / 2;
 	
-	be.Draw();
-	bf.Draw();
-	bg.Draw();
-	bh.Draw();
+	/*
 	Rect corpo_back(bf, be, bh, bg);
 	corpo_back.Draw();
 
@@ -155,46 +152,80 @@ void MyModel::DrawPlayer() {
 	corpo_right.Draw();
 
 	Rect corpo_left(be, ba, bd, bh);
-	corpo_left.Draw();
+	corpo_left.Draw();*/
 	
-	
-
 	
 	// Arms (45 degrees)
-	
+	float height = 2 * diag;
+	float angle2;
+	for (int j=0; j<4; j++) {
+		angle2 = 3.14 * j / 2 + 3.14/4;
+		
+		Vertex ArmPos;
+		ArmPos.SetColor(0.5, 0.5, 0.5);
+		ArmPos.x = PlayerPosition.x + height*cos(angle2 + PlayerRotation);
+		ArmPos.y = PlayerPosition.y + height*sin(angle2 + PlayerRotation);
+		ArmPos.z = PlayerPosition.z;
+		ArmPos.Draw();
+
+		bc.x = PlayerPosition.x + height*cos(angle2 + PlayerRotation) + diag*cos(angle + PlayerRotation);
+		bc.y = PlayerPosition.y + height*sin(angle2 + PlayerRotation) + diag*sin(angle + PlayerRotation);
+		bc.SetColor(0.1, 0.1, 0.6);
+		bc.Draw();
+
+		bd.x = PlayerPosition.x + height*cos(angle2 + PlayerRotation) + diag*cos(angle + PlayerRotation);
+		bd.y = PlayerPosition.y + height*sin(angle2 + PlayerRotation) - diag*sin(angle + PlayerRotation);
+		bd.Draw();
+		/*
+		ba.x = ArmPos.x + height / 2 * cos(angle2);
+		ba.y = ArmPos.y + height / 2 * sin(angle2);
+		ba.SetColor(0.1, 0.1, 0.6);
+		ba.Draw();
+
+		bb.x = ArmPos.x + height / 2 * cos(angle2) + PlayerThickness*cos(angle2);
+		bb.y = ArmPos.y + height / 2 * sin(angle2) - PlayerThickness*sin(angle2);
+		bb.Draw();
+		Rect leftArm(bb, ba, bc, bd);
+		leftArm.Draw();
+		*/
+	}
+	/*
 		
 		Vertex armPos = PlayerPosition;
 		
 		armPos.x = PlayerPosition.x - PlayerBodyHeight * 3 / 8 * cos(3.14 / 4) - PlayerThickness / 2;
 		armPos.y = PlayerPosition.y + PlayerBodyHeight * 3 / 8 - PlayerBodyHeight * 3 / 8 * sin(3.14 / 4);
-		//armPos.Draw();
+		armPos.Draw();
 
 
-		float diag2 = sqrt(pow((PlayerBodyHeight *3/8), 2.0) + pow((PlayerThickness / 4), 2.0));
+		float diag2 = sqrt(pow((PlayerBodyHeight *3/8), 2.0) + pow((PlayerThickness / 8*3), 2.0));
 		
 		float angle2 =  asin((PlayerBodyHeight *3/8) / diag2);
-		bd.x = PlayerPosition.x + (diag)*cos(3.14 - angle + PlayerRotation);
-		bd.y = PlayerPosition.y + (diag)*sin(3.14 - angle + PlayerRotation);
-		bd.z = PlayerPosition.z - PlayerThickness / 2;
+		
+		bd.z = PlayerPosition.z - PlayerThickness / 4*3;
+		ba.z = PlayerPosition.z - PlayerThickness / 4 * 3;
+		bb.z = PlayerPosition.z - PlayerThickness / 4 * 3;
+		bc.z = PlayerPosition.z - PlayerThickness / 4 * 3;
+
 		bc = bc;
-		bc.x = bh.x + PlayerThickness / 4*sin(3.14/4);
-		bc.y = bh.y - PlayerThickness / 4 * cos(3.14 / 4);
+		bc.x = armPos.x + PlayerBodyHeight / 4 * 3 * cos(angle2);
+		bc.y = armPos.y + PlayerThickness / 8*3 * sin(angle2);
 		
 		bc.SetColor(1.0, 1.0, 1.0);
 		bd.SetColor(1.0, 1.0, 1.0);
-		bc.Draw();
-		bd.Draw();
+		//bc.Draw();
+		//bd.Draw();
 
-		ba.x = bd.x - PlayerBodyHeight * 3 / 8 * cos(3.14 / 4);
-		ba.y = bd.y - PlayerBodyHeight * 3 / 8 * cos(3.14 / 4);
-		ba.Draw();
+		ba.x = bd.x - PlayerBodyHeight * 3 / 4 * cos(3.14 / 4);
+		ba.y = bd.y - PlayerBodyHeight * 3 / 4 * cos(3.14 / 4);
+		//ba.Draw();
 
-		bb.x = bc.x - PlayerBodyHeight * 3 / 8 * cos(3.14 / 4);
-		bb.y = bc.y - PlayerBodyHeight * 3 / 8 * cos(3.14 / 4);
-		bb.Draw();
+		bb.x = bc.x - PlayerBodyHeight * 3 / 4 * cos(3.14 / 4);
+		bb.y = bc.y - PlayerBodyHeight * 3 / 4 * cos(3.14 / 4);
+		//bb.Draw();
 
 		Rect leftArm(ba, bb, bc, bd);
-		leftArm.Draw();
+		//leftArm.Draw();
 
 		/*ba.x = armPos.x + ((diag2)*cos(3.14 + angle2 + PlayerRotation))*cos(3.14 / 4);
 		ba.y = armPos.y + ((diag2)*sin(3.14 + angle2 + PlayerRotation))*sin(3.14 / 4);
