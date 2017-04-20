@@ -173,11 +173,12 @@ void MyModel::DrawPlayer() {
 	float alpha = 3.14 / 4;
 	float ArmThickness = PlayerThickness / 2;
 	angle2 = asin( sin(90) / ArmDiag * ArmThickness / 2);
+	ArmDiag = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow((ArmThickness / 2), 2.0));
 	float angle3;
 	angle3 =acos( cos(angle2)*ArmDiag / PlayerArmHeight);
 	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow((ArmDiag), 2.0) - 2 * ArmDiag*PlayerArmHeight*cos(3.14 -angle2 - angle3));
 	float beta = 3.14 / 6;
-	ArmDiag =  sqrt(pow((PlayerArmHeight / 2), 2.0) + pow((ArmThickness / 2), 2.0));
+	
 	for (int i = 0; i < 4; i++) {
 		//ArmDist = ArmDiag*4/3;
 		alpha += i*3.14/2;
