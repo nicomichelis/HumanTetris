@@ -107,9 +107,9 @@ void MyModel::DrawPlayer() {
 	HeadPosition.x += (PlayerBodyHeight / 2 + PlayerHeadSize)*cos(3.14 / 2 + PlayerRotation);
 	HeadPosition.Draw();
 	Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
-	//Head.Draw();
+	Head.Draw();
 	
-	// PlayerPosition.Draw();
+	 PlayerPosition.Draw();
 	// Body
 	float diag = sqrt(pow((PlayerBodyHeight / 2),2.0) + pow((PlayerThickness / 2),2.0));
 	ba = bb = bc = bd = be = bf = bg = bh = PlayerPosition;
@@ -157,12 +157,19 @@ void MyModel::DrawPlayer() {
 	
 	
 	// Arms (45 degrees)
-
+	float PlayerArmHeight = PlayerBodyHeight / 5 * 3;
 	float ArmDist = 2 * diag ;
+	float angle2;
+	
 	float ArmDiag = diag;
+	
+	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0)+ pow((ArmDiag), 2.0)-2*ArmDiag*PlayerArmHeight*cos(3.14/6*5));
 	float alpha = 3.14 / 4;
 	float ArmThickness = PlayerThickness / 2;
-	float PlayerArmHeight = PlayerBodyHeight / 5 * 3;
+	angle2 = asin( sin(90) / ArmDiag * ArmThickness / 2);
+	float angle3;
+	angle3 =acos( cos(angle2)*ArmDiag / PlayerArmHeight);
+	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow((ArmDiag), 2.0) - 2 * ArmDiag*PlayerArmHeight*cos(3.14 -angle2 - angle3));
 	float beta = 3.14 / 6;
 	ArmDiag =  sqrt(pow((PlayerArmHeight / 2), 2.0) + pow((ArmThickness / 2), 2.0));
 	for (int i = 0; i < 4; i++) {
