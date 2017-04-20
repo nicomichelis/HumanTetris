@@ -133,8 +133,8 @@ void MyModel::DrawPlayer() {
 	bd.y = PlayerPosition.y + (diag)*sin(3.14 - angle + PlayerRotation);
 	bd.z = PlayerPosition.z - PlayerThickness / 2;
 	
-	Rect corpo(ba, bb, bc, bd);
-	corpo.Draw();
+	Rect corpo_front(ba, bb, bc, bd);
+	corpo_front.Draw();
 	
 	be = ba;
 	be.z = PlayerPosition.z + PlayerThickness / 2;
@@ -154,6 +154,12 @@ void MyModel::DrawPlayer() {
 
 	Rect corpo_left(be, ba, bd, bh);
 	corpo_left.Draw();
+
+	Rect corpo_top(bd, bc, bg, bh);
+	corpo_top.Draw();
+
+	Rect corpo_bottom(be, bf, bb, ba);
+	corpo_bottom.Draw();
 	
 	
 	// Arms (45 degrees)
