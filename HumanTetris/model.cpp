@@ -145,7 +145,6 @@ void MyModel::DrawPlayer() {
 	bh = bd;
 	bh.z = PlayerPosition.z + PlayerThickness / 2;
 	
-	
 	Rect corpo_back(bf, be, bh, bg);
 	corpo_back.Draw();
 
@@ -178,18 +177,18 @@ void MyModel::DrawPlayer() {
 	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow(diag, 2.0) - 2 * diag*PlayerArmHeight/2*cos(3.14 -angle2 - angle3));
 	float beta = 3.14 / 6;
 	float angle_arm = asin((PlayerArmHeight / 2) / ArmDiag);
-	for (int i = 0; i < 2; i++) {
+	Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
+	xa.SetColor(1.0, 0.5, 0.3);
+	xb.SetColor(1.0, 0.5, 0.3);
+	xc.SetColor(1.0, 0.5, 0.3);
+	xd.SetColor(1.0, 0.5, 0.3);
+	xe.SetColor(1.0, 0.5, 0.3);
+	xf.SetColor(1.0, 0.5, 0.3);
+	xg.SetColor(1.0, 0.5, 0.3);
+	xh.SetColor(1.0, 0.5, 0.3);
+
+	for (int i = 0; i < 4; i++) {
 		
-		alpha += i*3.14;
-		Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
-		xa.SetColor(1.0, 0.5, 0.3);
-		xb.SetColor(1.0, 0.5, 0.3);
-		xc.SetColor(1.0, 0.5, 0.3);
-		xd.SetColor(1.0, 0.5, 0.3);
-		xe.SetColor(1.0, 0.5, 0.3);
-		xf.SetColor(1.0, 0.5, 0.3);
-		xg.SetColor(1.0, 0.5, 0.3);
-		xh.SetColor(1.0, 0.5, 0.3);
 		
 		xa.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(3.14+ angle_arm + PlayerRotation - alpha));
 		xa.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + ((ArmDiag)*sin(3.14 + angle_arm + PlayerRotation - alpha));
@@ -207,12 +206,6 @@ void MyModel::DrawPlayer() {
 		xd.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + (ArmDiag)*sin(3.14 - angle_arm + PlayerRotation - alpha);
 		xd.z = PlayerPosition.z + ArmThickness / 2;
 
-		xa.Draw();
-		xb.Draw();
-		xc.Draw();
-		xd.Draw();
-		
-
 		Rect rightArm_front(xa, xb, xc, xd);
 		rightArm_front.Draw();
 		
@@ -220,24 +213,30 @@ void MyModel::DrawPlayer() {
 		xf = xb;
 		xg = xc;
 		xh = xd;
+
 		xe.z = xf.z = xg.z = xh.z = PlayerPosition.z - ArmThickness / 2;
-		Rect rightArm_back(xe, xf, xh, xg);
-		//rightArm_back.Draw();
+
+		Rect rightArm_back(xe, xf, xg, xh);
+		rightArm_back.Draw();
 
 		Rect rightArm_a(xb, xf, xg, xc);
 		rightArm_a.Draw();
 
 		Rect rightArm_b(xe, xa, xd, xh);
 		rightArm_b.Draw();
+
+
+		if (i == 0)
+			alpha = 3.14/6*4;
+		if (i == 1)
+			alpha =3.14 / 3*4;
+		if (i == 2)
+			alpha = 3.14/6*10;
 		
-		xc.x = PlayerPosition.x + ArmDist*cos(alpha + PlayerRotation);
-		xc.y = PlayerPosition.y + ArmDist*sin(alpha + PlayerRotation);
-		xc.z = PlayerPosition.z;
-		xc.Draw();
 	
 	}
-
-	alpha = 3.14 / 3 + 3.14 / 2;
+/*
+	//alpha = 3.14 / 3 + 3.14 / 2;
 	for (int i = 0; i < 2; i++) {
 
 		alpha =3.14/6*4 +i*3.14;
@@ -267,14 +266,8 @@ void MyModel::DrawPlayer() {
 		xd.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + (ArmDiag)*sin(3.14 - angle_arm + PlayerRotation - alpha);
 		xd.z = PlayerPosition.z + ArmThickness / 2;
 
-		xa.Draw();
-		xb.Draw();
-		xc.Draw();
-		xd.Draw();
-
-
 		Rect rightArm_front(xa, xb, xc, xd);
-		rightArm_front.Draw();
+		//rightArm_front.Draw();
 
 		xe = xa;
 		xf = xb;
@@ -285,18 +278,14 @@ void MyModel::DrawPlayer() {
 		//rightArm_back.Draw();
 
 		Rect rightArm_a(xb, xf, xg, xc);
-		rightArm_a.Draw();
+		//rightArm_a.Draw();
 
 		Rect rightArm_b(xe, xa, xd, xh);
-		rightArm_b.Draw();
+		//rightArm_b.Draw();
 
-		xc.x = PlayerPosition.x + ArmDist*cos(alpha + PlayerRotation);
-		xc.y = PlayerPosition.y + ArmDist*sin(alpha + PlayerRotation);
-		xc.z = PlayerPosition.z;
-		xc.Draw();
 
 	}
-
+	*/
 }
 
 void MyModel::SetWallPosition(float x) {
