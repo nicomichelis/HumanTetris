@@ -88,7 +88,7 @@ public:
 	}
 	void Draw()
 	{
-		glBegin(GL_QUADS);
+		/*glBegin(GL_QUADS);
 		glColor3f(a.r, a.g, a.b);
 		glVertex3f(a.x, a.y, a.z);
 		glColor3f(b.r, b.g, b.b);
@@ -97,6 +97,25 @@ public:
 		glVertex3f(c.x, c.y, c.z);
 		glColor3f(d.r, d.g, d.b);
 		glVertex3f(d.x, d.y, d.z);
+		glEnd();
+		*/
+
+		glBegin(GL_TRIANGLES);
+		glColor3f(a.r, a.g, a.b);
+		glVertex3f(a.x, a.y, a.z);
+		glColor3f(b.r, b.g, b.b);
+		glVertex3f(b.x, b.y, b.z);
+		glColor3f(c.r, c.g, c.b);
+		glVertex3f(c.x, c.y, c.z);
+		glEnd();
+
+		glBegin(GL_TRIANGLES);
+		glColor3f(c.r, c.g, c.b);
+		glVertex3f(c.x, c.y, c.z);
+		glColor3f(d.r, d.g, d.b);
+		glVertex3f(d.x, d.y, d.z);
+		glColor3f(a.r, a.g, a.b);
+		glVertex3f(a.x, a.y, a.z);
 		glEnd();
 	}
 };
@@ -159,7 +178,8 @@ public:
 		glBegin(GL_TRIANGLES);
 		int res = 1000;
 		Vertex last;
-		for (int i = 0; i < res + 1; i++) {
+		
+		for (int i = 0; i < res ; i++) {
 			float theta = 2.0f * 3.1415926f * float(i) / float(res);	//get the current angle 
 			float x = radius * cosf(theta) + center.x;	//calculate the x component 
 			float y = radius * sinf(theta) + center.y;	//calculate the y component 

@@ -107,7 +107,7 @@ void MyModel::DrawPlayer() {
 	HeadPosition.x += (PlayerBodyHeight / 2 + PlayerHeadSize)*cos(3.14 / 2 + PlayerRotation);
 	HeadPosition.Draw();
 	Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
-	//Head.Draw();
+	Head.Draw();
 	
 	 PlayerPosition.Draw();
 	// Body
@@ -216,7 +216,7 @@ void MyModel::DrawPlayer() {
 
 		xe.z = xf.z = xg.z = xh.z = PlayerPosition.z - ArmThickness / 2;
 
-		Rect arm_back(xe, xf, xg, xh);
+		Rect arm_back(xh, xg, xf, xe);
 		arm_back.Draw();
 
 		Rect arm_left(xb, xf, xg, xc);
@@ -225,10 +225,10 @@ void MyModel::DrawPlayer() {
 		Rect arm_right(xe, xa, xd, xh);
 		arm_right.Draw();
 
-		Rect arm_estremo_a(xc, xd, xh, xg);
+		Rect arm_estremo_a(xg, xh, xd, xc);
 		arm_estremo_a.Draw();
 
-		Rect arm_estremo_b(xa, xb, xf, xe);
+		Rect arm_estremo_b(xe, xf, xb, xa);
 		arm_estremo_b.Draw();
 
 		if (i == 0)
