@@ -206,8 +206,8 @@ void MyModel::DrawPlayer() {
 		xd.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + (ArmDiag)*sin(3.14 - angle_arm + PlayerRotation - alpha);
 		xd.z = PlayerPosition.z + ArmThickness / 2;
 
-		Rect rightArm_front(xa, xb, xc, xd);
-		rightArm_front.Draw();
+		Rect arm_front(xa, xb, xc, xd);
+		arm_front.Draw();
 		
 		xe = xa;
 		xf = xb;
@@ -216,15 +216,20 @@ void MyModel::DrawPlayer() {
 
 		xe.z = xf.z = xg.z = xh.z = PlayerPosition.z - ArmThickness / 2;
 
-		Rect rightArm_back(xe, xf, xg, xh);
-		rightArm_back.Draw();
+		Rect arm_back(xe, xf, xg, xh);
+		arm_back.Draw();
 
-		Rect rightArm_a(xb, xf, xg, xc);
-		rightArm_a.Draw();
+		Rect arm_left(xb, xf, xg, xc);
+		arm_left.Draw();
 
-		Rect rightArm_b(xe, xa, xd, xh);
-		rightArm_b.Draw();
+		Rect arm_right(xe, xa, xd, xh);
+		arm_right.Draw();
 
+		Rect arm_estremo_a(xc, xd, xh, xg);
+		arm_estremo_a.Draw();
+
+		Rect arm_estremo_b(xa, xb, xf, xe);
+		arm_estremo_b.Draw();
 
 		if (i == 0)
 			alpha = 3.14/6*4;
