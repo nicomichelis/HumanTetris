@@ -180,7 +180,7 @@ public:
 		Vertex last;
 		
 		for (int i = 0; i < res ; i++) {
-			float theta = 2.0f * 3.1415926f * float(i) / float(res);	//get the current angle 
+			float theta = 3.0f * 3.1415926f * float(i) / float(res);	//get the current angle 
 			float x = radius * cosf(theta) + center.x;	//calculate the x component 
 			float y = radius * sinf(theta) + center.y;	//calculate the y component 
 			Vertex current(x, y, center.z + width/2);
