@@ -4,6 +4,8 @@
 #include <gl\glu.h>
 #include <math.h>
 
+#define PI 3.14159265359
+
 class Vertex {
 public:
 	float x, y, z;				// 3D coordinates
@@ -66,6 +68,12 @@ public:
 		glColor3f(c.r, c.g, c.b);
 		glVertex3f(c.x, c.y, c.z);
 		glEnd();
+	}
+	void TraslateZ(float value) {
+		// Traslate the triangle along the z axis of selected value
+		a.z += value;
+		b.z += value;
+		c.z += value;
 	}
 };
 
@@ -177,6 +185,41 @@ public:
 	void Draw() {
 		glBegin(GL_TRIANGLES);
 		int res = 1000;
+		for (int i = 0; i < res; i++) {
+			// Current point
+			float theta = 2.0f * PI * float(i) / float(res);
+			float x = radius * cos(theta) + center.x;
+			float y = radius * sin(theta) + center.y;
+			Vertex current = center;
+			current.SetP(x, y, center.z);
+			// Next point
+			theta = 2.0f * PI * float(i+1) / float(res);
+			x = radius * cos(theta) + center.x;
+			y = radius * sin(theta) + center.y;
+			Vertex next = center;
+			next.SetP(x, y, center.z);
+			// Front
+			Triangle front(center, current, next);
+			front.TraslateZ(width / 2);
+			front.Draw();
+			// Back
+			Triangle back(current, center, next);
+			back.TraslateZ(-width / 2);
+			back.Draw();
+			// Sides
+			Vertex nextfront = next;
+			nextfront.z += width / 2;
+			Vertex currentfront = current;
+			currentfront.z += width / 2;
+			Vertex nextback = next;
+			nextback.z -= width / 2;
+			Vertex currentback = current;
+			currentback.z -= width / 2;
+			Rect side(currentfront, currentback, nextback, nextfront);
+			side.Draw();
+		}
+
+		/*
 		Vertex last;
 		
 		for (int i = 0; i < res ; i++) {
@@ -210,6 +253,7 @@ public:
 			}
 			last = current;
 		}
+		*/
 		glEnd();
 	}
 };
