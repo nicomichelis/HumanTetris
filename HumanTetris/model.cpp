@@ -105,7 +105,7 @@ void MyModel::DrawPlayer() {
 	Vertex HeadPosition = PlayerPosition;
 	HeadPosition.y += (PlayerBodyHeight / 2 + PlayerHeadSize)*sin(3.14 / 2 + PlayerRotation);
 	HeadPosition.x += (PlayerBodyHeight / 2 + PlayerHeadSize)*cos(3.14 / 2 + PlayerRotation);
-	HeadPosition.Draw();
+	//HeadPosition.Draw();
 	Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
 	Head.Draw();
 	

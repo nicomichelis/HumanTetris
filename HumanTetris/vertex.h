@@ -96,18 +96,6 @@ public:
 	}
 	void Draw()
 	{
-		/*glBegin(GL_QUADS);
-		glColor3f(a.r, a.g, a.b);
-		glVertex3f(a.x, a.y, a.z);
-		glColor3f(b.r, b.g, b.b);
-		glVertex3f(b.x, b.y, b.z);
-		glColor3f(c.r, c.g, c.b);
-		glVertex3f(c.x, c.y, c.z);
-		glColor3f(d.r, d.g, d.b);
-		glVertex3f(d.x, d.y, d.z);
-		glEnd();
-		*/
-
 		glBegin(GL_TRIANGLES);
 		glColor3f(a.r, a.g, a.b);
 		glVertex3f(a.x, a.y, a.z);
@@ -127,48 +115,6 @@ public:
 		glEnd();
 	}
 };
-/*
-class Circle {
-public:
-	Vertex center;
-	float radius;
-	Circle() {
-		Vertex temp(0, 0, 0);
-		temp.SetColor(0.0, 0.0, 0.0);
-		center = temp;
-		radius = 0.0;
-	}
-	Circle(Vertex c) {
-		center = c;
-		radius = 0.0;
-	}
-	Circle(Vertex c, float r) {
-		center = c;
-		radius = r;
-	}
-	void Draw()
-	{
-		glBegin(GL_TRIANGLES);
-		int res = 1000;
-		Vertex last;
-		for (int i = 0; i < res + 1; i++) {
-			float theta = 2.0f * 3.1415926f * float(i) / float(res);	//get the current angle 
-			float x = radius * cosf(theta) + center.x;	//calculate the x component 
-			float y = radius * sinf(theta) + center.y;	//calculate the y component 
-			Vertex current(x, y, center.z);
-			current.SetColor(center.r, center.b, center.g);
-			if (i != 0) {
-				
-				Triangle tri(center, last, current);
-				tri.Draw();
-			}
-			last.SetP(x, y, center.z);
-			last.SetColor(center.r, center.b, center.g);
-		}
-		glEnd();
-	}
-};
-*/
 
 class Cylinder {
 public:
@@ -178,12 +124,11 @@ public:
 	Cylinder() {
 	}
 	Cylinder(Vertex c, float r, float w) {
-		center = c;
-		radius = r;
-		width = w;
+		this->center = c;
+		this->radius = r;
+		this->width = w;
 	}
 	void Draw() {
-		glBegin(GL_TRIANGLES);
 		int res = 1000;
 		for (int i = 0; i < res; i++) {
 			// Current point
@@ -218,42 +163,5 @@ public:
 			Rect side(currentfront, currentback, nextback, nextfront);
 			side.Draw();
 		}
-
-		/*
-		Vertex last;
-		
-		for (int i = 0; i < res ; i++) {
-			float theta = 3.0f * 3.1415926f * float(i) / float(res);	//get the current angle 
-			float x = radius * cosf(theta) + center.x;	//calculate the x component 
-			float y = radius * sinf(theta) + center.y;	//calculate the y component 
-			Vertex current(x, y, center.z + width/2);
-			current.SetColor(center.r, center.b, center.g);
-			if (i != 0) {
-				
-				Triangle tri(center, last, current);
-				tri.Draw();
-				Vertex a = center;
-				a.z -= width;
-				Vertex b = last;
-				b.z -= width;
-				Vertex c = current;
-				c.z -= width;
-				tri.SetP(b, a, c);
-				tri.Draw();
-				tri.SetP(last, b, current);
-				tri.Draw();
-				tri.SetP(b, c, current);
-				tri.Draw();
-				//current.Draw();
-				//last.Draw();
-				//center.Draw();
-				//a.Draw();
-				//b.Draw();
-				//c.Draw();
-			}
-			last = current;
-		}
-		*/
-		glEnd();
 	}
 };
