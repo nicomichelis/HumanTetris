@@ -22,13 +22,13 @@ MyModel::MyModel() {
 	wallPosition = -10.0;
 
 	// Player
-	Vertex initPlayer(0.0, 5.0, 10.0);
+	Vertex initPlayer(0.0, 1.0, 10.0);
 	initPlayer.SetColor(1.0, 0.5, 0.5);
 	PlayerPosition = initPlayer;
 	PlayerRotation = 0.0;
 	PlayerHeadSize = 0.2;
-	PlayerThickness = 0.3;
-	PlayerBodyHeight = 1.0;
+	PlayerThickness = 0.25;
+	PlayerBodyHeight = 0.8;
 
 }
 
