@@ -114,8 +114,16 @@
     <ClCompile Include="model.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="audiere.h" />
     <ClInclude Include="model.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="vertex.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HumanTetris.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\..\..\..\..\Downloads\graphics\Basic2D_2\audiere.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,7 +13,12 @@
 #include <stdlib.h>       // librerie standard
 #include "vertex.h"
 #include "model.h"
+#include "audiere.h"
 #include <iostream>
+
+using namespace audiere;
+
+
 
 // resources (menu, icons...)
 
@@ -178,6 +183,7 @@ bool RegistraClasse(HINSTANCE hInstance)
 }
 
 
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	PSTR szCmdLine, int iCmdShow)
 {
@@ -192,6 +198,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	ShowWindow(CS.MainW, iCmdShow);
 	UpdateWindow(CS.MainW);
+
+	// Prove audio
+	//  AUDIO - start
+	AudioDevicePtr device(OpenDevice());
+	if (!device) {
+		return 0;
+	}
+	OutputStreamPtr explosion = OpenSound(device, "../Data/explosion.wav", false);
+
+
+
+
 	while (!done) {
 		if (PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE)) {
 			if (Msg.message == WM_QUIT) {
