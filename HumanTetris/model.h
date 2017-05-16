@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vertex.h"
+#include <ctime>
 
 class MyModel {
 private:
@@ -27,7 +28,22 @@ private:
 	float PlayerThickness;
 	float PlayerBodyHeight;
 
+	// Difficulty
+	float size;
+	float rotation;
+
 	Vertex ba, bb, bc, bd, be, bf, bg, bh;
+
+
+	// LIMITI
+	float limitesuperiore;
+	float limiteinferiore;
+	float limitedestro;
+	float limitesinistro;
+	float randomX;
+	float randomY;
+	
+
 
 public:
 	MyModel();

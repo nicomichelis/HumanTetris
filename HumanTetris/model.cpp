@@ -9,6 +9,7 @@
 #pragma comment( lib, "winmm.lib" )					
 
 MyModel::MyModel() {
+
 	// Init Floor
 	floorLargh = 5.0;
 	floorProf = 20.0;
@@ -30,6 +31,20 @@ MyModel::MyModel() {
 	PlayerThickness = 0.25;
 	PlayerBodyHeight = 0.8;
 
+	// Difficulty
+	size = 4;
+	rotation = 0;
+
+	// Init limits
+	srand((unsigned)time(NULL));
+	limitesuperiore = wallAltezza - (size*PlayerBodyHeight / 2 + size*PlayerHeadSize * 2);
+	limiteinferiore = (size*PlayerBodyHeight / 2 + size*PlayerHeadSize * 2);
+	limitedestro = wallLargh / 2 - (size*PlayerBodyHeight / 2 + size*PlayerHeadSize * 2);
+	limitesinistro = -wallLargh / 2 + (size*PlayerBodyHeight / 2 + size*PlayerHeadSize * 2);
+	int rands = (rand() % 100)/100;
+	randomX = limitesinistro + rands*(limitedestro - limitesinistro);
+	rands = (rand() % 100) / 100;
+	randomY = limiteinferiore + rands*(limitesuperiore - limiteinferiore);
 }
 
 void MyModel::DrawFloor() {
@@ -97,17 +112,23 @@ void MyModel::DrawWall() {
 	wallSideB.Draw();
 	wallBottom.Draw();
 
+	// Limiti
 	Vertex hole = wallPositionPoint;
-	DrawPlayerOnWall(hole, 0.3, 3);
-	hole.y += 0.5;
+	hole.y = randomY;
+	hole.x = randomX;
+	DrawPlayerOnWall(hole, 0, 3);
 	hole.z += wallProf;
-	DrawPlayerOnWall(hole, 0.3, 3);
+	DrawPlayerOnWall(hole, 0, 3);
 
 }
 
 void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 	// Head
+	position.r = 0.0;
+	position.g = 0.0;
+	position.b = 0.0;
 	Vertex HeadPosition = position;
+	
 	HeadPosition.y += (size*PlayerBodyHeight / 2 + size*PlayerHeadSize)*sin(PI / 2 + rotation);
 	HeadPosition.x += (size*PlayerBodyHeight / 2 + size*PlayerHeadSize)*cos(PI / 2 + rotation);
 	Cylinder Head(HeadPosition, size*PlayerHeadSize, size*PlayerThickness);
@@ -119,31 +140,28 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 
 	ba.x = position.x + ((diag)*cos(PI + angle + rotation));
 	ba.y = position.y + ((diag)*sin(PI + angle + rotation));
-	ba.z = position.z - size*PlayerThickness / 2;
+	ba.z = position.z + size*PlayerThickness / 2;
 
 	bb.x = position.x + ((diag)*cos(2 * PI - angle + rotation));
 	bb.y = position.y + ((diag)*sin(-angle + 2 * PI + rotation));
-	bb.z = position.z - size*PlayerThickness / 2;
+	bb.z = position.z + size*PlayerThickness / 2;
 
 	bc.x = position.x + ((diag)*cos(angle + rotation));
 	bc.y = position.y + ((diag)*sin(angle + rotation));
-	bc.z = position.z - size*PlayerThickness / 2;
+	bc.z = position.z + size*PlayerThickness / 2;
 
 	bd.x = position.x + (diag)*cos(PI - angle + rotation);
 	bd.y = position.y + (diag)*sin(PI - angle + rotation);
-	bd.z = position.z - size*PlayerThickness / 2;
+	bd.z = position.z + size*PlayerThickness / 2;
 
 	Rect corpo_front(ba, bb, bc, bd);
 	corpo_front.Draw();
 
 	be = ba;
-	be.z = position.z + size*PlayerThickness / 2;
 	bf = bb;
-	bf.z = position.z + size*PlayerThickness / 2;
 	bg = bc;
-	bg.z = position.z + size*PlayerThickness / 2;
 	bh = bd;
-	bh.z = position.z + size*PlayerThickness / 2;
+	be.z=bf.z=bg.z=bh.z = position.z - size*PlayerThickness / 2;
 
 	Rect corpo_back(bf, be, bh, bg);
 	corpo_back.Draw();
@@ -239,31 +257,28 @@ void MyModel::DrawPlayer() {
 
 	ba.x = PlayerPosition.x + ((diag)*cos(PI + angle + PlayerRotation));
 	ba.y = PlayerPosition.y + ((diag)*sin(PI + angle + PlayerRotation));
-	ba.z = PlayerPosition.z - PlayerThickness / 2;
+	ba.z = PlayerPosition.z + PlayerThickness / 2;
 
 	bb.x = PlayerPosition.x + ((diag)*cos(2*PI - angle + PlayerRotation));
 	bb.y = PlayerPosition.y + ((diag)*sin(-angle + 2*PI + PlayerRotation));
-	bb.z = PlayerPosition.z - PlayerThickness / 2;
+	bb.z = PlayerPosition.z + PlayerThickness / 2;
 	
 	bc.x = PlayerPosition.x + ((diag)*cos(angle + PlayerRotation));
 	bc.y = PlayerPosition.y + ((diag)*sin(angle + PlayerRotation));
-	bc.z = PlayerPosition.z - PlayerThickness / 2;
+	bc.z = PlayerPosition.z + PlayerThickness / 2;
 	
 	bd.x = PlayerPosition.x + (diag)*cos(PI - angle + PlayerRotation);
 	bd.y = PlayerPosition.y + (diag)*sin(PI - angle + PlayerRotation);
-	bd.z = PlayerPosition.z - PlayerThickness / 2;
+	bd.z = PlayerPosition.z + PlayerThickness / 2;
 	
 	Rect corpo_front(ba, bb, bc, bd);
 	corpo_front.Draw();
 	
 	be = ba;
-	be.z = PlayerPosition.z + PlayerThickness / 2;
 	bf = bb;
-	bf.z = PlayerPosition.z + PlayerThickness / 2;
 	bg = bc;
-	bg.z = PlayerPosition.z + PlayerThickness / 2;
 	bh = bd;
-	bh.z = PlayerPosition.z + PlayerThickness / 2;
+	be.z = bf.z = bg.z = bh.z = PlayerPosition.z - PlayerThickness / 2;
 	
 	Rect corpo_back(bf, be, bh, bg);
 	corpo_back.Draw();

@@ -103,9 +103,6 @@ public:
 		glVertex3f(b.x, b.y, b.z);
 		glColor3f(c.r, c.g, c.b);
 		glVertex3f(c.x, c.y, c.z);
-		glEnd();
-
-		glBegin(GL_TRIANGLES);
 		glColor3f(c.r, c.g, c.b);
 		glVertex3f(c.x, c.y, c.z);
 		glColor3f(d.r, d.g, d.b);
