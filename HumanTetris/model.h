@@ -40,5 +40,10 @@ public:
 	Vertex GetPlayerPosition();
 	void SetPlayerPosition(Vertex x);
 	float GetPlayerRotation();
+	float GetwallLargh() { return wallLargh; }
+	float GetwallAltezza() { return wallAltezza; }
 	void SetPlayerRotation(float x);
+	float GetPlayerBodyHeight() { return PlayerBodyHeight; }
+	float GetPlayerHeadSize() { return PlayerHeadSize; }
+
 };
