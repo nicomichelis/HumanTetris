@@ -207,26 +207,52 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			if (CS.keys[VK_UP]) {
 				CS.keys[VK_UP] = FALSE;
 				Vertex temp = CS.modello.GetPlayerPosition();
-				temp.y += CS.movement;
-				CS.modello.SetPlayerPosition(temp);
+				if(temp.y<=(CS.modello.GetwallAltezza() - (CS.modello.GetPlayerBodyHeight()/2+CS.modello.GetPlayerHeadSize()*2)))
+				{
+					temp.y += CS.movement;
+					CS.modello.SetPlayerPosition(temp);
+				}
+				else {
+					//sonoro limite
+				}
 			}
 			if (CS.keys[VK_DOWN]) {
 				CS.keys[VK_DOWN] = FALSE;
 				Vertex temp = CS.modello.GetPlayerPosition();
-				temp.y -= CS.movement;
-				CS.modello.SetPlayerPosition(temp);
+
+				if (temp.y >= ( + (CS.modello.GetPlayerBodyHeight() / 2 + CS.modello.GetPlayerHeadSize()*2)))
+				{
+					temp.y -= CS.movement;
+					CS.modello.SetPlayerPosition(temp);
+				}
+				else {
+					//sonoro limite
+				}
 			}
 			if (CS.keys[VK_LEFT]) {
 				CS.keys[VK_LEFT] = FALSE;
 				Vertex temp = CS.modello.GetPlayerPosition();
-				temp.x -= CS.movement;
-				CS.modello.SetPlayerPosition(temp);
+				if (temp.x >= (-CS.modello.GetwallLargh()/2 +(CS.modello.GetPlayerBodyHeight() / 2 + CS.modello.GetPlayerHeadSize() * 2)))
+				{
+					temp.x -= CS.movement;
+					CS.modello.SetPlayerPosition(temp);
+				}
+				else {
+					//sonoro limite
+				}
 			}
 			if (CS.keys[VK_RIGHT]) {
 				CS.keys[VK_RIGHT] = FALSE;
 				Vertex temp = CS.modello.GetPlayerPosition();
-				temp.x += CS.movement;
-				CS.modello.SetPlayerPosition(temp);
+				if (temp.x <= (CS.modello.GetwallLargh()/2 - (CS.modello.GetPlayerBodyHeight() / 2 + CS.modello.GetPlayerHeadSize() * 2)))
+				{
+					temp.x += CS.movement;
+					CS.modello.SetPlayerPosition(temp);
+				}
+				else {
+
+					//sonoro limite
+				}
 			}
 			if (CS.keys['A']) {
 				CS.keys['A'] = FALSE;
