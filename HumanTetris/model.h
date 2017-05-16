@@ -33,6 +33,7 @@ public:
 	MyModel();
 	void DrawFloor();
 	void DrawWall();
+	void DrawPlayerOnWall(Vertex position, float rotation, float size);
 	void DrawPlayer();
 	void SetWallPosition(float x);
 	float GetWallPosition();
