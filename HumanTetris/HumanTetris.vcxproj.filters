@@ -42,6 +42,6 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\..\..\..\Downloads\graphics\Basic2D_2\audiere.lib" />
+    <Library Include="..\audiere.lib" />
   </ItemGroup>
 </Project>

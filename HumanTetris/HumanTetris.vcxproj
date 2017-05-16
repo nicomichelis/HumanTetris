@@ -123,7 +123,7 @@
     <ResourceCompile Include="HumanTetris.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Library Include="..\..\..\..\..\..\Downloads\graphics\Basic2D_2\audiere.lib" />
+    <Library Include="..\audiere.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
