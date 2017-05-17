@@ -117,6 +117,7 @@
     <ClInclude Include="audiere.h" />
     <ClInclude Include="model.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="SOIL.h" />
     <ClInclude Include="vertex.h" />
   </ItemGroup>
   <ItemGroup>
@@ -124,6 +125,7 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\audiere.lib" />
+    <Library Include="..\SOIL.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

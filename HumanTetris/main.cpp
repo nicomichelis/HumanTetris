@@ -304,6 +304,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				CS.modello.SetPlayerRotation(temp);
 			}
 
+			if (CS.keys['M']) {
+				CS.keys['M'] = FALSE;
+				if (stream->isPlaying())
+					stream->stop();
+				else {
+					stream->play();
+				}
+			}
+
 
 		}
 	}

@@ -3,6 +3,7 @@
 #include "vertex.h"
 #include <ctime>
 
+
 class MyModel {
 private:
 	// Floor

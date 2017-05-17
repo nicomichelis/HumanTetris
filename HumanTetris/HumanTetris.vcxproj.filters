@@ -35,6 +35,9 @@
     <ClInclude Include="audiere.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="SOIL.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="HumanTetris.rc">
@@ -43,5 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Library Include="..\audiere.lib" />
+    <Library Include="..\SOIL.lib" />
   </ItemGroup>
 </Project>
