@@ -129,14 +129,14 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 	position.b = 0.0;
 	Vertex HeadPosition = position;
 	
-	HeadPosition.y += (size*PlayerBodyHeight / 2 + size*PlayerHeadSize)*sin(PI / 2 + rotation);
-	HeadPosition.x += (size*PlayerBodyHeight / 2 + size*PlayerHeadSize)*cos(PI / 2 + rotation);
+	HeadPosition.y += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*sin(PI / 2 + rotation);
+	HeadPosition.x += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*cos(PI / 2 + rotation);
 	Cylinder Head(HeadPosition, size*PlayerHeadSize, size*PlayerThickness);
 	Head.Draw();
 	// Body
-	float diag = sqrt(pow((size*PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
+	float diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
 	ba = bb = bc = bd = be = bf = bg = bh = position;
-	float angle = asin((size*PlayerBodyHeight / 2) / diag);
+	float angle = asin((PlayerBodyHeight / 2) / diag);
 
 	ba.x = position.x + ((diag)*cos(PI + angle + rotation));
 	ba.y = position.y + ((diag)*sin(PI + angle + rotation));
