@@ -205,7 +205,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	if (!device) {
 		return 0;
 	}
-	OutputStreamPtr explosion = OpenSound(device, "../Data/explosion.wav", false);
+
+	OutputStreamPtr stream(OpenSound(device, "../Data/space.wav", true));
+
+	if (!stream) {
+		return 0;         // failure
+	}
+	stream->setRepeat(true);
+	stream->setVolume(0.5f); // 50% volume
+	stream->play();
+
+	OutputStreamPtr limit(OpenSound(device, "../Data/limit.wav", false));
+	OutputStreamPtr stupid(OpenSound(device, "../Data/stupid.wav", false));
 
 
 
@@ -232,6 +243,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				}
 				else {
 					//sonoro limite
+					if (limit->isPlaying()) limit->reset();
+					else limit->play();
 				}
 			}
 			if (CS.keys[VK_DOWN]) {
@@ -245,6 +258,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				}
 				else {
 					//sonoro limite
+					if (limit->isPlaying()) limit->reset();
+					else limit->play();
 				}
 			}
 			if (CS.keys[VK_LEFT]) {
@@ -257,6 +272,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				}
 				else {
 					//sonoro limite
+					if (limit->isPlaying()) limit->reset();
+					else limit->play();
 				}
 			}
 			if (CS.keys[VK_RIGHT]) {
@@ -270,6 +287,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				else {
 
 					//sonoro limite
+					if (limit->isPlaying()) limit->reset();
+					else limit->play();
 				}
 			}
 			if (CS.keys['A']) {
