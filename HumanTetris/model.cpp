@@ -88,20 +88,12 @@ void MyModel::DrawWall() {
 	wallPositionPoint.SetColor(1.0, 0, 0);
 	wa.SetP(-(wallLargh / 2), 0.0, wallPosition + wallProf);
 	wa.SetColor(0.0, 1.0, 0.0);
-	wa.u = 0;
-	wa.v = 0;
 	wb.SetP(+(wallLargh / 2), 0.0, wallPosition + wallProf);
 	wb.SetColor(0.0, 1.0, 0.0);
-	wb.u = 1;
-	wb.v = 0;
 	wc.SetP(+(wallLargh / 2), wallAltezza, wallPosition + wallProf);
 	wc.SetColor(0.0, 1.0, 0.0);
-	wc.u = 1;
-	wc.v = 1;
 	wd.SetP(-(wallLargh / 2), wallAltezza, wallPosition + wallProf);
 	wd.SetColor(0.0, 1.0, 0.0);
-	wd.u = 0;
-	wd.v = 1;
 	we.SetP(-(wallLargh / 2), 0.0, wallPosition);
 	we.SetColor(0.0, 1.0, 0.0);
 	wf.SetP(+(wallLargh / 2), 0.0, wallPosition);
@@ -116,14 +108,12 @@ void MyModel::DrawWall() {
 	wallSideA.SetP(wb, wf, wg, wc);
 	wallSideB.SetP(we, wa, wd, wh);
 	wallBottom.SetP(we, wf, wb, wa);
-	glEnable(GL_TEXTURE_2D);
 	wallFront.DrawTextures();
-	glDisable(GL_TEXTURE_2D);
-	wallBack.Draw();
-	wallTop.Draw();
-	wallSideA.Draw();
-	wallSideB.Draw();
-	wallBottom.Draw();
+	wallBack.DrawTextures();
+	wallTop.DrawTextures();
+	wallSideA.DrawTextures();
+	wallSideB.DrawTextures();
+	wallBottom.DrawTextures();
 
 	// Limiti
 	Vertex hole = wallPositionPoint;

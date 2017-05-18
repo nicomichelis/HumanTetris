@@ -109,16 +109,20 @@ public:
 	}
 
 	void DrawTextures() {
+		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
-		glTexCoord2f(a.u, a.v);
+		glTexCoord2f(0,0);
 		glVertex3f(a.x, a.y, a.z);
-		glTexCoord2f(b.u, b.v);
+		glTexCoord2f(1, 0);
 		glVertex3f(b.x, b.y, b.z);
-		glTexCoord2f(c.u, c.v);
+		glTexCoord2f(1, 1);
 		glVertex3f(c.x, c.y, c.z);
-		glTexCoord2f(d.u, d.v);
+		glTexCoord2f(0, 1);
 		glVertex3f(d.x, d.y, d.z);
+
+		
 		glEnd();
+		glDisable(GL_TEXTURE_2D);
 	}
 };
 
