@@ -49,6 +49,8 @@ MyModel::MyModel() {
 }
 
 void MyModel::DrawFloor() {
+	Vertex fa, fb, fc, fd, fe, ff, fg, fh;
+	Rect floorFront, floorBack, floorSideA, floorSideB, floorTop, floorBottom;
 	fa.SetP(-(floorLargh / 2), 0.0, (floorProf / 2));
 	fa.SetColor(0.0, 0.0, 1.0);
 	fb.SetP((floorLargh / 2), 0.0, (floorProf / 2));
@@ -80,18 +82,26 @@ void MyModel::DrawFloor() {
 }
 
 void MyModel::DrawWall() {
-
+	Vertex wa, wb, wc, wd, we, wf, wg, wh;
+	Rect wallFront, wallBack, wallSideA, wallSideB, wallTop, wallBottom;
 	wallPositionPoint.SetP(0.0, 0.0, wallPosition);
 	wallPositionPoint.SetColor(1.0, 0, 0);
-
 	wa.SetP(-(wallLargh / 2), 0.0, wallPosition + wallProf);
 	wa.SetColor(0.0, 1.0, 0.0);
+	wa.u = 0;
+	wa.v = 0;
 	wb.SetP(+(wallLargh / 2), 0.0, wallPosition + wallProf);
 	wb.SetColor(0.0, 1.0, 0.0);
+	wb.u = 1;
+	wb.v = 0;
 	wc.SetP(+(wallLargh / 2), wallAltezza, wallPosition + wallProf);
 	wc.SetColor(0.0, 1.0, 0.0);
+	wc.u = 1;
+	wc.v = 1;
 	wd.SetP(-(wallLargh / 2), wallAltezza, wallPosition + wallProf);
 	wd.SetColor(0.0, 1.0, 0.0);
+	wd.u = 0;
+	wd.v = 1;
 	we.SetP(-(wallLargh / 2), 0.0, wallPosition);
 	we.SetColor(0.0, 1.0, 0.0);
 	wf.SetP(+(wallLargh / 2), 0.0, wallPosition);
@@ -106,7 +116,9 @@ void MyModel::DrawWall() {
 	wallSideA.SetP(wb, wf, wg, wc);
 	wallSideB.SetP(we, wa, wd, wh);
 	wallBottom.SetP(we, wf, wb, wa);
-	wallFront.Draw();
+	glEnable(GL_TEXTURE_2D);
+	wallFront.DrawTextures();
+	glDisable(GL_TEXTURE_2D);
 	wallBack.Draw();
 	wallTop.Draw();
 	wallSideA.Draw();
@@ -124,6 +136,7 @@ void MyModel::DrawWall() {
 }
 
 void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
+	Vertex ba, bb, bc, bd, be, bf, bg, bh;
 	// Head
 	position.r = 0.0;
 	position.g = 0.0;
@@ -245,6 +258,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 }
 
 void MyModel::DrawPlayer() {
+	Vertex ba, bb, bc, bd, be, bf, bg, bh;
 	// Head
 	Vertex HeadPosition = PlayerPosition;
 	HeadPosition.y += (PlayerBodyHeight / 2 + PlayerHeadSize)*sin(PI / 2 + PlayerRotation);

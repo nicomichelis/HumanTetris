@@ -15,15 +15,10 @@
 #include "model.h"
 #include "audiere.h"
 #include <iostream>
+#include "SOIL.h"
 
 using namespace audiere;
 
-
-
-// resources (menu, icons...)
-
-//  LIBRERIE OPENGL e multimendia
-//	OpenGL libraries
 #pragma comment( lib, "opengl32.lib" )				// Search For OpenGL32.lib While Linking
 #pragma comment( lib, "glu32.lib" )						// Search For GLu32.lib While Linking
 #pragma comment( lib, "winmm.lib" )						// Search For WinMM Library While Linking
@@ -43,11 +38,11 @@ typedef struct CommonData {
 					  // view angle in y (degrees)
 	float movement = 0.1; // Di quanto si muove l'omino ogni volta che premo un tasto
 
-	CommonData() : lCaptured(false), RotX_a(0), RotY_a(0),
-		fovy(45.0)
-	{}
+	CommonData() : lCaptured(false), RotX_a(0), RotY_a(0), fovy(45.0){
+	}
 	MyModel modello;
 	bool keys[256];
+	GLuint	texture[1];
 } CoDa;
 
 static CoDa CS;
@@ -55,6 +50,7 @@ static CoDa CS;
 GLvoid InitGL();
 GLvoid SetProjection(GLsizei iWidth, GLsizei iHeight);
 GLvoid DrawGLScene(GLvoid);
+bool LoadGLTextures(void);
 
 //  callback
 LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -182,24 +178,16 @@ bool RegistraClasse(HINSTANCE hInstance)
 	return true;
 }
 
-
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-	PSTR szCmdLine, int iCmdShow)
-{
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow) {
 	MSG Msg;
 	BOOL done = FALSE;
 	if (!RegistraClasse(hInstance)) exit(1);
 	CS.Shinstance = hInstance;
 
-	CS.MainW = CreateWindowEx(WS_EX_LEFT, "MainWindow", "HumanTetris",
-		WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN,
-		100, 100, 900, 600, NULL, NULL, hInstance, NULL);
-
+	CS.MainW = CreateWindowEx(WS_EX_LEFT, "MainWindow", "HumanTetris", WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN, 100, 100, 900, 600, NULL, NULL, hInstance, NULL);
 	ShowWindow(CS.MainW, iCmdShow);
 	UpdateWindow(CS.MainW);
 
-	// Prove audio
 	//  AUDIO - start
 	AudioDevicePtr device(OpenDevice());
 	if (!device) {
@@ -224,7 +212,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	while (!done) {
 		if (PeekMessage(&Msg, NULL, 0, 0, PM_REMOVE)) {
 			if (Msg.message == WM_QUIT) {
-				// When x to close the window is pressed
 				done = TRUE;
 			}
 			else {
@@ -236,7 +223,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			if (CS.keys[VK_UP]) {
 				CS.keys[VK_UP] = FALSE;
 				Vertex temp = CS.modello.GetPlayerPosition();
-				if(temp.y<=(CS.modello.GetwallAltezza() - (CS.modello.GetPlayerBodyHeight()/2+CS.modello.GetPlayerHeadSize()*2)))
+				if (temp.y <= (CS.modello.GetwallAltezza() - (CS.modello.GetPlayerBodyHeight() / 2 + CS.modello.GetPlayerHeadSize() * 2)))
 				{
 					temp.y += CS.movement;
 					CS.modello.SetPlayerPosition(temp);
@@ -251,7 +238,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 				CS.keys[VK_DOWN] = FALSE;
 				Vertex temp = CS.modello.GetPlayerPosition();
 
-				if (temp.y >= ( + (CS.modello.GetPlayerBodyHeight() / 2 + CS.modello.GetPlayerHeadSize()*2)))
+				if (temp.y >= (+(CS.modello.GetPlayerBodyHeight() / 2 + CS.modello.GetPlayerHeadSize() * 2)))
 				{
 					temp.y -= CS.movement;
 					CS.modello.SetPlayerPosition(temp);
@@ -265,7 +252,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			if (CS.keys[VK_LEFT]) {
 				CS.keys[VK_LEFT] = FALSE;
 				Vertex temp = CS.modello.GetPlayerPosition();
-				if (temp.x >= (-CS.modello.GetwallLargh()/2 +(CS.modello.GetPlayerBodyHeight() / 2 + CS.modello.GetPlayerHeadSize() * 2)))
+				if (temp.x >= (-CS.modello.GetwallLargh() / 2 + (CS.modello.GetPlayerBodyHeight() / 2 + CS.modello.GetPlayerHeadSize() * 2)))
 				{
 					temp.x -= CS.movement;
 					CS.modello.SetPlayerPosition(temp);
@@ -279,7 +266,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 			if (CS.keys[VK_RIGHT]) {
 				CS.keys[VK_RIGHT] = FALSE;
 				Vertex temp = CS.modello.GetPlayerPosition();
-				if (temp.x <= (CS.modello.GetwallLargh()/2 - (CS.modello.GetPlayerBodyHeight() / 2 + CS.modello.GetPlayerHeadSize() * 2)))
+				if (temp.x <= (CS.modello.GetwallLargh() / 2 - (CS.modello.GetPlayerBodyHeight() / 2 + CS.modello.GetPlayerHeadSize() * 2)))
 				{
 					temp.x += CS.movement;
 					CS.modello.SetPlayerPosition(temp);
@@ -319,7 +306,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	return Msg.wParam;
 }
 
-
 GLvoid SetProjection(GLsizei iWidth, GLsizei iHeight)
 {
 	if (iHeight == 0) iHeight = 1;
@@ -332,8 +318,8 @@ GLvoid SetProjection(GLsizei iWidth, GLsizei iHeight)
 	gluPerspective(CS.fovy, (GLfloat)iWidth / (GLfloat)iHeight, 0.1, 200.0);
 }
 
-GLvoid InitGL()
-{
+GLvoid InitGL() {
+	LoadGLTextures();
 	glCullFace(GL_BACK);
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClearDepth(1.0);
@@ -342,25 +328,38 @@ GLvoid InitGL()
 	glShadeModel(GL_SMOOTH);
 	glEnable(GL_NORMALIZE);
 	glEnable(GL_CULL_FACE);
+	glEnable(GL_TEXTURE_2D);
 	glPointSize(2); // !!
 }
 
-GLvoid DrawGLScene(GLvoid)
-{
+GLvoid DrawGLScene(GLvoid) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	glDisable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
 	glDisable(GL_LIGHTING);
 	glPushMatrix();
 	glTranslatef(0.0, -1.0, -20.0); // POW
 	glRotatef(CS.RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(CS.RotY_a, 0.0, 1.0, 0.0);
+
+	glBindTexture(GL_TEXTURE_2D, CS.texture[0]);
+	CS.modello.DrawWall();
 	// Floor
 	CS.modello.DrawFloor();
-	// Wall
-	CS.modello.DrawWall();
 	// Player
 	CS.modello.DrawPlayer();
+	glDisable(GL_TEXTURE);
+	glEnd();
 	glPopMatrix();
+}
+
+bool LoadGLTextures(void) {
+	CS.texture[0] = SOIL_load_OGL_texture("../Data/image0.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (CS.texture[0] == 0) return false;
+	// Typical Texture Generation Using Data From The Bitmap
+	glBindTexture(GL_TEXTURE_2D, CS.texture[0]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	return true;
 }

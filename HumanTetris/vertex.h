@@ -96,19 +96,28 @@ public:
 	}
 	void Draw()
 	{
-		glBegin(GL_TRIANGLES);
+		glBegin(GL_QUADS);
 		glColor3f(a.r, a.g, a.b);
 		glVertex3f(a.x, a.y, a.z);
 		glColor3f(b.r, b.g, b.b);
 		glVertex3f(b.x, b.y, b.z);
 		glColor3f(c.r, c.g, c.b);
 		glVertex3f(c.x, c.y, c.z);
-		glColor3f(c.r, c.g, c.b);
-		glVertex3f(c.x, c.y, c.z);
 		glColor3f(d.r, d.g, d.b);
 		glVertex3f(d.x, d.y, d.z);
-		glColor3f(a.r, a.g, a.b);
+		glEnd();
+	}
+
+	void DrawTextures() {
+		glBegin(GL_QUADS);
+		glTexCoord2f(a.u, a.v);
 		glVertex3f(a.x, a.y, a.z);
+		glTexCoord2f(b.u, b.v);
+		glVertex3f(b.x, b.y, b.z);
+		glTexCoord2f(c.u, c.v);
+		glVertex3f(c.x, c.y, c.z);
+		glTexCoord2f(d.u, d.v);
+		glVertex3f(d.x, d.y, d.z);
 		glEnd();
 	}
 };

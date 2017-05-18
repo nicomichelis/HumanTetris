@@ -10,8 +10,6 @@ private:
 	float floorLargh;
 	float floorProf;
 	float floorAltezza;
-	Vertex fa, fb, fc, fd, fe, ff, fg, fh;
-	Rect floorFront, floorBack, floorSideA, floorSideB, floorTop, floorBottom;
 
 	// Wall
 	float wallLargh;
@@ -19,8 +17,6 @@ private:
 	float wallAltezza;
 	float wallPosition;
 	Vertex wallPositionPoint;
-	Vertex wa, wb, wc, wd, we, wf, wg, wh;
-	Rect wallFront, wallBack, wallSideA, wallSideB, wallTop, wallBottom;
 
 	// Player
 	Vertex PlayerPosition;
@@ -33,9 +29,6 @@ private:
 	float size;
 	float rotation;
 
-	Vertex ba, bb, bc, bd, be, bf, bg, bh;
-
-
 	// LIMITI
 	float limitesuperiore;
 	float limiteinferiore;
@@ -43,7 +36,6 @@ private:
 	float limitesinistro;
 	float randomX;
 	float randomY;
-	
 
 
 public:
