@@ -9,7 +9,11 @@
 #pragma comment( lib, "glu32.lib" )					
 #pragma comment( lib, "winmm.lib" )					
 
-MyModel::MyModel() {
+MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), fps(0), cursor(true), captured(false), StartScreen(true), Perso(false), fovy(45.0), RotX_a(0), RotY_a(0) {
+	// Init timing
+	this->Tstart = this->Tstamp = clock();
+	this->Full_elapsed = 0;
+	this->frameTime = 0;
 
 	// Init Floor
 	floorLargh = 5.0;
@@ -389,4 +393,84 @@ float MyModel::GetPlayerRotation() {
 
 void MyModel::SetPlayerRotation(float x) {
 	this->PlayerRotation = x;
+}
+
+bool MyModel::InitGL(void) {
+	if (!this->LoadGLTextures()) {
+		return false;
+	}
+	glEnable(GL_TEXTURE_2D);
+	glShadeModel(GL_SMOOTH);
+	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
+	glClearDepth(1.0);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	glCullFace(GL_BACK);
+	glEnable(GL_CULL_FACE);
+	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
+	return true;
+}
+
+bool MyModel::LoadGLTextures(void) {
+	texture[0] = SOIL_load_OGL_texture("../Data/image0.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[0] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	return true;
+}
+
+void MyModel::ReSizeGLScene(int width, int height) {
+	if (height == 0) height = 1;
+	if (width == 0) width = 1;
+	this->Wwidth = width;
+	this->Wheight = height;
+	glViewport(0, 0, width, height);
+	this->Wwidth = width;
+	this->Wheight = height;
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+bool MyModel::DrawGLScene(void) {
+	RECT R;
+	GetClientRect(hWnd, &R);
+	this->SetProjection();
+	// timing
+	clock_t t = clock();
+	double elapsed = double(t - Tstamp) / (double)CLOCKS_PER_SEC;
+	int ms_elapsed = (int)(t - Tstamp);
+	this->Full_elapsed = double(t - Tstamp) / (double)CLOCKS_PER_SEC;
+	this->frameTime += double(t - Tstamp) / (double)CLOCKS_PER_SEC;
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glDisable(GL_LIGHTING);
+	
+	// POW
+
+	glPushMatrix();
+	glTranslatef(0.0, -1.0, -20.0);
+	glRotatef(RotX_a, 1.0, 0.0, 0.0);
+	glRotatef(RotY_a, 0.0, 1.0, 0.0);
+	// Roba da disegnare
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	this->DrawWall();
+	// Floor
+	this->DrawFloor();
+	// Player
+	this->DrawPlayer();
+	glDisable(GL_TEXTURE);
+	return true;
+	
+}
+
+void MyModel::SetProjection() {
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
+	gluPerspective(fovy, (GLfloat)Wwidth / (GLfloat)Wheight, 0.1, 200.0);
 }

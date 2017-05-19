@@ -5,6 +5,30 @@
 
 
 class MyModel {
+public:
+	// OpenGL
+	HDC			hDC;
+	HGLRC		hRC;
+	HWND		hWnd;
+	HINSTANCE	hInstance;
+	bool		keys[256];
+	bool		active;
+	bool		cursor;
+	bool		captured;
+	int			cx, cy;
+	int			Wheight, Wwidth;
+	int			frames;
+	double		frameTime;
+	double		fps;
+	clock_t		Tstamp, Tstart;
+	double		Full_elapsed;
+	bool		StartScreen;
+	bool		Perso;
+	GLuint		texture[1];
+	GLdouble	fovy;
+	GLfloat		RotX_a;
+	GLfloat		RotY_a;
+
 private:
 	// Floor
 	float floorLargh;
@@ -55,4 +79,13 @@ public:
 	float GetPlayerBodyHeight() { return PlayerBodyHeight; }
 	float GetPlayerHeadSize() { return PlayerHeadSize; }
 
+	// GL
+	bool InitGL(void);
+	bool LoadGLTextures(void);
+	void ReSizeGLScene(int width, int height);
+	bool DrawGLScene(void);
+	void SetProjection();
+
 };
+
+extern class MyModel Data;
