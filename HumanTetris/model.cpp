@@ -30,7 +30,7 @@ MyModel::MyModel() {
 	PlayerRotation = 0.0;
 	PlayerHeadSize = 0.2;
 	PlayerThickness = 0.25;
-	PlayerBodyHeight = 0.8;
+	PlayerBodyHeight = 0.7;
 
 	// Difficulty
 	size = 4;
@@ -119,44 +119,42 @@ void MyModel::DrawWall() {
 	Vertex hole = wallPositionPoint;
 	hole.y = randomY;
 	hole.x = randomX;
-	DrawPlayerOnWall(hole, 0, 3);
-	hole.z += wallProf;
-	DrawPlayerOnWall(hole, 0, 3);
+	hole.z += wallProf / 2;
+	DrawPlayerOnWall(hole, 0, 2.0);
 
 }
 
 void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
-	Vertex ba, bb, bc, bd, be, bf, bg, bh;
+	float spessore = wallProf+0.27; //DA cCAMBIARE
 	// Head
 	position.r = 0.0;
 	position.g = 0.0;
 	position.b = 0.0;
 	Vertex HeadPosition = position;
-	
 	HeadPosition.y += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*sin(PI / 2 + rotation);
 	HeadPosition.x += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*cos(PI / 2 + rotation);
-	Cylinder Head(HeadPosition, size*PlayerHeadSize, size*PlayerThickness);
+	Cylinder Head(HeadPosition, size*PlayerHeadSize, spessore);
 	Head.Draw();
 	// Body
 	float diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
-	ba = bb = bc = bd = be = bf = bg = bh = position;
 	float angle = asin((PlayerBodyHeight / 2) / diag);
-
+	Vertex ba, bb, bc, bd, be, bf, bg, bh;
+	ba = bb = bc = bd = be = bf = bg = bh = position;
 	ba.x = position.x + ((diag)*cos(PI + angle + rotation));
 	ba.y = position.y + ((diag)*sin(PI + angle + rotation));
-	ba.z = position.z + size*PlayerThickness / 2;
+	ba.z = position.z + spessore / 2;
 
 	bb.x = position.x + ((diag)*cos(2 * PI - angle + rotation));
 	bb.y = position.y + ((diag)*sin(-angle + 2 * PI + rotation));
-	bb.z = position.z + size*PlayerThickness / 2;
+	bb.z = position.z + spessore / 2;
 
 	bc.x = position.x + ((diag)*cos(angle + rotation));
 	bc.y = position.y + ((diag)*sin(angle + rotation));
-	bc.z = position.z + size*PlayerThickness / 2;
+	bc.z = position.z + spessore / 2;
 
 	bd.x = position.x + (diag)*cos(PI - angle + rotation);
 	bd.y = position.y + (diag)*sin(PI - angle + rotation);
-	bd.z = position.z + size*PlayerThickness / 2;
+	bd.z = position.z + spessore / 2;
 
 	Rect corpo_front(ba, bb, bc, bd);
 	corpo_front.Draw();
@@ -165,7 +163,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 	bf = bb;
 	bg = bc;
 	bh = bd;
-	be.z=bf.z=bg.z=bh.z = position.z - size*PlayerThickness / 2;
+	be.z=bf.z=bg.z=bh.z = position.z - spessore / 2;
 
 	Rect corpo_back(bf, be, bh, bg);
 	corpo_back.Draw();
@@ -177,7 +175,6 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 	corpo_top.Draw();
 	Rect corpo_bottom(be, bf, bb, ba);
 	corpo_bottom.Draw();
-
 	// Arms
 	float PlayerArmHeight = size*PlayerBodyHeight / 4 * 3;
 	float ArmDist;
@@ -199,19 +196,19 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 	for (int i = 0; i < 4; i++) {
 		xa.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + ((ArmDiag)*cos(PI + angle_arm + rotation - alpha));
 		xa.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + ((ArmDiag)*sin(PI + angle_arm + rotation - alpha));
-		xa.z = position.z + ArmThickness / 2;
+		xa.z = position.z + spessore / 2;
 
 		xb.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + ((ArmDiag)*cos(2 * PI - angle_arm + rotation - alpha));
 		xb.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + ((ArmDiag)*sin(2 * PI - angle_arm + +rotation - alpha));
-		xb.z = position.z + ArmThickness / 2;
+		xb.z = position.z + spessore / 2;
 
 		xc.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + ((ArmDiag)*cos(angle_arm + rotation - alpha));
 		xc.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + ((ArmDiag)*sin(angle_arm + rotation - alpha));
-		xc.z = position.z + ArmThickness / 2;
+		xc.z = position.z + spessore / 2;
 
 		xd.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + (ArmDiag)*cos(PI - angle_arm + rotation - alpha);
 		xd.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + (ArmDiag)*sin(PI - angle_arm + rotation - alpha);
-		xd.z = position.z + ArmThickness / 2;
+		xd.z = position.z + spessore / 2;
 
 		Rect arm_front(xa, xb, xc, xd);
 		arm_front.Draw();
@@ -221,7 +218,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 		xg = xc;
 		xh = xd;
 
-		xe.z = xf.z = xg.z = xh.z = position.z - ArmThickness / 2;
+		xe.z = xf.z = xg.z = xh.z = position.z - spessore / 2;
 
 		Rect arm_back(xh, xg, xf, xe);
 		arm_back.Draw();
