@@ -52,6 +52,7 @@ GLvoid SetProjection(GLsizei iWidth, GLsizei iHeight);
 GLvoid DrawGLScene(GLvoid);
 bool LoadGLTextures(void);
 
+
 //  callback
 LRESULT CALLBACK MainWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {

@@ -122,6 +122,11 @@ void MyModel::DrawWall() {
 	hole.z += wallProf / 2;
 	DrawPlayerOnWall(hole, 0, 2.0);
 
+	if (wallPosition < 10.0)
+		wallPosition += 0.1;
+	else
+		wallPosition = -10.0;
+
 }
 
 void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
