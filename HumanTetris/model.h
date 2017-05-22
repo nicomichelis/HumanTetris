@@ -58,6 +58,7 @@ private:
 	// Difficulty
 	float size;
 	float rotation;
+	float diff;
 
 	// LIMITI
 	float limitesuperiore;
@@ -66,6 +67,7 @@ private:
 	float limitesinistro;
 	float randomX;
 	float randomY;
+	float randomR;
 
 	// TEST
 	float Rotx = 0.0;
@@ -86,6 +88,7 @@ public:
 	void SetPlayerRotation(float x);
 	float GetPlayerBodyHeight() { return PlayerBodyHeight; }
 	float GetPlayerHeadSize() { return PlayerHeadSize; }
+	void Randomize();
 
 	// GL
 	bool InitGL(void);
