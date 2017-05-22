@@ -42,6 +42,7 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	PlayerThickness = 0.25;
 	PlayerBodyHeight = 0.7;
 
+
 	// Difficulty
 	size = 4; // da 4 si scende a max 2
 	diff = 0.01;
@@ -132,6 +133,8 @@ void MyModel::DrawWall() {
 }
 
 void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
+	holePosition = position;
+	holeRotation = rotation;
 	float spessore = wallProf + 0.01;
 	// Head
 	position.r = 0.0;
@@ -492,7 +495,7 @@ bool MyModel::DrawGLScene(void) {
 	Vertex a, b, c, d,e,f,g,h,i,l,m,n;
 	Vertex cursorP;
 	Vertex ca, cb, cc, cd;
-	if (this->StartScreen) {
+	if (!this->StartScreen) { // ! solo per testare, da togliere
 		//glDisable(GL_TEXTURE_2D);
 
 		glRotatef(0.0, 1.0, 0.0, 0.0);
@@ -558,29 +561,35 @@ bool MyModel::DrawGLScene(void) {
 	else {
 		
 		// POW
-	
 		glRotatef(RotX_a, 1.0, 0.0, 0.0);//<---
 		glRotatef(RotY_a, 0.0, 1.0, 0.0);
 		// Roba da disegnare
-		glBindTexture(GL_TEXTURE_2D, texture[0]);
-		this->DrawWall();
-		if (wallPosition < 10.0) {
-			wallPosition += diff;
+		if (!Perso) {
+			glBindTexture(GL_TEXTURE_2D, texture[0]);
+			this->DrawWall();
+			if (wallPosition < 10.0) {
+				wallPosition += diff;
+			}
+			else {
+				wallPosition = -10.0;
+				diff += 0.001;
+				if (size > 2)
+					size -= 0.1;
+				Randomize();
+			}
+			// Floor
+			this->DrawFloor();
+			// Player
+			this->DrawPlayer();
+			float limit = fabs(size*PlayerThickness - PlayerThickness);
+			float dist = fabs(PlayerPosition.x - holePosition.x);
+
+			glDisable(GL_TEXTURE);
 		}
 		else {
-			wallPosition = -10.0;
-			diff += 0.001;
-			if (size > 2)
-			size -= 0.1;
-			Randomize();
+			// Cosa fare quando perso
+			wallPosition = -20.0;
 		}
-		// Floor
-		this->DrawFloor();
-		// Player
-		this->DrawPlayer();
-
-
-		glDisable(GL_TEXTURE);
 	}
 	return true;
 }
