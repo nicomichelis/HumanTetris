@@ -539,7 +539,8 @@ bool MyModel::DrawGLScene(void) {
 		else {
 			wallPosition = -10.0;
 			diff += 0.001;
-			size -= 0.001;
+			if (size > 2)
+			size -= 0.1;
 			Randomize();
 		}
 		// Floor
