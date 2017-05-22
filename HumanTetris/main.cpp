@@ -186,6 +186,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 			Data.RotX_a += (GLfloat)(CS.ldy * 0.4);
 			Data.RotY_a += (GLfloat)(CS.ldx * 0.4);
 			InvalidateRect(hWnd, NULL, FALSE);
+			
 		}
 		break;
 	case WM_SYSCOMMAND:

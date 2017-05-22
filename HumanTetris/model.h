@@ -30,6 +30,11 @@ public:
 	GLfloat		RotY_a;
 
 private:
+	//butt
+	float buttonWidth;
+	float buttonHeight;
+	float cursorWidth;
+
 	// Floor
 	float floorLargh;
 	float floorProf;
