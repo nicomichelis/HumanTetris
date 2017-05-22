@@ -37,6 +37,7 @@ private:
 	float cursorHeight;
 	int nbuttons;
 	int buttCount;
+	boolean selectButt[2];
 
 	// Floor
 	float floorLargh;
@@ -96,9 +97,13 @@ public:
 	float GetPlayerBodyHeight() { return PlayerBodyHeight; }
 	float GetPlayerHeadSize() { return PlayerHeadSize; }
 	void Randomize();
+
+	//butt
 	int getNbuttons() { return nbuttons; }
 	int getCounterButtons() { return buttCount; }
 	void SetCounterButtons(int n);
+	void setScene(int n);
+	
 
 	// GL
 	bool InitGL(void);

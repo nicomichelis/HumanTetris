@@ -256,7 +256,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 		}
 		else {
-			if ((Data.active && !Data.DrawGLScene() || Data.keys[VK_ESCAPE])) {
+			if ((Data.active && !Data.DrawGLScene() )) {
 				done = TRUE;
 			}
 			else {
@@ -264,16 +264,32 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			if (Data.keys[VK_UP]) {
 				Data.keys[VK_UP] = FALSE;
-				Vertex temp = Data.GetPlayerPosition();
-				if (temp.y <= (Data.GetwallAltezza() - (Data.GetPlayerBodyHeight() / 2 + Data.GetPlayerHeadSize() * 2)))
-				{
-					temp.y += CS.movement;
-					Data.SetPlayerPosition(temp);
+
+				if (Data.StartScreen == TRUE) {
+					int a, b;
+					a = Data.getCounterButtons();
+					b = Data.getNbuttons();
+					if (a == 0)
+						Data.SetCounterButtons(b);
+					else
+					{
+						a--;
+						Data.SetCounterButtons(a);
+					}
 				}
 				else {
-					//sonoro limite
-					if (limit->isPlaying()) limit->reset();
-					else limit->play();
+
+					Vertex temp = Data.GetPlayerPosition();
+					if (temp.y <= (Data.GetwallAltezza() - (Data.GetPlayerBodyHeight() / 2 + Data.GetPlayerHeadSize() * 2)))
+					{
+						temp.y += CS.movement;
+						Data.SetPlayerPosition(temp);
+					}
+					else {
+						//sonoro limite
+						if (limit->isPlaying()) limit->reset();
+						else limit->play();
+					}
 				}
 			}
 			if (Data.keys[VK_DOWN]) {
@@ -289,7 +305,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						}
 						else
 						{
-							Data.SetCounterButtons(a++);
+							a++;
+							Data.SetCounterButtons(a);
 						}
 				}
 				else {
@@ -336,6 +353,26 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					else limit->play();
 				}
 			}
+			if (Data.keys[VK_RETURN]) {
+				if (Data.StartScreen == TRUE) {
+					int a;
+					a = Data.getCounterButtons();
+					
+					Data.StartScreen = FALSE;
+					//a seconda di cosa si preme
+					Data.setScene(a);
+				
+				}
+			}
+			
+			if (Data.keys[VK_ESCAPE]) {
+				//torna alla schermata iniziale
+				
+				Data.StartScreen = TRUE;
+				
+			}
+			
+
 			if (Data.keys['A']) {
 				Data.keys['A'] = FALSE;
 				float temp = Data.GetPlayerRotation();
@@ -351,11 +388,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			if (Data.keys['M']) {
 				Data.keys['M'] = FALSE;
-				if (stream->isPlaying())
-					stream->stop();
+				if (stream->isPlaying()) {
+					stream->stop();				
+				}
 				else {
 					stream->play();
-				}
+					}
+				
 			}
 
 

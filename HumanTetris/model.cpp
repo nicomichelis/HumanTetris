@@ -19,6 +19,10 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	cursorHeight = 0.7;
 	nbuttons = 2;
 	buttCount = 0;
+	selectButt[0] = 0;
+	selectButt[1] = 0;
+	selectButt[2] = 0;
+	
 	
 	
 	// Init timing
@@ -404,6 +408,15 @@ void MyModel::SetCounterButtons(int n) {
 	buttCount=n;
 }
 
+void MyModel::setScene(int n) {
+	for (int i = 0; i < nbuttons; i++) {
+		selectButt[i] = 0;
+	}
+	selectButt[n] = 1;
+}
+
+
+
 void MyModel::Randomize() {
 	float rands = (rand() % 100)*0.01;
 	randomX = limitesinistro + rands*(limitedestro - limitesinistro);
@@ -491,7 +504,7 @@ bool MyModel::DrawGLScene(void) {
 	int ms_elapsed = (int)(t - Tstamp);
 	this->Full_elapsed = double(t - Tstamp) / (double)CLOCKS_PER_SEC;
 	this->frameTime += double(t - Tstamp) / (double)CLOCKS_PER_SEC;
-	
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -502,7 +515,7 @@ bool MyModel::DrawGLScene(void) {
 	glPushMatrix();
 	glTranslatef(0.0, -1.0, -20.0);
 	// Start Screen
-	Vertex a, b, c, d,e,f,g,h,i,l,m,n;
+	Vertex a, b, c, d, e, f, g, h, i, l, m, n;
 	Vertex cursorP;
 	Vertex ca, cb, cc, cd;
 	if (this->StartScreen) { // ! solo per testare, da togliere
@@ -511,100 +524,140 @@ bool MyModel::DrawGLScene(void) {
 		glRotatef(0.0, 1.0, 0.0, 0.0);
 		glRotatef(0.0, 0.0, 1.0, 0.0);
 
-		a.SetP(-(buttonWidth / 2),  buttonHeight / 2, 0.0);
-		b.SetP(( + buttonWidth / 2),  buttonHeight / 2, 0.0);
-		c.SetP(( -buttonWidth / 2),  -(buttonHeight / 2), 0.0);
-		d.SetP(( + buttonWidth / 2),  -(buttonHeight / 2), 0.0);
-		
-		e.SetP(-buttonWidth / 2,  buttonHeight * 2, 0.0);
+		a.SetP(-(buttonWidth / 2), buttonHeight / 2, 0.0);
+		b.SetP((+buttonWidth / 2), buttonHeight / 2, 0.0);
+		c.SetP((-buttonWidth / 2), -(buttonHeight / 2), 0.0);
+		d.SetP((+buttonWidth / 2), -(buttonHeight / 2), 0.0);
+
+		e.SetP(-buttonWidth / 2, buttonHeight * 2, 0.0);
 		f.SetP(buttonWidth / 2, buttonHeight * 2, 0.0);
-		g.SetP( -buttonWidth / 2, buttonHeight , 0.0);
-		h.SetP( buttonWidth / 2, buttonHeight, 0.0);
-	
+		g.SetP(-buttonWidth / 2, buttonHeight, 0.0);
+		h.SetP(buttonWidth / 2, buttonHeight, 0.0);
+
 
 		i.SetP(-buttonWidth / 2, -buttonHeight * 2, 0.0);
 		l.SetP(buttonWidth / 2, -buttonHeight * 2, 0.0);
 		m.SetP(-buttonWidth / 2, -buttonHeight, 0.0);
 		n.SetP(buttonWidth / 2, -buttonHeight, 0.0);
-		
+
 
 		Rect start(g, h, f, e);
-		start.Draw(); 
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
-		start.DrawTextures();
+		start.Draw();
+		if (buttCount != 0) {
 
+			glBindTexture(GL_TEXTURE_2D, texture[2]);
+			start.DrawTextures();
+		}
+		else {
+			glBindTexture(GL_TEXTURE_2D, texture[3]);
+			start.DrawTextures();
+		}
 
-		Rect commands(c,d,b,a);
+		Rect commands(c, d, b, a);
 		commands.Draw();
-		glBindTexture(GL_TEXTURE_2D, texture[4]);
-		commands.DrawTextures();
-
+		if (buttCount != 1) {
+			glBindTexture(GL_TEXTURE_2D, texture[4]);
+			commands.DrawTextures();
+		}
+		else {
+			glBindTexture(GL_TEXTURE_2D, texture[5]);
+			commands.DrawTextures();
+		}
 
 		Rect quit(i, l, n, m);
 		quit.Draw();
-		glBindTexture(GL_TEXTURE_2D, texture[6]);
-		quit.DrawTextures();
+
+		if (buttCount != 2) {
+			glBindTexture(GL_TEXTURE_2D, texture[6]);
+			quit.DrawTextures();
+
+		}
+		else {
+			glBindTexture(GL_TEXTURE_2D, texture[7]);
+			quit.DrawTextures();
+
+		}
+
 
 		cursorP.x = e.x - cursorWidth / 2;
 		cursorP.z = e.z;
 		cursorP.y = e.y - cursorHeight / 2;
 
 		switch (buttCount) {
-			case 1:
-				cursorP.y = a.y - cursorHeight/2;
-				break;
-			case 2:
-				cursorP.y = i.y - cursorHeight/ 2;
-				break;
+		case 1:
+			cursorP.y = a.y - cursorHeight / 2;
+			break;
+		case 2:
+			cursorP.y = m.y - cursorHeight / 2;
+			break;
 		}
 
-		ca.SetP(cursorP.x-cursorWidth/2, cursorP.y - cursorHeight/2 , 0.0);
-		cb.SetP(cursorP.x+ cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
-		cc.SetP(cursorP.x+ cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
-		cd.SetP(cursorP.x- cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
-		
+		ca.SetP(cursorP.x - cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
+		cb.SetP(cursorP.x + cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
+		cc.SetP(cursorP.x + cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
+		cd.SetP(cursorP.x - cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
 
-		Rect cursor(ca,cb,cc,cd);
+
+		Rect cursor(ca, cb, cc, cd);
 		cursor.Draw();
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
 		cursor.DrawTextures();
-		
-		
-		
-		
-		
+
+
+
+
+
 	}
 	else {
-		
-		// POW
-		glRotatef(RotX_a, 1.0, 0.0, 0.0);//<---
-		glRotatef(RotY_a, 0.0, 1.0, 0.0);
-		// Roba da disegnare
-		if (!Perso) {
-			glBindTexture(GL_TEXTURE_2D, texture[0]);
-			this->DrawWall();
-			if (wallPosition < 10.0) {
-				wallPosition += diff;
+		//0 play,1 commands,2 quit
+		if (selectButt[0] == 1) {
+			// POW
+			glRotatef(RotX_a, 1.0, 0.0, 0.0);
+			glRotatef(RotY_a, 0.0, 1.0, 0.0);
+			// Roba da disegnare
+			if (!Perso) {
+				glBindTexture(GL_TEXTURE_2D, texture[0]);
+				this->DrawWall();
+				if (wallPosition < 10.0) {
+					wallPosition += diff;
+				}
+				else {
+					wallPosition = -10.0;
+					diff += 0.001;
+					if (size > 2)
+						size -= 0.1;
+					Randomize();
+				}
+				// Floor
+				this->DrawFloor();
+				// Player
+				this->DrawPlayer();
+				float limit = fabs(size*PlayerThickness - PlayerThickness);
+				float dist = fabs(PlayerPosition.x - holePosition.x);
+
+				glDisable(GL_TEXTURE);
 			}
 			else {
-				wallPosition = -10.0;
-				diff += 0.001;
-				if (size > 2)
-					size -= 0.1;
-				Randomize();
+				// Cosa fare quando perso
+				wallPosition = -20.0;
 			}
-			// Floor
-			this->DrawFloor();
-			// Player
-			this->DrawPlayer();
-			float limit = fabs(size*PlayerThickness - PlayerThickness);
-			float dist = fabs(PlayerPosition.x - holePosition.x);
-
-			glDisable(GL_TEXTURE);
 		}
-		else {
-			// Cosa fare quando perso
-			wallPosition = -20.0;
+
+	
+
+		if (selectButt[1] == 1)
+		{
+			//commands
+			glRotatef(0.0, 1.0, 0.0, 0.0);
+			glRotatef(0.0, 0.0, 1.0, 0.0);
+
+		}
+		if (selectButt[2] == 1)
+		{
+			//quit
+			glRotatef(0.0, 1.0, 0.0, 0.0);
+			glRotatef(0.0, 0.0, 1.0, 0.0);
+			
 		}
 	}
 	return true;
