@@ -61,7 +61,9 @@ private:
 	float randomX;
 	float randomY;
 
-
+	// TEST
+	float Rotx = 0.0;
+	float Roty = 0.0;
 public:
 	MyModel();
 	void DrawFloor();

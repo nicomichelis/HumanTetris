@@ -20,7 +20,6 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	floorProf = 20.0;
 	floorAltezza = 1.0;
 
-
 	// Wall
 	wallLargh = 5.0;
 	wallProf = 1.0;
@@ -125,11 +124,6 @@ void MyModel::DrawWall() {
 	hole.x = randomX;
 	hole.z += wallProf / 2;
 	DrawPlayerOnWall(hole, 0, 2.0);
-
-	if (wallPosition < 10.0)
-		wallPosition += 0.1;
-	else
-		wallPosition = -10.0;
 
 }
 
@@ -450,22 +444,30 @@ bool MyModel::DrawGLScene(void) {
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glDisable(GL_LIGHTING);
 	
+	// Start Screen
+	if (this->StartScreen) {
+		
+	}
 	// POW
 
 	glPushMatrix();
 	glTranslatef(0.0, -1.0, -20.0);
 	glRotatef(RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(RotY_a, 0.0, 1.0, 0.0);
+
 	// Roba da disegnare
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	this->DrawWall();
+	if (wallPosition < 10.0)
+		wallPosition += 0.01;
+	else
+		wallPosition = -10.0;
 	// Floor
 	this->DrawFloor();
 	// Player
 	this->DrawPlayer();
 	glDisable(GL_TEXTURE);
 	return true;
-	
 }
 
 void MyModel::SetProjection() {
