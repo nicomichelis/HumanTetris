@@ -16,12 +16,12 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	this->frameTime = 0;
 
 	// Init Floor
-	floorLargh = 5.0;
+	floorLargh = 8.0;
 	floorProf = 20.0;
 	floorAltezza = 1.0;
 
 	// Wall
-	wallLargh = 5.0;
+	wallLargh = floorLargh;
 	wallProf = 1.0;
 	wallAltezza = 7.0;
 	wallPosition = -10.0;
@@ -36,8 +36,8 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	PlayerBodyHeight = 0.7;
 
 	// Difficulty
-	size = 4;
-	rotation = 0;
+	size = 4; // da 4 si scende a max 2
+	diff = 0.01;
 
 	// Init limits
 	srand((unsigned)time(NULL));
@@ -45,10 +45,7 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	limiteinferiore = (size*PlayerBodyHeight / 2 + size*PlayerHeadSize * 2);
 	limitedestro = wallLargh / 2 - (size*PlayerBodyHeight / 2 + size*PlayerHeadSize * 2);
 	limitesinistro = -wallLargh / 2 + (size*PlayerBodyHeight / 2 + size*PlayerHeadSize * 2);
-	int rands = (rand() % 100)/100;
-	randomX = limitesinistro + rands*(limitedestro - limitesinistro);
-	rands = (rand() % 100) / 100;
-	randomY = limiteinferiore + rands*(limitesuperiore - limiteinferiore);
+	Randomize();
 }
 
 void MyModel::DrawFloor() {
@@ -123,12 +120,12 @@ void MyModel::DrawWall() {
 	hole.y = randomY;
 	hole.x = randomX;
 	hole.z += wallProf / 2;
-	DrawPlayerOnWall(hole, 0, 2.0);
+	DrawPlayerOnWall(hole, randomR, size);
 
 }
 
 void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
-	float spessore = wallProf+0.27; //DA cCAMBIARE
+	float spessore = wallProf + 0.01;
 	// Head
 	position.r = 0.0;
 	position.g = 0.0;
@@ -136,7 +133,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 	Vertex HeadPosition = position;
 	HeadPosition.y += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*sin(PI / 2 + rotation);
 	HeadPosition.x += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*cos(PI / 2 + rotation);
-	Cylinder Head(HeadPosition, size*PlayerHeadSize, spessore);
+	Cylinder Head(HeadPosition, size*PlayerHeadSize/1.2, spessore);
 	Head.Draw();
 	// Body
 	float diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
@@ -179,11 +176,11 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 	Rect corpo_bottom(be, bf, bb, ba);
 	corpo_bottom.Draw();
 	// Arms
-	float PlayerArmHeight = size*PlayerBodyHeight / 4 * 3;
+	float PlayerArmHeight = size*PlayerBodyHeight / 5 * 3;
 	float ArmDist;
 	float angle2;
 	float angle3;
-	float ArmThickness = size*PlayerThickness / 2;
+	float ArmThickness = size*PlayerThickness / 1.5;
 	float ArmDiag;
 	float alpha = PI / 3;
 
@@ -389,6 +386,14 @@ void MyModel::SetPlayerRotation(float x) {
 	this->PlayerRotation = x;
 }
 
+void MyModel::Randomize() {
+	float rands = (rand() % 100)*0.01;
+	randomX = limitesinistro + rands*(limitedestro - limitesinistro);
+	rands = (rand() % 100) *0.01;
+	randomY = limiteinferiore + rands*(limitesuperiore - limiteinferiore);
+	randomR = (rand() % 100)*0.01 * 2 * PI;
+}
+
 bool MyModel::InitGL(void) {
 	if (!this->LoadGLTextures()) {
 		return false;
@@ -449,7 +454,6 @@ bool MyModel::DrawGLScene(void) {
 		
 	}
 	// POW
-
 	glPushMatrix();
 	glTranslatef(0.0, -1.0, -20.0);
 	glRotatef(RotX_a, 1.0, 0.0, 0.0);
@@ -458,14 +462,22 @@ bool MyModel::DrawGLScene(void) {
 	// Roba da disegnare
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	this->DrawWall();
-	if (wallPosition < 10.0)
-		wallPosition += 0.01;
-	else
+	
+	if (wallPosition < 10.0) {
+		wallPosition += diff;
+	}
+	else {
 		wallPosition = -10.0;
+		diff += 0.001;
+		size -= 0.001;
+		Randomize();
+	}
 	// Floor
 	this->DrawFloor();
 	// Player
 	this->DrawPlayer();
+
+	
 	glDisable(GL_TEXTURE);
 	return true;
 }
