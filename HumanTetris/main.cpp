@@ -282,20 +282,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				if (Data.StartScreen ==TRUE) {
 					int a, b;
 					a = Data.getCounterButtons();
-					b = Data.getNbuttons();
-					
+					b = Data.getNbuttons();				
 						if (a==b)
 						{
-
 							Data.SetCounterButtons(0);
 						}
 						else
 						{
 							Data.SetCounterButtons(a++);
 						}
-
-
-
 				}
 				else {
 					Vertex temp = Data.GetPlayerPosition();

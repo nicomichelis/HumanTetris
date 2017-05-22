@@ -505,7 +505,7 @@ bool MyModel::DrawGLScene(void) {
 	Vertex a, b, c, d,e,f,g,h,i,l,m,n;
 	Vertex cursorP;
 	Vertex ca, cb, cc, cd;
-	if (!this->StartScreen) { // ! solo per testare, da togliere
+	if (this->StartScreen) { // ! solo per testare, da togliere
 		//glDisable(GL_TEXTURE_2D);
 
 		glRotatef(0.0, 1.0, 0.0, 0.0);
@@ -545,15 +545,17 @@ bool MyModel::DrawGLScene(void) {
 		glBindTexture(GL_TEXTURE_2D, texture[6]);
 		quit.DrawTextures();
 
-		cursorP.x = a.x - cursorWidth / 2;
-		cursorP.z = a.z;
-		cursorP.y = a.y + cursorHeight * 5 / 2;
+		cursorP.x = e.x - cursorWidth / 2;
+		cursorP.z = e.z;
+		cursorP.y = e.y - cursorHeight / 2;
 
 		switch (buttCount) {
 			case 1:
-				cursorP.y = e.y + cursorHeight * 5 / 2;
+				cursorP.y = a.y - cursorHeight/2;
+				break;
 			case 2:
-				cursorP.y = i.y + cursorHeight * 5 / 2;
+				cursorP.y = i.y - cursorHeight/ 2;
+				break;
 		}
 
 		ca.SetP(cursorP.x-cursorWidth/2, cursorP.y - cursorHeight/2 , 0.0);
