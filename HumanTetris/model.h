@@ -24,7 +24,7 @@ public:
 	double		Full_elapsed;
 	bool		StartScreen;
 	bool		Perso;
-	GLuint		texture[1];
+	GLuint		texture[10];
 	GLdouble	fovy;
 	GLfloat		RotX_a;
 	GLfloat		RotY_a;
@@ -34,6 +34,7 @@ private:
 	float buttonWidth;
 	float buttonHeight;
 	float cursorWidth;
+	float cursorHeight;
 
 	// Floor
 	float floorLargh;

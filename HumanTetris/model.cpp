@@ -14,7 +14,8 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	//butt
 	buttonWidth = 4.5;
 	buttonHeight = 1.5;
-	cursorWidth = 0.5;
+	cursorWidth = 1.2;
+	cursorHeight = 0.7;
 	
 	// Init timing
 	this->Tstart = this->Tstamp = clock();
@@ -416,6 +417,35 @@ bool MyModel::LoadGLTextures(void) {
 	texture[0] = SOIL_load_OGL_texture("../Data/image0.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[0] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
+
+	texture[1] = SOIL_load_OGL_texture("../Data/cursor.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[1] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[1]);
+
+	texture[2] = SOIL_load_OGL_texture("../Data/start1.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[2] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[2]);
+
+	texture[3] = SOIL_load_OGL_texture("../Data/start2.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[3] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[3]);
+
+	texture[4] = SOIL_load_OGL_texture("../Data/comm1.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[4] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[4]);
+
+	texture[5] = SOIL_load_OGL_texture("../Data/comm2.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[5] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[5]);
+
+	texture[6] = SOIL_load_OGL_texture("../Data/quit1.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[6] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[6]);
+
+	texture[7] = SOIL_load_OGL_texture("../Data/quit2.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[7] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[7]);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	return true;
@@ -458,66 +488,67 @@ bool MyModel::DrawGLScene(void) {
 	Vertex cursorP;
 	Vertex ca, cb, cc, cd;
 	if (this->StartScreen) {
-		
+		//glDisable(GL_TEXTURE_2D);
 
 		glRotatef(0.0, 1.0, 0.0, 0.0);
 		glRotatef(0.0, 0.0, 1.0, 0.0);
 
 		a.SetP(-(buttonWidth / 2),  buttonHeight / 2, 0.0);
-		a.SetColor(0.0, 0.0, 1.0);
 		b.SetP(( + buttonWidth / 2),  buttonHeight / 2, 0.0);
-		b.SetColor(0.0, 0.0, 1.0);
 		c.SetP(( -buttonWidth / 2),  -(buttonHeight / 2), 0.0);
-		c.SetColor(1.0, 0.0, 1.0);
 		d.SetP(( + buttonWidth / 2),  -(buttonHeight / 2), 0.0);
-		d.SetColor(0.0, 1.0, 1.0);
 		
 		e.SetP(-buttonWidth / 2,  buttonHeight * 2, 0.0);
-		e.SetColor(0.0, 0.0, 1.0);
 		f.SetP(buttonWidth / 2, buttonHeight * 2, 0.0);
-		f.SetColor(0.0, 0.0, 1.0);
 		g.SetP( -buttonWidth / 2, buttonHeight , 0.0);
-		g.SetColor(1.0, 0.0, 1.0);
 		h.SetP( buttonWidth / 2, buttonHeight, 0.0);
-		h.SetColor(0.0, 1.0, 1.0);
+	
 
 		i.SetP(-buttonWidth / 2, -buttonHeight * 2, 0.0);
-		i.SetColor(0.0, 0.0, 1.0);
 		l.SetP(buttonWidth / 2, -buttonHeight * 2, 0.0);
-		l.SetColor(0.0, 0.0, 1.0);
 		m.SetP(-buttonWidth / 2, -buttonHeight, 0.0);
-		m.SetColor(1.0, 0.0, 1.0);
 		n.SetP(buttonWidth / 2, -buttonHeight, 0.0);
-		n.SetColor(0.0, 1.0, 1.0);
+		
 
 		Rect start(g, h, f, e);
-		start.Draw();
+		start.Draw(); 
+		glBindTexture(GL_TEXTURE_2D, texture[2]);
+		start.DrawTextures();
+
+
 		Rect commands(c,d,b,a);
 		commands.Draw();
-		Rect quit(n, m, i, l);
+		glBindTexture(GL_TEXTURE_2D, texture[4]);
+		commands.DrawTextures();
+
+
+		Rect quit(i, l, n, m);
 		quit.Draw();
+		glBindTexture(GL_TEXTURE_2D, texture[6]);
+		quit.DrawTextures();
 
 		cursorP.x = a.x - cursorWidth/2;
 		cursorP.z = a.z;
-		cursorP.y = a.y - buttonHeight / 2;
+		cursorP.y = a.y + cursorHeight * 5/2;
 
-		ca.SetP(-(buttonWidth / 2), buttonHeight / 2, 0.0);
-		ca.SetColor(0.0, 0.0, 1.0);
-		cb.SetP((+buttonWidth / 2), buttonHeight / 2, 0.0);
-		cb.SetColor(0.0, 0.0, 1.0);
-		cc.SetP((-buttonWidth / 2), -(buttonHeight / 2), 0.0);
-		cc.SetColor(1.0, 0.0, 1.0);
-		cd.SetP((+buttonWidth / 2), -(buttonHeight / 2), 0.0);
-		cd.SetColor(0.0, 1.0, 1.0);
+		ca.SetP(cursorP.x-cursorWidth/2, cursorP.y - cursorHeight/2 , 0.0);
+		cb.SetP(cursorP.x+ cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
+		cc.SetP(cursorP.x+ cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
+		cd.SetP(cursorP.x- cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
+		
 
-		Rect cursor(cc, cd, cb, ca);
+		Rect cursor(ca,cb,cc,cd);
 		cursor.Draw();
-
+		glBindTexture(GL_TEXTURE_2D, texture[1]);
+		cursor.DrawTextures();
+		
+		/*
+		
 		if (WM_KEYDOWN) {
 			Data.keys[WM_KEYDOWN] = FALSE;
 			//spostare puntatore
 		}
-		
+		*/
 	}
 	else {
 		
