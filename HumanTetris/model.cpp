@@ -10,6 +10,12 @@
 #pragma comment( lib, "winmm.lib" )					
 
 MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), fps(0), cursor(true), captured(false), StartScreen(true), Perso(false), fovy(45.0), RotX_a(0), RotY_a(0) {
+	
+	//butt
+	buttonWidth = 4.5;
+	buttonHeight = 1.5;
+	cursorWidth = 0.5;
+	
 	// Init timing
 	this->Tstart = this->Tstamp = clock();
 	this->Full_elapsed = 0;
@@ -448,37 +454,102 @@ bool MyModel::DrawGLScene(void) {
 	glLoadIdentity();
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glDisable(GL_LIGHTING);
-	
-	// Start Screen
-	if (this->StartScreen) {
-		
-	}
-	// POW
+	//POW
+
 	glPushMatrix();
 	glTranslatef(0.0, -1.0, -20.0);
-	glRotatef(RotX_a, 1.0, 0.0, 0.0);
-	glRotatef(RotY_a, 0.0, 1.0, 0.0);
+	// Start Screen
+	Vertex a, b, c, d,e,f,g,h,i,l,m,n;
+	Vertex cursorP;
+	Vertex ca, cb, cc, cd;
+	if (this->StartScreen) {
+		
 
-	// Roba da disegnare
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	this->DrawWall();
-	
-	if (wallPosition < 10.0) {
-		wallPosition += diff;
+		glRotatef(0.0, 1.0, 0.0, 0.0);
+		glRotatef(0.0, 0.0, 1.0, 0.0);
+
+		a.SetP(-(buttonWidth / 2),  buttonHeight / 2, 0.0);
+		a.SetColor(0.0, 0.0, 1.0);
+		b.SetP(( + buttonWidth / 2),  buttonHeight / 2, 0.0);
+		b.SetColor(0.0, 0.0, 1.0);
+		c.SetP(( -buttonWidth / 2),  -(buttonHeight / 2), 0.0);
+		c.SetColor(1.0, 0.0, 1.0);
+		d.SetP(( + buttonWidth / 2),  -(buttonHeight / 2), 0.0);
+		d.SetColor(0.0, 1.0, 1.0);
+		
+		e.SetP(-buttonWidth / 2,  buttonHeight * 2, 0.0);
+		e.SetColor(0.0, 0.0, 1.0);
+		f.SetP(buttonWidth / 2, buttonHeight * 2, 0.0);
+		f.SetColor(0.0, 0.0, 1.0);
+		g.SetP( -buttonWidth / 2, buttonHeight , 0.0);
+		g.SetColor(1.0, 0.0, 1.0);
+		h.SetP( buttonWidth / 2, buttonHeight, 0.0);
+		h.SetColor(0.0, 1.0, 1.0);
+
+		i.SetP(-buttonWidth / 2, -buttonHeight * 2, 0.0);
+		i.SetColor(0.0, 0.0, 1.0);
+		l.SetP(buttonWidth / 2, -buttonHeight * 2, 0.0);
+		l.SetColor(0.0, 0.0, 1.0);
+		m.SetP(-buttonWidth / 2, -buttonHeight, 0.0);
+		m.SetColor(1.0, 0.0, 1.0);
+		n.SetP(buttonWidth / 2, -buttonHeight, 0.0);
+		n.SetColor(0.0, 1.0, 1.0);
+
+		Rect start(g, h, f, e);
+		start.Draw();
+		Rect commands(c,d,b,a);
+		commands.Draw();
+		Rect quit(n, m, i, l);
+		quit.Draw();
+
+		cursorP.x = a.x - cursorWidth/2;
+		cursorP.z = a.z;
+		cursorP.y = a.y - buttonHeight / 2;
+
+		ca.SetP(-(buttonWidth / 2), buttonHeight / 2, 0.0);
+		ca.SetColor(0.0, 0.0, 1.0);
+		cb.SetP((+buttonWidth / 2), buttonHeight / 2, 0.0);
+		cb.SetColor(0.0, 0.0, 1.0);
+		cc.SetP((-buttonWidth / 2), -(buttonHeight / 2), 0.0);
+		cc.SetColor(1.0, 0.0, 1.0);
+		cd.SetP((+buttonWidth / 2), -(buttonHeight / 2), 0.0);
+		cd.SetColor(0.0, 1.0, 1.0);
+
+		Rect cursor(cc, cd, cb, ca);
+		cursor.Draw();
+
+		if (WM_KEYDOWN) {
+			Data.keys[WM_KEYDOWN] = FALSE;
+			//spostare puntatore
+		}
+		
 	}
 	else {
-		wallPosition = -10.0;
-		diff += 0.001;
-		size -= 0.001;
-		Randomize();
-	}
-	// Floor
-	this->DrawFloor();
-	// Player
-	this->DrawPlayer();
-
+		
+		// POW
 	
-	glDisable(GL_TEXTURE);
+		glRotatef(RotX_a, 1.0, 0.0, 0.0);//<---
+		glRotatef(RotY_a, 0.0, 1.0, 0.0);
+		// Roba da disegnare
+		glBindTexture(GL_TEXTURE_2D, texture[0]);
+		this->DrawWall();
+		if (wallPosition < 10.0) {
+			wallPosition += diff;
+		}
+		else {
+			wallPosition = -10.0;
+			diff += 0.001;
+			size -= 0.001;
+			Randomize();
+		}
+		// Floor
+		this->DrawFloor();
+		// Player
+		this->DrawPlayer();
+
+
+		glDisable(GL_TEXTURE);
+	}
 	return true;
 }
 
