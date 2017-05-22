@@ -71,6 +71,11 @@ private:
 	float randomY;
 	float randomR;
 
+
+	// Hole
+	Vertex holePosition;
+	float holeRotation;
+
 	// TEST
 	float Rotx = 0.0;
 	float Roty = 0.0;
