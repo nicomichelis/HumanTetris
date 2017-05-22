@@ -89,12 +89,15 @@ void MyModel::DrawFloor() {
 	floorBack.SetP(fg, fh, fd, fc);
 	floorSideA.SetP(fh, fe, fa, fd);
 	floorSideB.SetP(ff, fg, fc, fb);
-	floorFront.Draw();
-	floorBack.Draw();
-	floorTop.Draw();
-	floorBottom.Draw();
-	floorSideA.Draw();
-	floorSideB.Draw();
+	glBindTexture(GL_TEXTURE_2D, texture[8]);
+	
+	floorFront.DrawTextures();
+	floorBack.DrawTextures();
+	floorTop.DrawTextures();
+	floorBottom.DrawTextures();
+	floorSideA.DrawTextures();
+	floorSideB.DrawTextures();
+
 }
 
 void MyModel::DrawWall() {
@@ -443,7 +446,7 @@ bool MyModel::InitGL(void) {
 }
 
 bool MyModel::LoadGLTextures(void) {
-	texture[0] = SOIL_load_OGL_texture("../Data/image0.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[0] = SOIL_load_OGL_texture("../Data/image1.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[0] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 
@@ -474,6 +477,11 @@ bool MyModel::LoadGLTextures(void) {
 	texture[7] = SOIL_load_OGL_texture("../Data/quit2.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[7] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[7]);
+
+
+	texture[8] = SOIL_load_OGL_texture("../Data/image1.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[8] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[8]);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
