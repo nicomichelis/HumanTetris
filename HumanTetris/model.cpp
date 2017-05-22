@@ -5,6 +5,7 @@
 #include <gl\glu.h> 
 #include "SOIL.h"
 
+
 #pragma comment( lib, "opengl32.lib" )			
 #pragma comment( lib, "glu32.lib" )					
 #pragma comment( lib, "winmm.lib" )					
@@ -16,6 +17,9 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	buttonHeight = 1.5;
 	cursorWidth = 1.2;
 	cursorHeight = 0.7;
+	nbuttons = 2;
+	buttCount = 0;
+	
 	
 	// Init timing
 	this->Tstart = this->Tstamp = clock();
@@ -393,6 +397,10 @@ void MyModel::SetPlayerRotation(float x) {
 	this->PlayerRotation = x;
 }
 
+void MyModel::SetCounterButtons(int n) {
+	buttCount=n;
+}
+
 void MyModel::Randomize() {
 	float rands = (rand() % 100)*0.01;
 	randomX = limitesinistro + rands*(limitedestro - limitesinistro);
@@ -468,6 +476,8 @@ void MyModel::ReSizeGLScene(int width, int height) {
 	glLoadIdentity();
 }
 
+
+
 bool MyModel::DrawGLScene(void) {
 	RECT R;
 	GetClientRect(hWnd, &R);
@@ -532,9 +542,16 @@ bool MyModel::DrawGLScene(void) {
 		glBindTexture(GL_TEXTURE_2D, texture[6]);
 		quit.DrawTextures();
 
-		cursorP.x = a.x - cursorWidth/2;
+		cursorP.x = a.x - cursorWidth / 2;
 		cursorP.z = a.z;
-		cursorP.y = a.y + cursorHeight * 5/2;
+		cursorP.y = a.y + cursorHeight * 5 / 2;
+
+		switch (buttCount) {
+			case 1:
+				cursorP.y = e.y + cursorHeight * 5 / 2;
+			case 2:
+				cursorP.y = i.y + cursorHeight * 5 / 2;
+		}
 
 		ca.SetP(cursorP.x-cursorWidth/2, cursorP.y - cursorHeight/2 , 0.0);
 		cb.SetP(cursorP.x+ cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
@@ -547,13 +564,10 @@ bool MyModel::DrawGLScene(void) {
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
 		cursor.DrawTextures();
 		
-		/*
 		
-		if (WM_KEYDOWN) {
-			Data.keys[WM_KEYDOWN] = FALSE;
-			//spostare puntatore
-		}
-		*/
+		
+		
+		
 	}
 	else {
 		
@@ -591,3 +605,4 @@ void MyModel::SetProjection() {
 	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
 	gluPerspective(fovy, (GLfloat)Wwidth / (GLfloat)Wheight, 0.1, 200.0);
 }
+

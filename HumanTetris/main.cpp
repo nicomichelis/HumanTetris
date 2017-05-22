@@ -31,6 +31,7 @@ typedef struct CommonData {
 	int ldx, ldy;     // delta
 	float movement = 0.1; // Di quanto si muove l'omino ogni volta che premo un tasto
 	float rotation = 0.1;
+
 	CommonData() : lCaptured(false){
 	}
 } CoDa;
@@ -277,17 +278,38 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 			if (Data.keys[VK_DOWN]) {
 				Data.keys[VK_DOWN] = FALSE;
-				Vertex temp = Data.GetPlayerPosition();
+				
+				if (Data.StartScreen ==TRUE) {
+					int a, b;
+					a = Data.getCounterButtons();
+					b = Data.getNbuttons();
+					
+						if (a==b)
+						{
 
-				if (temp.y >= (+(Data.GetPlayerBodyHeight() / 2 + Data.GetPlayerHeadSize() * 2)))
-				{
-					temp.y -= CS.movement;
-					Data.SetPlayerPosition(temp);
+							Data.SetCounterButtons(0);
+						}
+						else
+						{
+							Data.SetCounterButtons(a++);
+						}
+
+
+
 				}
 				else {
-					//sonoro limite
-					if (limit->isPlaying()) limit->reset();
-					else limit->play();
+					Vertex temp = Data.GetPlayerPosition();
+
+					if (temp.y >= (+(Data.GetPlayerBodyHeight() / 2 + Data.GetPlayerHeadSize() * 2)))
+					{
+						temp.y -= CS.movement;
+						Data.SetPlayerPosition(temp);
+					}
+					else {
+						//sonoro limite
+						if (limit->isPlaying()) limit->reset();
+						else limit->play();
+					}
 				}
 			}
 			if (Data.keys[VK_LEFT]) {
