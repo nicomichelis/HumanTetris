@@ -25,11 +25,6 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	selectButt[1] = 0;
 	selectButt[2] = 0;
 
-
-
-	
-	
-	
 	// Init timing
 	this->Tstart = this->Tstamp = clock();
 	this->Full_elapsed = 0;
@@ -55,10 +50,10 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	PlayerThickness = 0.25;
 	PlayerBodyHeight = 0.7;
 
-
 	// Difficulty
 	size = 4; // da 4 si scende a max 2
 	diff = 0.01;
+	score = 0;
 
 	// Init limits
 	srand((unsigned)time(NULL));
@@ -203,6 +198,10 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 	corpo_top.Draw();
 	Rect corpo_bottom(be, bf, bb, ba);
 	corpo_bottom.Draw();
+	ha = ba;
+	hb = bb;
+	hc = bc;
+	hd = bd;
 	// Arms
 	float PlayerArmHeight = size*PlayerBodyHeight / 5 * 3;
 	float ArmDist;
@@ -320,6 +319,10 @@ void MyModel::DrawPlayer() {
 	corpo_top.Draw();
 	Rect corpo_bottom(be, bf, bb, ba);
 	corpo_bottom.Draw();
+	a = ba;
+	b = bb;
+	c = bc;
+	d = bd;
 	
 	// Arms
 	float PlayerArmHeight = PlayerBodyHeight / 4*3;
@@ -574,7 +577,7 @@ bool MyModel::DrawGLScene(void) {
 	Vertex a, b, c, d, e, f, g, h, i, l, m, n;
 	Vertex cursorP;
 	Vertex ca, cb, cc, cd;
-	if (this->StartScreen) { 
+	if (this->StartScreen) {
 		glRotatef(0.0, 1.0, 0.0, 0.0);
 		glRotatef(0.0, 0.0, 1.0, 0.0);
 		// PER SCRIVERE
@@ -660,21 +663,20 @@ bool MyModel::DrawGLScene(void) {
 		cursor.Draw();
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
 		cursor.DrawTextures();
-		
-		
-		
-		
-		
 	}
 	else {
 		//0 play,1 commands,2 quit
 		if (selectButt[0] == 1) {
 			// POW
+			glTranslatef(0.0, -2.0, 0.0);
 			glRotatef(RotX_a, 1.0, 0.0, 0.0);
 			glRotatef(RotY_a, 0.0, 1.0, 0.0);
+			// Controllo posizione corretta
 			// Roba da disegnare
 			if (!Perso) {
-				
+				glColor3f(1.0f, 0.0f, 0.0f);
+				glRasterPos3f(-wallLargh/2, wallAltezza/2, 20.0);
+				this->glPrint("Score: %d", score);
 				glBindTexture(GL_TEXTURE_2D, texture[0]);
 				this->DrawWall();
 				if (wallPosition < 10.0) {
@@ -686,6 +688,7 @@ bool MyModel::DrawGLScene(void) {
 					if (size > 2)
 						size -= 0.1;
 					Randomize();
+					score++;
 				}
 				// Floor
 				this->DrawFloor();

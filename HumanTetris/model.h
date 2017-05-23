@@ -58,11 +58,13 @@ private:
 	float PlayerHeadSize;
 	float PlayerThickness;
 	float PlayerBodyHeight;
+	Vertex a, b, c, d;
 
 	// Difficulty
 	float size;
 	float rotation;
 	float diff;
+	int score;
 
 	// LIMITI
 	float limitesuperiore;
@@ -77,6 +79,7 @@ private:
 	// Hole
 	Vertex holePosition;
 	float holeRotation;
+	Vertex ha, hb, hc, hd;
 
 	// TEST
 	float Rotx = 0.0;
