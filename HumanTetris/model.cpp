@@ -19,6 +19,13 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	cursorHeight = 0.7;
 	nbuttons = 2;
 	buttCount = 0;
+	selectButt[0] = 0;
+	selectButt[1] = 0;
+	selectButt[2] = 0;
+
+
+
+	
 	
 	
 	// Init timing
@@ -85,12 +92,15 @@ void MyModel::DrawFloor() {
 	floorBack.SetP(fg, fh, fd, fc);
 	floorSideA.SetP(fh, fe, fa, fd);
 	floorSideB.SetP(ff, fg, fc, fb);
-	floorFront.Draw();
-	floorBack.Draw();
-	floorTop.Draw();
-	floorBottom.Draw();
-	floorSideA.Draw();
-	floorSideB.Draw();
+	glBindTexture(GL_TEXTURE_2D, texture[8]);
+	
+	floorFront.DrawTextures();
+	floorBack.DrawTextures();
+	floorTop.DrawTextures();
+	floorBottom.DrawTextures();
+	floorSideA.DrawTextures();
+	floorSideB.DrawTextures();
+
 }
 
 void MyModel::DrawWall() {
@@ -404,6 +414,15 @@ void MyModel::SetCounterButtons(int n) {
 	buttCount=n;
 }
 
+void MyModel::setScene(int n) {
+	for (int i = 0; i < nbuttons; i++) {
+		selectButt[i] = 0;
+	}
+	selectButt[n] = 1;
+}
+
+
+
 void MyModel::Randomize() {
 	float rands = (rand() % 100)*0.01;
 	randomX = limitesinistro + rands*(limitedestro - limitesinistro);
@@ -430,7 +449,7 @@ bool MyModel::InitGL(void) {
 }
 
 bool MyModel::LoadGLTextures(void) {
-	texture[0] = SOIL_load_OGL_texture("../Data/image0.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[0] = SOIL_load_OGL_texture("../Data/image1.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[0] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 
@@ -462,6 +481,51 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[7] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[7]);
 
+
+	texture[8] = SOIL_load_OGL_texture("../Data/image1.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[8] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[8]);
+
+	texture[9] = SOIL_load_OGL_texture("../Data/up.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[9] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[9]);
+
+	texture[10] = SOIL_load_OGL_texture("../Data/down.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[10] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[10]);
+
+	texture[11] = SOIL_load_OGL_texture("../Data/left.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[11] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[11]);
+
+	texture[12] = SOIL_load_OGL_texture("../Data/right.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[12] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[12]);
+
+	texture[13] = SOIL_load_OGL_texture("../Data/A.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[13] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[13]);
+
+	texture[14] = SOIL_load_OGL_texture("../Data/S.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[14] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[14]);
+
+	texture[15] = SOIL_load_OGL_texture("../Data/M.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[15] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[15]);
+
+	texture[16] = SOIL_load_OGL_texture("../Data/esc.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[16] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[16]);
+
+	texture[17] = SOIL_load_OGL_texture("../Data/scroll.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[17] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[17]);
+
+	texture[18] = SOIL_load_OGL_texture("../Data/click.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[18] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[18]);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	return true;
@@ -491,7 +555,7 @@ bool MyModel::DrawGLScene(void) {
 	int ms_elapsed = (int)(t - Tstamp);
 	this->Full_elapsed = double(t - Tstamp) / (double)CLOCKS_PER_SEC;
 	this->frameTime += double(t - Tstamp) / (double)CLOCKS_PER_SEC;
-	
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -502,7 +566,7 @@ bool MyModel::DrawGLScene(void) {
 	glPushMatrix();
 	glTranslatef(0.0, -1.0, -20.0);
 	// Start Screen
-	Vertex a, b, c, d,e,f,g,h,i,l,m,n;
+	Vertex a, b, c, d, e, f, g, h, i, l, m, n;
 	Vertex cursorP;
 	Vertex ca, cb, cc, cd;
 	if (this->StartScreen) { // ! solo per testare, da togliere
@@ -511,95 +575,194 @@ bool MyModel::DrawGLScene(void) {
 		glRotatef(0.0, 1.0, 0.0, 0.0);
 		glRotatef(0.0, 0.0, 1.0, 0.0);
 
-		a.SetP(-(buttonWidth / 2),  buttonHeight / 2, 0.0);
-		b.SetP(( + buttonWidth / 2),  buttonHeight / 2, 0.0);
-		c.SetP(( -buttonWidth / 2),  -(buttonHeight / 2), 0.0);
-		d.SetP(( + buttonWidth / 2),  -(buttonHeight / 2), 0.0);
-		
-		e.SetP(-buttonWidth / 2,  buttonHeight * 2, 0.0);
+		a.SetP(-(buttonWidth / 2), buttonHeight / 2, 0.0);
+		b.SetP((+buttonWidth / 2), buttonHeight / 2, 0.0);
+		c.SetP((-buttonWidth / 2), -(buttonHeight / 2), 0.0);
+		d.SetP((+buttonWidth / 2), -(buttonHeight / 2), 0.0);
+
+		e.SetP(-buttonWidth / 2, buttonHeight * 2, 0.0);
 		f.SetP(buttonWidth / 2, buttonHeight * 2, 0.0);
-		g.SetP( -buttonWidth / 2, buttonHeight , 0.0);
-		h.SetP( buttonWidth / 2, buttonHeight, 0.0);
-	
+		g.SetP(-buttonWidth / 2, buttonHeight, 0.0);
+		h.SetP(buttonWidth / 2, buttonHeight, 0.0);
+
 
 		i.SetP(-buttonWidth / 2, -buttonHeight * 2, 0.0);
 		l.SetP(buttonWidth / 2, -buttonHeight * 2, 0.0);
 		m.SetP(-buttonWidth / 2, -buttonHeight, 0.0);
 		n.SetP(buttonWidth / 2, -buttonHeight, 0.0);
-		
+
 
 		Rect start(g, h, f, e);
-		start.Draw(); 
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
-		start.DrawTextures();
+		start.Draw();
+		if (buttCount != 0) {
 
+			glBindTexture(GL_TEXTURE_2D, texture[2]);
+			start.DrawTextures();
+		}
+		else {
+			glBindTexture(GL_TEXTURE_2D, texture[3]);
+			start.DrawTextures();
+		}
 
-		Rect commands(c,d,b,a);
+		Rect commands(c, d, b, a);
 		commands.Draw();
-		glBindTexture(GL_TEXTURE_2D, texture[4]);
-		commands.DrawTextures();
-
+		if (buttCount != 1) {
+			glBindTexture(GL_TEXTURE_2D, texture[4]);
+			commands.DrawTextures();
+		}
+		else {
+			glBindTexture(GL_TEXTURE_2D, texture[5]);
+			commands.DrawTextures();
+		}
 
 		Rect quit(i, l, n, m);
 		quit.Draw();
-		glBindTexture(GL_TEXTURE_2D, texture[6]);
-		quit.DrawTextures();
 
-		cursorP.x = a.x - cursorWidth / 2;
-		cursorP.z = a.z;
-		cursorP.y = a.y + cursorHeight * 5 / 2;
+		if (buttCount != 2) {
+			glBindTexture(GL_TEXTURE_2D, texture[6]);
+			quit.DrawTextures();
 
-		switch (buttCount) {
-			case 1:
-				cursorP.y = e.y + cursorHeight * 5 / 2;
-			case 2:
-				cursorP.y = i.y + cursorHeight * 5 / 2;
+		}
+		else {
+			glBindTexture(GL_TEXTURE_2D, texture[7]);
+			quit.DrawTextures();
+
 		}
 
-		ca.SetP(cursorP.x-cursorWidth/2, cursorP.y - cursorHeight/2 , 0.0);
-		cb.SetP(cursorP.x+ cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
-		cc.SetP(cursorP.x+ cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
-		cd.SetP(cursorP.x- cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
-		
 
-		Rect cursor(ca,cb,cc,cd);
+		cursorP.x = e.x - cursorWidth / 2;
+		cursorP.z = e.z;
+		cursorP.y = e.y - cursorHeight / 2;
+
+		switch (buttCount) {
+		case 1:
+			cursorP.y = a.y - cursorHeight / 2;
+			break;
+		case 2:
+			cursorP.y = m.y - cursorHeight / 2;
+			break;
+		}
+
+		ca.SetP(cursorP.x - cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
+		cb.SetP(cursorP.x + cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
+		cc.SetP(cursorP.x + cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
+		cd.SetP(cursorP.x - cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
+
+
+		Rect cursor(ca, cb, cc, cd);
 		cursor.Draw();
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
 		cursor.DrawTextures();
-	
+		
+		
+		
+		
 		
 	}
 	else {
-		
-		// POW
-		glRotatef(RotX_a, 1.0, 0.0, 0.0);//<---
-		glRotatef(RotY_a, 0.0, 1.0, 0.0);
-		// Roba da disegnare
-		if (!Perso) {
-			glBindTexture(GL_TEXTURE_2D, texture[0]);
-			this->DrawWall();
-			if (wallPosition < 10.0) {
-				wallPosition += diff;
+		//0 play,1 commands,2 quit
+		if (selectButt[0] == 1) {
+			// POW
+			glRotatef(RotX_a, 1.0, 0.0, 0.0);
+			glRotatef(RotY_a, 0.0, 1.0, 0.0);
+			// Roba da disegnare
+			if (!Perso) {
+				glBindTexture(GL_TEXTURE_2D, texture[0]);
+				this->DrawWall();
+				if (wallPosition < 10.0) {
+					wallPosition += diff;
+				}
+				else {
+					wallPosition = -10.0;
+					diff += 0.001;
+					if (size > 2)
+						size -= 0.1;
+					Randomize();
+				}
+				// Floor
+				this->DrawFloor();
+				// Player
+				this->DrawPlayer();
+				float limit = fabs(size*PlayerThickness - PlayerThickness);
+				float dist = fabs(PlayerPosition.x - holePosition.x);
+
+				glDisable(GL_TEXTURE);
 			}
 			else {
-				wallPosition = -10.0;
-				diff += 0.001;
-				if (size > 2)
-					size -= 0.1;
-				Randomize();
+				// Cosa fare quando perso
+				wallPosition = -20.0;
 			}
-			// Floor
-			this->DrawFloor();
-			// Player
-			this->DrawPlayer();
-			float limit = fabs(size*PlayerThickness - PlayerThickness);
-			float dist = fabs(PlayerPosition.x - holePosition.x);
-
-			glDisable(GL_TEXTURE);
 		}
-		else {
-			// Cosa fare quando perso
-			wallPosition = -20.0;
+
+	
+
+		if (selectButt[1] == 1)
+		{
+			//commands
+			glRotatef(0.0, 1.0, 0.0, 0.0);
+			glRotatef(0.0, 0.0, 1.0, 0.0);
+
+			float butt = 1.0;
+			Vertex ka,kb,kc,kd;
+			float marginx,marginy;
+			marginx = 8.0;
+			marginy = 7.0;
+			ka.SetColor(1.0, 0.0, 0.2);
+			kb.SetColor(1.0, 0.0, 0.2);
+			kc.SetColor(1.0, 0.0, 0.2);
+			kd.SetColor(1.0, 0.0, 0.2);
+			
+
+			kd.SetP(-marginx,marginy, 0.0);
+			ka.SetP(kd.x, kd.y - butt, kd.z);
+			kc.SetP(kd.x + butt, kd.y, kd.z);
+			kb.SetP(kd.x + butt, kd.y - butt, kd.z);
+
+			Rect com(ka,kb,kc,kd);
+			com.Draw();
+			glBindTexture(GL_TEXTURE_2D, texture[9]);
+			com.DrawTextures();
+
+
+			for (int g = 0; g < 9; g++) {
+				if (g == 5) {
+					kd.SetP(0.0 + 2.0, marginy, 0.0);
+					ka.SetP(kd.x, kd.y - butt, kd.z);
+					kc.SetP(kd.x + butt, kd.y, kd.z);
+					kb.SetP(kd.x + butt, kd.y - butt, kd.z);
+				}
+				else {
+					ka.y -= butt * 2;
+					kb.y -= butt * 2;
+					kc.y -= butt * 2;
+					kd.y -= butt * 2;
+				}
+				Rect com(ka, kb, kc, kd);
+				com.Draw();
+				glBindTexture(GL_TEXTURE_2D, texture[10+g]);
+				com.DrawTextures();
+				
+			}
+
+
+
+			kd.SetP(0.0+2.0, marginy, 0.0);
+			ka.SetP(kd.x, kd.y - butt, kd.z);
+			kc.SetP(kd.x + butt, kd.y, kd.z);
+			kb.SetP(kd.x + butt, kd.y - butt, kd.z);
+			
+			Rect com2(ka, kb, kc, kd);
+			com2.Draw();
+			glBindTexture(GL_TEXTURE_2D, texture[15]);
+			com2.DrawTextures();
+
+		}
+		if (selectButt[2] == 1)
+		{
+			//quit
+			PostQuitMessage(0);
+			return 0;
+			
 		}
 	}
 	return true;
