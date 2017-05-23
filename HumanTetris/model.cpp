@@ -675,7 +675,7 @@ bool MyModel::DrawGLScene(void) {
 			// Roba da disegnare
 			if (!Perso) {
 				glColor3f(1.0f, 0.0f, 0.0f);
-				glRasterPos3f(-wallLargh/2, wallAltezza/2, 20.0);
+				glRasterPos3f(-wallLargh/2, wallAltezza/2, 10.0);
 				this->glPrint("Score: %d", score);
 				glBindTexture(GL_TEXTURE_2D, texture[0]);
 				this->DrawWall();
