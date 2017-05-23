@@ -283,9 +283,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					int a, b;
 					a = Data.getCounterButtons();
 					b = Data.getNbuttons();
-					
-						if (a==b)
-						{
+					if (a==b){
 
 							Data.SetCounterButtons(0);
 						}

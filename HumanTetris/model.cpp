@@ -505,7 +505,7 @@ bool MyModel::DrawGLScene(void) {
 	Vertex a, b, c, d,e,f,g,h,i,l,m,n;
 	Vertex cursorP;
 	Vertex ca, cb, cc, cd;
-	if (!this->StartScreen) { // ! solo per testare, da togliere
+	if (this->StartScreen) { // ! solo per testare, da togliere
 		//glDisable(GL_TEXTURE_2D);
 
 		glRotatef(0.0, 1.0, 0.0, 0.0);
@@ -566,10 +566,7 @@ bool MyModel::DrawGLScene(void) {
 		cursor.Draw();
 		glBindTexture(GL_TEXTURE_2D, texture[1]);
 		cursor.DrawTextures();
-		
-		
-		
-		
+	
 		
 	}
 	else {
