@@ -24,7 +24,7 @@ public:
 	double		Full_elapsed;
 	bool		StartScreen;
 	bool		Perso;
-	GLuint		texture[10];
+	GLuint		texture[20];
 	GLdouble	fovy;
 	GLfloat		RotX_a;
 	GLfloat		RotY_a;

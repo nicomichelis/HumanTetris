@@ -22,6 +22,9 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	selectButt[0] = 0;
 	selectButt[1] = 0;
 	selectButt[2] = 0;
+
+
+
 	
 	
 	
@@ -483,6 +486,46 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[8] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[8]);
 
+	texture[9] = SOIL_load_OGL_texture("../Data/up.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[9] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[9]);
+
+	texture[10] = SOIL_load_OGL_texture("../Data/down.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[10] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[10]);
+
+	texture[11] = SOIL_load_OGL_texture("../Data/left.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[11] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[11]);
+
+	texture[12] = SOIL_load_OGL_texture("../Data/right.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[12] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[12]);
+
+	texture[13] = SOIL_load_OGL_texture("../Data/A.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[13] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[13]);
+
+	texture[14] = SOIL_load_OGL_texture("../Data/S.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[14] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[14]);
+
+	texture[15] = SOIL_load_OGL_texture("../Data/M.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[15] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[15]);
+
+	texture[16] = SOIL_load_OGL_texture("../Data/esc.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[16] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[16]);
+
+	texture[17] = SOIL_load_OGL_texture("../Data/scroll.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[17] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[17]);
+
+	texture[18] = SOIL_load_OGL_texture("../Data/click.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[18] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[18]);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	return true;
@@ -659,12 +702,66 @@ bool MyModel::DrawGLScene(void) {
 			glRotatef(0.0, 1.0, 0.0, 0.0);
 			glRotatef(0.0, 0.0, 1.0, 0.0);
 
+			float butt = 1.0;
+			Vertex ka,kb,kc,kd;
+			float marginx,marginy;
+			marginx = 8.0;
+			marginy = 7.0;
+			ka.SetColor(1.0, 0.0, 0.2);
+			kb.SetColor(1.0, 0.0, 0.2);
+			kc.SetColor(1.0, 0.0, 0.2);
+			kd.SetColor(1.0, 0.0, 0.2);
+			
+
+			kd.SetP(-marginx,marginy, 0.0);
+			ka.SetP(kd.x, kd.y - butt, kd.z);
+			kc.SetP(kd.x + butt, kd.y, kd.z);
+			kb.SetP(kd.x + butt, kd.y - butt, kd.z);
+
+			Rect com(ka,kb,kc,kd);
+			com.Draw();
+			glBindTexture(GL_TEXTURE_2D, texture[9]);
+			com.DrawTextures();
+
+
+			for (int g = 0; g < 9; g++) {
+				if (g == 5) {
+					kd.SetP(0.0 + 2.0, marginy, 0.0);
+					ka.SetP(kd.x, kd.y - butt, kd.z);
+					kc.SetP(kd.x + butt, kd.y, kd.z);
+					kb.SetP(kd.x + butt, kd.y - butt, kd.z);
+				}
+				else {
+					ka.y -= butt * 2;
+					kb.y -= butt * 2;
+					kc.y -= butt * 2;
+					kd.y -= butt * 2;
+				}
+				Rect com(ka, kb, kc, kd);
+				com.Draw();
+				glBindTexture(GL_TEXTURE_2D, texture[10+g]);
+				com.DrawTextures();
+				
+			}
+
+
+
+			kd.SetP(0.0+2.0, marginy, 0.0);
+			ka.SetP(kd.x, kd.y - butt, kd.z);
+			kc.SetP(kd.x + butt, kd.y, kd.z);
+			kb.SetP(kd.x + butt, kd.y - butt, kd.z);
+			
+			Rect com2(ka, kb, kc, kd);
+			com2.Draw();
+			glBindTexture(GL_TEXTURE_2D, texture[15]);
+			com2.DrawTextures();
+
 		}
 		if (selectButt[2] == 1)
 		{
 			//quit
-			glRotatef(0.0, 1.0, 0.0, 0.0);
-			glRotatef(0.0, 0.0, 1.0, 0.0);
+			PostQuitMessage(0);
+			return 0;
 			
 		}
 	}
