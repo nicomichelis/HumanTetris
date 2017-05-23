@@ -25,6 +25,7 @@ public:
 	bool		StartScreen;
 	bool		Perso;
 	GLuint		texture[20];
+	GLuint		base;
 	GLdouble	fovy;
 	GLfloat		RotX_a;
 	GLfloat		RotY_a;
@@ -111,7 +112,12 @@ public:
 	void ReSizeGLScene(int width, int height);
 	bool DrawGLScene(void);
 	void SetProjection();
-
+	void BuildFont(void);
+	void KillFont(void);
+	void glPrint(const char *fmt, ...);
+	~MyModel() {
+		this->KillFont();
+	}
 };
 
 extern class MyModel Data;

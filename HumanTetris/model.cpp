@@ -4,11 +4,13 @@
 #include <gl\gl.h>
 #include <gl\glu.h> 
 #include "SOIL.h"
-
+#include <stdio.h>
 
 #pragma comment( lib, "opengl32.lib" )			
 #pragma comment( lib, "glu32.lib" )					
 #pragma comment( lib, "winmm.lib" )					
+
+#pragma warning(disable:4996)
 
 MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), fps(0), cursor(true), captured(false), StartScreen(true), Perso(false), fovy(45.0), RotX_a(0), RotY_a(0) {
 	
@@ -66,6 +68,8 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	limitesinistro = -wallLargh / 2 + (size*PlayerBodyHeight / 2 + size*PlayerHeadSize * 2);
 	Randomize();
 }
+
+
 
 void MyModel::DrawFloor() {
 	Vertex fa, fb, fc, fd, fe, ff, fg, fh;
@@ -442,6 +446,7 @@ bool MyModel::InitGL(void) {
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+	this->BuildFont();
 	glCullFace(GL_BACK);
 	glEnable(GL_CULL_FACE);
 	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
@@ -569,11 +574,13 @@ bool MyModel::DrawGLScene(void) {
 	Vertex a, b, c, d, e, f, g, h, i, l, m, n;
 	Vertex cursorP;
 	Vertex ca, cb, cc, cd;
-	if (this->StartScreen) { // ! solo per testare, da togliere
-		//glDisable(GL_TEXTURE_2D);
-
+	if (this->StartScreen) { 
 		glRotatef(0.0, 1.0, 0.0, 0.0);
 		glRotatef(0.0, 0.0, 1.0, 0.0);
+		// PER SCRIVERE
+		glColor3f(0.1f, 0.9f, 0.1f);
+		glRasterPos3f(-5.0f, +5.0f, 0.0f);
+		this->glPrint("Ciaone");
 
 		a.SetP(-(buttonWidth / 2), buttonHeight / 2, 0.0);
 		b.SetP((+buttonWidth / 2), buttonHeight / 2, 0.0);
@@ -667,6 +674,7 @@ bool MyModel::DrawGLScene(void) {
 			glRotatef(RotY_a, 0.0, 1.0, 0.0);
 			// Roba da disegnare
 			if (!Perso) {
+				
 				glBindTexture(GL_TEXTURE_2D, texture[0]);
 				this->DrawWall();
 				if (wallPosition < 10.0) {
@@ -773,5 +781,34 @@ void MyModel::SetProjection() {
 	glLoadIdentity();
 	gluLookAt(0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 1.0, 0.0);
 	gluPerspective(fovy, (GLfloat)Wwidth / (GLfloat)Wheight, 0.1, 200.0);
+}
+
+void MyModel::BuildFont(void) {
+	HFONT font;
+	HFONT oldfont;
+	base = glGenLists(96);
+	font = CreateFont(-20, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_TT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY, FF_DONTCARE | DEFAULT_PITCH, "Courier New");
+	oldfont = (HFONT)SelectObject(hDC, font);
+	wglUseFontBitmaps(hDC, 32, 96, base);
+	SelectObject(hDC, oldfont);
+	DeleteObject(font);
+}
+
+void MyModel::KillFont(void) {
+	glDeleteLists(base, 96);
+}
+
+void MyModel::glPrint(const char * fmt, ...) {
+	char text[256];
+	va_list ap;
+	if (fmt == NULL)
+		return;
+	va_start(ap, fmt);
+	vsprintf (text, fmt, ap);
+	va_end(ap);
+	glPushAttrib(GL_LIST_BIT);
+	glListBase(base - 32);
+	glCallLists(strlen(text), GL_UNSIGNED_BYTE, text);
+	glPopAttrib();
 }
 
