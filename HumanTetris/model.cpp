@@ -5,6 +5,7 @@
 #include <gl\glu.h> 
 #include "SOIL.h"
 #include <stdio.h>
+#include <string>
 
 #pragma comment( lib, "opengl32.lib" )			
 #pragma comment( lib, "glu32.lib" )					
@@ -14,6 +15,8 @@
 
 MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), fps(0), cursor(true), captured(false), StartScreen(true), Perso(false), fovy(45.0), RotX_a(0), RotY_a(0) {
 	
+	
+
 	//butt
 	buttonWidth = 4.5;
 	buttonHeight = 1.5;
@@ -457,7 +460,7 @@ bool MyModel::InitGL(void) {
 }
 
 bool MyModel::LoadGLTextures(void) {
-	texture[0] = SOIL_load_OGL_texture("../Data/image1.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[0] = SOIL_load_OGL_texture("../Data/image0.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[0] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 
@@ -490,7 +493,7 @@ bool MyModel::LoadGLTextures(void) {
 	glBindTexture(GL_TEXTURE_2D, texture[7]);
 
 
-	texture[8] = SOIL_load_OGL_texture("../Data/image1.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[8] = SOIL_load_OGL_texture("../Data/lava.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[8] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[8]);
 
@@ -716,7 +719,9 @@ bool MyModel::DrawGLScene(void) {
 			float butt = 1.0;
 			Vertex ka,kb,kc,kd;
 			float marginx,marginy;
-			marginx = 8.0;
+			static const std::string command[10] = {"Move Up","Move Down","Move left","Move right","Rotate clockwise","Rotate counterclockwise","Mute music", "Back to Menu", "Move view", "Zoom"};
+
+			marginx = 10.0;
 			marginy = 7.0;
 			ka.SetColor(1.0, 0.0, 0.2);
 			kb.SetColor(1.0, 0.0, 0.2);
@@ -733,9 +738,13 @@ bool MyModel::DrawGLScene(void) {
 			com.Draw();
 			glBindTexture(GL_TEXTURE_2D, texture[9]);
 			com.DrawTextures();
-
+			glColor3f(0.1f, 0.9f, 0.1f);
+			glRasterPos3f(kc.x+ butt, kc.y- butt/2, 0.0f);
+			this->glPrint("%s", command[0].c_str());
+			int d = 0;
 
 			for (int g = 0; g < 9; g++) {
+				d++;
 				if (g == 5) {
 					kd.SetP(0.0 + 2.0, marginy, 0.0);
 					ka.SetP(kd.x, kd.y - butt, kd.z);
@@ -752,6 +761,10 @@ bool MyModel::DrawGLScene(void) {
 				com.Draw();
 				glBindTexture(GL_TEXTURE_2D, texture[10+g]);
 				com.DrawTextures();
+				
+				glColor3f(0.1f, 0.9f, 0.1f);
+				glRasterPos3f(kc.x + butt, kc.y - butt / 2, 0.0f);
+				this->glPrint("%s",command[d].c_str());
 				
 			}
 
