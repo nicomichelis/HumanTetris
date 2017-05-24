@@ -537,6 +537,10 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[18] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[18]);
 
+	texture[19] = SOIL_load_OGL_texture("../Data/logo1.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[19] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[19]);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	return true;
@@ -583,10 +587,7 @@ bool MyModel::DrawGLScene(void) {
 	if (this->StartScreen) {
 		glRotatef(0.0, 1.0, 0.0, 0.0);
 		glRotatef(0.0, 0.0, 1.0, 0.0);
-		// PER SCRIVERE
-		glColor3f(0.1f, 0.9f, 0.1f);
-		glRasterPos3f(-5.0f, +5.0f, 0.0f);
-		this->glPrint("Ciaone");
+		
 
 		a.SetP(-(buttonWidth / 2), buttonHeight / 2, 0.0);
 		b.SetP((+buttonWidth / 2), buttonHeight / 2, 0.0);
@@ -641,6 +642,21 @@ bool MyModel::DrawGLScene(void) {
 			quit.DrawTextures();
 
 		}
+		//logo
+		Vertex  l1, l2, l3, l4;
+		l1.SetColor(1.0, 0.0, 0.2);
+		l2.SetColor(1.0, 0.0, 0.2);
+		l3.SetColor(1.0, 0.0, 0.2);
+		l4.SetColor(1.0, 0.0, 0.2);
+		l1.SetP(-9.0, 4.5, 0.0);
+		l2.SetP(9.0, 4.5, 0.0);
+		l3.SetP(9.0, 7.5, 0.0);
+		l4.SetP(-9.0, 7.5, 0.0);
+
+		Rect log(l1, l2, l3, l4);
+		log.Draw();
+		glBindTexture(GL_TEXTURE_2D, texture[19]);
+		log.DrawTextures();
 
 
 		cursorP.x = e.x - cursorWidth / 2;
@@ -766,6 +782,9 @@ bool MyModel::DrawGLScene(void) {
 				com.Draw();
 				glBindTexture(GL_TEXTURE_2D, texture[10+g]);
 				com.DrawTextures();
+
+				
+
 				
 				glColor3f(0.1f, 0.9f, 0.1f);
 				glRasterPos3f(kc.x + butt, kc.y - butt / 2, 0.0f);
