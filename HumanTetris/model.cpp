@@ -644,15 +644,17 @@ bool MyModel::DrawGLScene(void) {
 		}
 		//logo
 		Vertex  l1, l2, l3, l4;
-		l1.SetColor(1.0, 0.0, 0.2);
-		l2.SetColor(1.0, 0.0, 0.2);
-		l3.SetColor(1.0, 0.0, 0.2);
-		l4.SetColor(1.0, 0.0, 0.2);
+		l1.SetColor(0.0, 0.0, 0.0);
+		l2.SetColor(0.0, 0.0, 0.0);
+		l3.SetColor(0.0, 0.0, 0.0);
+		l4.SetColor(0.0, 0.0, 0.0);
 		l1.SetP(-9.0, 4.5, 0.0);
 		l2.SetP(9.0, 4.5, 0.0);
 		l3.SetP(9.0, 7.5, 0.0);
 		l4.SetP(-9.0, 7.5, 0.0);
 
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		Rect log(l1, l2, l3, l4);
 		log.Draw();
 		glBindTexture(GL_TEXTURE_2D, texture[19]);
@@ -693,7 +695,7 @@ bool MyModel::DrawGLScene(void) {
 			// Controllo posizione corretta
 			// Roba da disegnare
 			if (!Perso) {
-				glColor3f(1.0f, 0.0f, 0.0f);
+				glColor3f(0.0f, 0.0f, 0.0f);
 				glRasterPos3f(0.0, 0.0, 10.0);
 				this->glPrint("Score: %d", score);
 
