@@ -27,7 +27,10 @@ class MyModel Data;
 
 typedef struct CommonData {
 	bool lCaptured;
-	int lxs, lys;     // posizione iniziale / initial position
+	double lxs, lys;     // posizione iniziale / initial position0.0, 1.0, 10.0
+	double x1=0.0, y1=1.0, z1=10.0;
+
+	double wallz = -10.0;//z iniziale del muro
 	int ldx, ldy;     // delta
 	double movement = 0.1; // Di quanto si muove l'omino ogni volta che premo un tasto
 	double rotation = 0.1;
@@ -369,7 +372,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			
 			if (Data.keys[VK_ESCAPE]) {
 				//torna alla schermata iniziale
+				//modify
+				Vertex x;
+				x.x = CS.x1;
+				x.y = CS.y1;
+				x.z = CS.z1;
 				
+				x.SetColor(1.0, 0.5, 0.5);
+				Data.SetPlayerPosition(x);
+				Data.SetPlayerRotation(0.0);
+				Data.SetWallPosition(CS.wallz);
+				glTranslatef(0.0, -2.0, 0.0);
+				Data.RotX_a = 0.0;
+				Data.RotY_a = 0.0; //reset perspective
+				Data.SetLevel();
+				Data.fovy = 45.0; // reset zoom
+				//
 				Data.StartScreen = TRUE;
 				
 			}

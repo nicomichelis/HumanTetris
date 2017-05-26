@@ -24,7 +24,7 @@ public:
 	double		Full_elapsed;
 	bool		StartScreen;
 	bool		Perso;
-	GLuint		texture[20];
+	GLuint		texture[25];
 	GLuint		base;
 	GLdouble	fovy;
 	GLfloat		RotX_a;
@@ -108,6 +108,8 @@ public:
 	void SetCounterButtons(int n);
 	void setScene(int n);
 	
+	//reset level
+	void SetLevel(void);
 
 	// GL
 	bool InitGL(void);
