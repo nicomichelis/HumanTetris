@@ -218,11 +218,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		return 0;
 	case WM_MOUSEWHEEL:
 		int t, z;
-		z = (short)HIWORD(wParam);
-		t = (z / WHEEL_DELTA);
-		Data.fovy += t * 0.5;
-		InvalidateRect(hWnd, NULL, FALSE);
-		return 0;
+		
+			z = (short)HIWORD(wParam);
+			t = (z / WHEEL_DELTA);
+			//disabilito lo zoom in 1
+			if(Data.getCounterButtons()!=1)
+			Data.fovy += t * 0.5;
+
+			InvalidateRect(hWnd, NULL, FALSE);
+		
+			return 0;
+		
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }

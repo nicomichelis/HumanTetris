@@ -697,6 +697,8 @@ bool MyModel::DrawGLScene(void) {
 			glTranslatef(0.0, -2.0, 0.0);
 			glRotatef(RotX_a, 1.0, 0.0, 0.0);
 			glRotatef(RotY_a, 0.0, 1.0, 0.0);
+			
+			
 			// Controllo posizione corretta
 			// Roba da disegnare
 			if (!Perso) {
