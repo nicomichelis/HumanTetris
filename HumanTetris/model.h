@@ -88,18 +88,18 @@ public:
 	MyModel();
 	void DrawFloor();
 	void DrawWall();
-	void DrawPlayerOnWall(Vertex position, float rotation, float size);
+	void DrawPlayerOnWall(Vertex position, double rotation, double size);
 	void DrawPlayer();
-	void SetWallPosition(float x);
-	float GetWallPosition();
+	void SetWallPosition(double x);
+	double GetWallPosition();
 	Vertex GetPlayerPosition();
 	void SetPlayerPosition(Vertex x);
-	float GetPlayerRotation();
-	float GetwallLargh() { return wallLargh; }
-	float GetwallAltezza() { return wallAltezza; }
-	void SetPlayerRotation(float x);
-	float GetPlayerBodyHeight() { return PlayerBodyHeight; }
-	float GetPlayerHeadSize() { return PlayerHeadSize; }
+	double GetPlayerRotation();
+	double GetwallLargh() { return wallLargh; }
+	double GetwallAltezza() { return wallAltezza; }
+	void SetPlayerRotation(double x);
+	double GetPlayerBodyHeight() { return PlayerBodyHeight; }
+	double GetPlayerHeadSize() { return PlayerHeadSize; }
 	void Randomize();
 
 	//butt

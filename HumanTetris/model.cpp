@@ -148,10 +148,10 @@ void MyModel::DrawWall() {
 
 }
 
-void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
+void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	holePosition = position;
 	holeRotation = rotation;
-	float spessore = wallProf + 0.01;
+	double spessore = wallProf + 0.01;
 	// Head
 	position.r = 0.0;
 	position.g = 0.0;
@@ -162,8 +162,8 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 	Cylinder Head(HeadPosition, size*PlayerHeadSize/1.2, spessore);
 	Head.Draw();
 	// Body
-	float diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
-	float angle = asin((PlayerBodyHeight / 2) / diag);
+	double diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
+	double angle = asin((PlayerBodyHeight / 2) / diag);
 	Vertex ba, bb, bc, bd, be, bf, bg, bh;
 	ba = bb = bc = bd = be = bf = bg = bh = position;
 	ba.x = position.x + ((diag)*cos(PI + angle + rotation));
@@ -206,21 +206,21 @@ void MyModel::DrawPlayerOnWall(Vertex position, float rotation, float size) {
 	hc = bc;
 	hd = bd;
 	// Arms
-	float PlayerArmHeight = size*PlayerBodyHeight / 5 * 3;
-	float ArmDist;
-	float angle2;
-	float angle3;
-	float ArmThickness = size*PlayerThickness / 1.5;
-	float ArmDiag;
-	float alpha = PI / 3;
+	double PlayerArmHeight = size*PlayerBodyHeight / 5 * 3;
+	double ArmDist;
+	double angle2;
+	double angle3;
+	double ArmThickness = size*PlayerThickness / 1.5;
+	double ArmDiag;
+	double alpha = PI / 3;
 
 	ArmDiag = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow((ArmThickness / 2), 2.0));
 	angle2 = asin(sin(90) / diag * size*PlayerThickness / 2) - alpha;
 	angle3 = acos(cos(angle2)*diag / PlayerArmHeight / 2);
 
 	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow(diag, 2.0) - 2 * diag*PlayerArmHeight / 2 * cos(PI - angle2 - angle3));
-	float beta = PI / 6;
-	float angle_arm = asin((PlayerArmHeight / 2) / ArmDiag);
+	double beta = PI / 6;
+	double angle_arm = asin((PlayerArmHeight / 2) / ArmDiag);
 	Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
 	xa = xb = xc = xd = xe = xf = xg = xh = ba;
 	for (int i = 0; i < 4; i++) {
@@ -283,9 +283,9 @@ void MyModel::DrawPlayer() {
 	Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
 	Head.Draw();
 	// Body
-	float diag = sqrt(pow((PlayerBodyHeight / 2),2.0) + pow((PlayerThickness / 2),2.0));
+	double diag = sqrt(pow((PlayerBodyHeight / 2),2.0) + pow((PlayerThickness / 2),2.0));
 	ba = bb = bc = bd = be = bf = bg = bh = PlayerPosition;
-	float angle = asin((PlayerBodyHeight / 2) / diag) ;
+	double angle = asin((PlayerBodyHeight / 2) / diag) ;
 
 	ba.x = PlayerPosition.x + ((diag)*cos(PI + angle + PlayerRotation));
 	ba.y = PlayerPosition.y + ((diag)*sin(PI + angle + PlayerRotation));
@@ -328,21 +328,21 @@ void MyModel::DrawPlayer() {
 	d = bd;
 	
 	// Arms
-	float PlayerArmHeight = PlayerBodyHeight / 4*3;
-	float ArmDist;
-	float angle2;
-	float angle3;
-	float ArmThickness = PlayerThickness / 2;
-	float ArmDiag;
-	float alpha = PI / 3;
+	double PlayerArmHeight = PlayerBodyHeight / 4*3;
+	double ArmDist;
+	double angle2;
+	double angle3;
+	double ArmThickness = PlayerThickness / 2;
+	double ArmDiag;
+	double alpha = PI / 3;
 
 	ArmDiag = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow((ArmThickness / 2), 2.0));
 	angle2 = asin( sin(90) / diag * PlayerThickness / 2) - alpha;
 	angle3 =acos( cos(angle2)*diag / PlayerArmHeight/2);
 	
 	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow(diag, 2.0) - 2 * diag*PlayerArmHeight/2*cos(PI -angle2 - angle3));
-	float beta = PI / 6;
-	float angle_arm = asin((PlayerArmHeight / 2) / ArmDiag);
+	double beta = PI / 6;
+	double angle_arm = asin((PlayerArmHeight / 2) / ArmDiag);
 	Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
 	xa = xb = xc = xd = xe = xf = xg = xh = ba;
 	for (int i = 0; i < 4; i++) {
@@ -396,11 +396,11 @@ void MyModel::DrawPlayer() {
 	}
 }
 
-void MyModel::SetWallPosition(float x) {
+void MyModel::SetWallPosition(double x) {
 	this->wallPosition = x;
 }
 
-float MyModel::GetWallPosition() {
+double MyModel::GetWallPosition() {
 	return wallPosition;
 }
 
@@ -412,11 +412,11 @@ void MyModel::SetPlayerPosition(Vertex x) {
 	this->PlayerPosition = x;
 }
 
-float MyModel::GetPlayerRotation() {
+double MyModel::GetPlayerRotation() {
 	return this->PlayerRotation;
 }
 
-void MyModel::SetPlayerRotation(float x) {
+void MyModel::SetPlayerRotation(double x) {
 	this->PlayerRotation = x;
 }
 
@@ -434,7 +434,7 @@ void MyModel::setScene(int n) {
 
 
 void MyModel::Randomize() {
-	float rands = (rand() % 100)*0.01;
+	double rands = (rand() % 100)*0.01;
 	randomX = limitesinistro + rands*(limitedestro - limitesinistro);
 	rands = (rand() % 100) *0.01;
 	randomY = limiteinferiore + rands*(limitesuperiore - limiteinferiore);
@@ -721,8 +721,8 @@ bool MyModel::DrawGLScene(void) {
 				this->DrawFloor();
 				// Player
 				this->DrawPlayer();
-				float limit = fabs(size*PlayerThickness - PlayerThickness);
-				float dist = fabs(PlayerPosition.x - holePosition.x);
+				double limit = fabs(size*PlayerThickness - PlayerThickness);
+				double dist = fabs(PlayerPosition.x - holePosition.x);
 
 				glDisable(GL_TEXTURE);
 			}
@@ -740,9 +740,9 @@ bool MyModel::DrawGLScene(void) {
 			glRotatef(0.0, 1.0, 0.0, 0.0);
 			glRotatef(0.0, 0.0, 1.0, 0.0);
 
-			float butt = 1.0;
+			double butt = 1.0;
 			Vertex ka,kb,kc,kd;
-			float marginx,marginy;
+			double marginx,marginy;
 			static const std::string command[10] = {"Move Up","Move Down","Move left","Move right","Rotate counterclockwise","Rotate clockwise","Mute music", "Back to Menu", "Move view", "Zoom"};
 
 			marginx = 10.0;

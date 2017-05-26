@@ -29,8 +29,8 @@ typedef struct CommonData {
 	bool lCaptured;
 	int lxs, lys;     // posizione iniziale / initial position
 	int ldx, ldy;     // delta
-	float movement = 0.1; // Di quanto si muove l'omino ogni volta che premo un tasto
-	float rotation = 0.1;
+	double movement = 0.1; // Di quanto si muove l'omino ogni volta che premo un tasto
+	double rotation = 0.1;
 
 	CommonData() : lCaptured(false){
 	}
@@ -377,13 +377,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 			if (Data.keys['A']) {
 				Data.keys['A'] = FALSE;
-				float temp = Data.GetPlayerRotation();
+				double temp = Data.GetPlayerRotation();
 				temp += CS.rotation;
 				Data.SetPlayerRotation(temp);
 			}
 			if (Data.keys['S']) {
 				Data.keys['S'] = FALSE;
-				float temp = Data.GetPlayerRotation();
+				double temp = Data.GetPlayerRotation();
 				temp -= CS.rotation;
 				Data.SetPlayerRotation(temp);
 			}
