@@ -653,6 +653,7 @@ bool MyModel::DrawGLScene(void) {
 		l3.SetP(9.0, 7.5, 0.0);
 		l4.SetP(-9.0, 7.5, 0.0);
 
+		//prossime due righe utili a mantenere la trasparenza delle immagini
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		Rect log(l1, l2, l3, l4);
@@ -742,14 +743,14 @@ bool MyModel::DrawGLScene(void) {
 			float butt = 1.0;
 			Vertex ka,kb,kc,kd;
 			float marginx,marginy;
-			static const std::string command[10] = {"Move Up","Move Down","Move left","Move right","Rotate clockwise","Rotate counterclockwise","Mute music", "Back to Menu", "Move view", "Zoom"};
+			static const std::string command[10] = {"Move Up","Move Down","Move left","Move right","Rotate counterclockwise","Rotate clockwise","Mute music", "Back to Menu", "Move view", "Zoom"};
 
 			marginx = 10.0;
 			marginy = 7.0;
-			ka.SetColor(1.0, 0.0, 0.2);
-			kb.SetColor(1.0, 0.0, 0.2);
-			kc.SetColor(1.0, 0.0, 0.2);
-			kd.SetColor(1.0, 0.0, 0.2);
+			ka.SetColor(0.0, 0.0, 0.0);
+			kb.SetColor(0.0, 0.0, 0.0);
+			kc.SetColor(0.0, 0.0, 0.0);
+			kd.SetColor(0.0, 0.0, 0.0);
 			
 
 			kd.SetP(-marginx,marginy, 0.0);

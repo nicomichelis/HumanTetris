@@ -32,58 +32,58 @@ public:
 
 private:
 	//butt
-	float buttonWidth;
-	float buttonHeight;
-	float cursorWidth;
-	float cursorHeight;
+	double buttonWidth;
+	double buttonHeight;
+	double cursorWidth;
+	double cursorHeight;
 	int nbuttons;
 	int buttCount;
 	boolean selectButt[2];
 
 	// Floor
-	float floorLargh;
-	float floorProf;
-	float floorAltezza;
+	double floorLargh;
+	double floorProf;
+	double floorAltezza;
 
 	// Wall
-	float wallLargh;
-	float wallProf;
-	float wallAltezza;
-	float wallPosition;
+	double wallLargh;
+	double wallProf;
+	double wallAltezza;
+	double wallPosition;
 	Vertex wallPositionPoint;
 
 	// Player
 	Vertex PlayerPosition;
-	float PlayerRotation;
-	float PlayerHeadSize;
-	float PlayerThickness;
-	float PlayerBodyHeight;
+	double PlayerRotation;
+	double PlayerHeadSize;
+	double PlayerThickness;
+	double PlayerBodyHeight;
 	Vertex a, b, c, d;
 
 	// Difficulty
-	float size;
-	float rotation;
-	float diff;
+	double size;
+	double rotation;
+	double diff;
 	int score;
 
 	// LIMITI
-	float limitesuperiore;
-	float limiteinferiore;
-	float limitedestro;
-	float limitesinistro;
-	float randomX;
-	float randomY;
-	float randomR;
+	double limitesuperiore;
+	double limiteinferiore;
+	double limitedestro;
+	double limitesinistro;
+	double randomX;
+	double randomY;
+	double randomR;
 
 
 	// Hole
 	Vertex holePosition;
-	float holeRotation;
+	double holeRotation;
 	Vertex ha, hb, hc, hd;
 
 	// TEST
-	float Rotx = 0.0;
-	float Roty = 0.0;
+	double Rotx = 0.0;
+	double Roty = 0.0;
 public:
 	MyModel();
 	void DrawFloor();

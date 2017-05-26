@@ -378,13 +378,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (Data.keys['A']) {
 				Data.keys['A'] = FALSE;
 				float temp = Data.GetPlayerRotation();
-				temp -= CS.rotation;
+				temp += CS.rotation;
 				Data.SetPlayerRotation(temp);
 			}
 			if (Data.keys['S']) {
 				Data.keys['S'] = FALSE;
 				float temp = Data.GetPlayerRotation();
-				temp += CS.rotation;
+				temp -= CS.rotation;
 				Data.SetPlayerRotation(temp);
 			}
 
