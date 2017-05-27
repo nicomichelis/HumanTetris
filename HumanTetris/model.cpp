@@ -654,8 +654,8 @@ bool MyModel::DrawGLScene(void) {
 		l4.SetColor(0.0, 0.0, 0.0);
 		l1.SetP(-9.0, 4.5, 0.0);
 		l2.SetP(9.0, 4.5, 0.0);
-		l3.SetP(9.0, 7.5, 0.0);
-		l4.SetP(-9.0, 7.5, 0.0);
+		l3.SetP(9.0, 6.5, 0.0);
+		l4.SetP(-9.0, 6.5, 0.0);
 
 		//prossime due righe utili a mantenere la trasparenza delle immagini
 		glEnable(GL_BLEND);
