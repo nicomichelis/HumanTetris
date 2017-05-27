@@ -251,8 +251,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	stream->setRepeat(true);
 	stream->setVolume(0.5f);
 	stream->play();
-	OutputStreamPtr limit(OpenSound(device, "../Data/limit.wav", false));
+	OutputStreamPtr limit(OpenSound(device, "../Data/hurt.wav", false));
 	OutputStreamPtr stupid(OpenSound(device, "../Data/stupid.wav", false));
+	OutputStreamPtr butt(OpenSound(device, "../Data/butt.wav", false));
+	butt->setVolume(0.4f);
 
 	while (!done) {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -275,6 +277,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				Data.keys[VK_UP] = FALSE;
 
 				if (Data.StartScreen == TRUE) {
+					butt->play();
 					int a, b;
 					a = Data.getCounterButtons();
 					b = Data.getNbuttons();
@@ -300,11 +303,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						else limit->play();
 					}
 				}
+
 			}
 			if (Data.keys[VK_DOWN]) {
 				Data.keys[VK_DOWN] = FALSE;
 				
 				if (Data.StartScreen ==TRUE) {
+					butt->play();
 					int a, b;
 					a = Data.getCounterButtons();
 					b = Data.getNbuttons();
