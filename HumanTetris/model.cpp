@@ -96,7 +96,7 @@ void MyModel::DrawFloor() {
 	floorSideB.SetP(ff, fg, fc, fb);
 	glBindTexture(GL_TEXTURE_2D, texture[8]);
 	floorTop.DrawTextures();
-	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	glBindTexture(GL_TEXTURE_2D, texture[21]);
 	floorBack.DrawTextures();
 	floorFront.DrawTextures();
 	floorBottom.DrawTextures();
@@ -160,7 +160,10 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	HeadPosition.y += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*sin(PI / 2 + rotation);
 	HeadPosition.x += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*cos(PI / 2 + rotation);
 	Cylinder Head(HeadPosition, size*PlayerHeadSize/1.2, spessore);
+	
+	
 	Head.Draw();
+	
 	// Body
 	double diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
 	double angle = asin((PlayerBodyHeight / 2) / diag);
@@ -201,6 +204,13 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	corpo_top.Draw();
 	Rect corpo_bottom(be, bf, bb, ba);
 	corpo_bottom.Draw();
+	glBindTexture(GL_TEXTURE_2D, texture[20]);
+	corpo_front.DrawTextures();
+	corpo_back.DrawTextures();
+	corpo_right.DrawTextures();
+	corpo_left.DrawTextures();
+	corpo_top.DrawTextures();
+	corpo_bottom.DrawTextures();
 	ha = ba;
 	hb = bb;
 	hc = bc;
@@ -264,6 +274,13 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 
 		Rect arm_estremo_b(xe, xf, xb, xa);
 		arm_estremo_b.Draw();
+
+		arm_front.DrawTextures();
+		arm_back.DrawTextures();
+		arm_right.DrawTextures();
+		arm_left.DrawTextures();
+		arm_estremo_a.DrawTextures();
+		arm_estremo_b.DrawTextures();
 
 		if (i == 0)
 			alpha = PI / 6 * 4;
@@ -544,6 +561,10 @@ bool MyModel::LoadGLTextures(void) {
 	texture[20] = SOIL_load_OGL_texture("../Data/black.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[20] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[20]);
+
+	texture[21] = SOIL_load_OGL_texture("../Data/green.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[21] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[21]);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
