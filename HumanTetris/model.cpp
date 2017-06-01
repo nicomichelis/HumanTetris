@@ -6,6 +6,7 @@
 #include "SOIL.h"
 #include <stdio.h>
 #include <string>
+#include <math.h>
 
 #pragma comment( lib, "opengl32.lib" )			
 #pragma comment( lib, "glu32.lib" )					
@@ -192,6 +193,12 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	bf = bb;
 	bg = bc;
 	bh = bd;
+	HolePoints[0] = ba;
+	HolePoints[1] = bb;
+	HolePoints[2] = bc;
+	HolePoints[3] = bc;
+	HolePoints[4] = bd;
+	HolePoints[5] = ba;
 	be.z=bf.z=bg.z=bh.z = position.z - spessore / 2;
 
 	Rect corpo_back(bf, be, bh, bg);
@@ -257,6 +264,14 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 		xf = xb;
 		xg = xc;
 		xh = xd;
+
+
+		HolePoints[6 + (6 * i)] = xa;
+		HolePoints[7 + (6 * i)] = xb;
+		HolePoints[8 + (6 * i)] = xc;
+		HolePoints[9 + (6 * i)] = xc;
+		HolePoints[10 + (6 * i)] = xd;
+		HolePoints[11 + (6 * i)] = xa;
 
 		xe.z = xf.z = xg.z = xh.z = position.z - spessore / 2;
 
@@ -328,7 +343,13 @@ void MyModel::DrawPlayer() {
 	bg = bc;
 	bh = bd;
 	be.z = bf.z = bg.z = bh.z = PlayerPosition.z - PlayerThickness / 2;
-	
+	CheckPoints[0] = ba;
+	CheckPoints[1] = bb;
+	CheckPoints[2] = bc;
+	CheckPoints[3] = bc;
+	CheckPoints[4] = bd;
+	CheckPoints[5] = ba;
+
 	Rect corpo_back(bf, be, bh, bg);
 	corpo_back.Draw();
 	Rect corpo_right(bb, bf, bg, bc);
@@ -386,6 +407,12 @@ void MyModel::DrawPlayer() {
 		xf = xb;
 		xg = xc;
 		xh = xd;
+		CheckPoints[6 + 6 * i] = xa;
+		CheckPoints[7 + 6 * i] = xb;
+		CheckPoints[8 + 6 * i] = xc;
+		CheckPoints[9 + 6 * i] = xc;
+		CheckPoints[10 + 6 * i] = xd;
+		CheckPoints[11 + 6 * i] = xa;
 
 		xe.z = xf.z = xg.z = xh.z = PlayerPosition.z - ArmThickness / 2;
 
@@ -566,6 +593,10 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[21] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[21]);
 
+	texture[22] = SOIL_load_OGL_texture("../Data/lose.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[22] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[22]);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	return true;
@@ -727,10 +758,7 @@ bool MyModel::DrawGLScene(void) {
 				glRasterPos3f(0.0, 0.0, 10.0);
 				this->glPrint("Score: %d", score);
 
-
-
 				glBindTexture(GL_TEXTURE_2D, texture[0]);
-
 
 				this->DrawWall();
 				if (wallPosition < 10.0) {
@@ -752,10 +780,18 @@ bool MyModel::DrawGLScene(void) {
 				double dist = fabs(PlayerPosition.x - holePosition.x);
 
 				glDisable(GL_TEXTURE);
+				//collisioni
+				if (wallPosition >10 ) {
+					Collision();
+					if (checkIn == false)
+						Perso = true;
+				}
+				
 			}
 			else {
 				// Cosa fare quando perso
 				wallPosition = -20.0;
+				Lose(score);
 			}
 		}
 
@@ -823,7 +859,6 @@ bool MyModel::DrawGLScene(void) {
 			}
 
 
-
 			kd.SetP(0.0+2.0, marginy, 0.0);
 			ka.SetP(kd.x, kd.y - butt, kd.z);
 			kc.SetP(kd.x + butt, kd.y, kd.z);
@@ -874,6 +909,20 @@ void MyModel::SetLevel(void) {
 	score = 0;
 }
 
+void MyModel::Lose(int score) {
+	Vertex a, b, c, d;
+	double l=5.0;
+	a.SetP(0.0 - (l+1), 0.0 - l/2, 10.0);
+	b.SetP(0.0 + (l + 1), 0.0 - l/2, 10.0);
+	c.SetP(0.0 + (l + 1), 0.0 + l/2*3, 10.0);
+	d.SetP(0.0 - (l + 1), 0.0 + l/2*3, 10.0);
+
+	Rect lost(a,b,c,d);
+	lost.Draw();
+	glBindTexture(GL_TEXTURE_2D, texture[22]);
+	lost.DrawTextures();
+}
+
 void MyModel::glPrint(const char * fmt, ...) {
 	char text[256];
 	va_list ap;
@@ -888,3 +937,37 @@ void MyModel::glPrint(const char * fmt, ...) {
 	glPopAttrib();
 }
 
+void MyModel::Collision() {
+	checkIn = true;
+	for each (Vertex x in CheckPoints)
+	{
+		isInside(x);
+		if (checkIn == false) {
+			exit;
+		}
+	}
+}
+void MyModel::isInside(Vertex x) {
+	int j = 0;
+	double Area;
+	int s, t;
+	
+	boolean b1, b2, b3;
+	//nP%3==0!
+	while ((j < nP / 3) && checkIn == true) {
+		Area = 0.5 *(-HolePoints[1].y*HolePoints[2].x + HolePoints[0].y*(-HolePoints[1].x + HolePoints[2].x) + 
+						HolePoints[0].x*(HolePoints[1].y - HolePoints[2].y) + HolePoints[1].x*HolePoints[2].y);
+		s = 1 / (2 * Area)*(HolePoints[0].y*HolePoints[2].x - HolePoints[0].x*HolePoints[2].y + 
+							(HolePoints[2].y - HolePoints[0].y)*x.x + (HolePoints[0].x - HolePoints[2].x)*x.y);
+		t = 1 / (2 * Area)*(HolePoints[0].x*HolePoints[1].y - HolePoints[0].y *HolePoints[1].x + (HolePoints[0].y -
+												HolePoints[1].y)*x.x + (HolePoints[1].x - HolePoints[0].x)*x.y);
+		if (s&&t&&(1-s-t) >= 0) {
+			checkIn = true;
+		}
+		else {
+			checkIn = false;
+		}		
+		j++;
+	}
+
+}

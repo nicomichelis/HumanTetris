@@ -2,6 +2,7 @@
 
 #include "vertex.h"
 #include <ctime>
+#define nP 30
 
 
 class MyModel {
@@ -29,6 +30,7 @@ public:
 	GLdouble	fovy;
 	GLfloat		RotX_a;
 	GLfloat		RotY_a;
+
 
 private:
 	//butt
@@ -59,6 +61,9 @@ private:
 	double PlayerThickness;
 	double PlayerBodyHeight;
 	Vertex a, b, c, d;
+	Vertex CheckPoints[30];
+	
+	boolean checkIn=true;
 
 	// Difficulty
 	double size;
@@ -80,11 +85,15 @@ private:
 	Vertex holePosition;
 	double holeRotation;
 	Vertex ha, hb, hc, hd;
+	Vertex HolePoints[nP];
 
 	// TEST
 	double Rotx = 0.0;
 	double Roty = 0.0;
+
+
 public:
+	
 	MyModel();
 	void DrawFloor();
 	void DrawWall();
@@ -123,6 +132,11 @@ public:
 	~MyModel() {
 		this->KillFont();
 	}
+
+	//collision
+	void Collision();
+	void isInside(Vertex x);
+	void Lose(int a);
 };
 
 extern class MyModel Data;

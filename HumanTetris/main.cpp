@@ -384,6 +384,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (Data.keys[VK_ESCAPE]) {
 				//torna alla schermata iniziale
 				//modify
+				Data.Perso = false;
 				Vertex x;
 				x.x = CS.x1;
 				x.y = CS.y1;
