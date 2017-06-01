@@ -781,7 +781,7 @@ bool MyModel::DrawGLScene(void) {
 
 				glDisable(GL_TEXTURE);
 				//collisioni
-				if (wallPosition >10 ) {
+				if (wallPosition >=10 ) {
 					Collision();
 					if (checkIn == false)
 						Perso = true;
@@ -951,21 +951,22 @@ void MyModel::isInside(Vertex x) {
 	int j = 0;
 	double Area;
 	int s, t;
-	
+	checkIn = true;
 	boolean b1, b2, b3;
 	//nP%3==0!
 	while ((j < nP / 3) && checkIn == true) {
-		Area = 0.5 *(-HolePoints[1].y*HolePoints[2].x + HolePoints[0].y*(-HolePoints[1].x + HolePoints[2].x) + 
-						HolePoints[0].x*(HolePoints[1].y - HolePoints[2].y) + HolePoints[1].x*HolePoints[2].y);
-		s = 1 / (2 * Area)*(HolePoints[0].y*HolePoints[2].x - HolePoints[0].x*HolePoints[2].y + 
-							(HolePoints[2].y - HolePoints[0].y)*x.x + (HolePoints[0].x - HolePoints[2].x)*x.y);
-		t = 1 / (2 * Area)*(HolePoints[0].x*HolePoints[1].y - HolePoints[0].y *HolePoints[1].x + (HolePoints[0].y -
-												HolePoints[1].y)*x.x + (HolePoints[1].x - HolePoints[0].x)*x.y);
-		if (s&&t&&(1-s-t) >= 0) {
+		Area = 0.5 *(-HolePoints[1+(3*j)].y*HolePoints[2+ (3 * j)].x + HolePoints[0 + (3 * j)].y*(-HolePoints[1 + (3 * j)].x + HolePoints[2 + (3 * j)].x) +
+						HolePoints[0 + (3 * j)].x*(HolePoints[1 + (3 * j)].y - HolePoints[2 + (3 * j)].y) + HolePoints[1 + (3 * j)].x*HolePoints[2 + (3 * j)].y);
+		s = (HolePoints[0 + (3 * j)].y*HolePoints[2 + (3 * j)].x - HolePoints[0 + (3 * j)].x*HolePoints[2 + (3 * j)].y +
+							(HolePoints[2 + (3 * j)].y - HolePoints[0 + (3 * j)].y)*x.x + (HolePoints[0 + (3 * j)].x - HolePoints[2 + (3 * j)].x)*x.y);
+		t = (HolePoints[0 + (3 * j)].x*HolePoints[1 + (3 * j)].y - HolePoints[0 + (3 * j)].y *HolePoints[1 + (3 * j)].x + (HolePoints[0 + (3 * j)].y -
+												HolePoints[1 + (3 * j)].y)*x.x + (HolePoints[1 + (3 * j)].x - HolePoints[0 + (3 * j)].x)*x.y);
+		if (s>0 && t>0 && (s + t)<2 * abs( Area  )) {
 			checkIn = true;
 		}
 		else {
 			checkIn = false;
+			exit;
 		}		
 		j++;
 	}
