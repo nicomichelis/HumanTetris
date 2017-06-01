@@ -966,7 +966,6 @@ void MyModel::isInside(Vertex x) {
 		}
 		else {
 			checkIn = false;
-			exit;
 		}		
 		j++;
 	}
