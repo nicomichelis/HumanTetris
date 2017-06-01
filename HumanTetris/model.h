@@ -2,7 +2,7 @@
 
 #include "vertex.h"
 #include <ctime>
-#define nP 30
+#define nP 33
 
 
 class MyModel {
@@ -61,7 +61,7 @@ private:
 	double PlayerThickness;
 	double PlayerBodyHeight;
 	Vertex a, b, c, d;
-	Vertex CheckPoints[30];
+	Vertex CheckPoints[33];
 	
 	boolean checkIn=true;
 

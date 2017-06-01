@@ -161,6 +161,10 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	HeadPosition.y += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*sin(PI / 2 + rotation);
 	HeadPosition.x += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*cos(PI / 2 + rotation);
 	Cylinder Head(HeadPosition, size*PlayerHeadSize/1.2, spessore);
+
+	HolePoints[30].SetP(HeadPosition.x - size*PlayerHeadSize/0.6,HeadPosition.y,HeadPosition.z);
+	HolePoints[31].SetP(HeadPosition.x + size*PlayerHeadSize / 0.6, HeadPosition.y, HeadPosition.z);
+	HolePoints[32].SetP(HeadPosition.x, +size*PlayerHeadSize / 0.6, HeadPosition.z);
 	
 	
 	Head.Draw();
@@ -313,6 +317,9 @@ void MyModel::DrawPlayer() {
 	HeadPosition.y += (PlayerBodyHeight / 2 + PlayerHeadSize)*sin(PI / 2 + PlayerRotation);
 	HeadPosition.x += (PlayerBodyHeight / 2 + PlayerHeadSize)*cos(PI / 2 + PlayerRotation);
 	Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
+	CheckPoints[30].SetP(HeadPosition.x - size*PlayerHeadSize / 0.6, HeadPosition.y, HeadPosition.z);
+	CheckPoints[31].SetP(HeadPosition.x + size*PlayerHeadSize / 0.6, HeadPosition.y, HeadPosition.z);
+	CheckPoints[32].SetP(HeadPosition.x, +size*PlayerHeadSize / 0.6, HeadPosition.z);
 	Head.Draw();
 	// Body
 	double diag = sqrt(pow((PlayerBodyHeight / 2),2.0) + pow((PlayerThickness / 2),2.0));
@@ -950,24 +957,27 @@ void MyModel::Collision() {
 void MyModel::isInside(Vertex x) {
 	int j = 0;
 	double Area;
-	int s, t;
+	double s, t;
 	checkIn = true;
-	boolean b1, b2, b3;
+	boolean temp = true;
 	//nP%3==0!
-	while ((j < nP / 3) && checkIn == true) {
+	while ((j < (nP / 3)) && checkIn == true) {
+		
 		Area = 0.5 *(-HolePoints[1+(3*j)].y*HolePoints[2+ (3 * j)].x + HolePoints[0 + (3 * j)].y*(-HolePoints[1 + (3 * j)].x + HolePoints[2 + (3 * j)].x) +
 						HolePoints[0 + (3 * j)].x*(HolePoints[1 + (3 * j)].y - HolePoints[2 + (3 * j)].y) + HolePoints[1 + (3 * j)].x*HolePoints[2 + (3 * j)].y);
 		s = (HolePoints[0 + (3 * j)].y*HolePoints[2 + (3 * j)].x - HolePoints[0 + (3 * j)].x*HolePoints[2 + (3 * j)].y +
 							(HolePoints[2 + (3 * j)].y - HolePoints[0 + (3 * j)].y)*x.x + (HolePoints[0 + (3 * j)].x - HolePoints[2 + (3 * j)].x)*x.y);
 		t = (HolePoints[0 + (3 * j)].x*HolePoints[1 + (3 * j)].y - HolePoints[0 + (3 * j)].y *HolePoints[1 + (3 * j)].x + (HolePoints[0 + (3 * j)].y -
 												HolePoints[1 + (3 * j)].y)*x.x + (HolePoints[1 + (3 * j)].x - HolePoints[0 + (3 * j)].x)*x.y);
-		if (s>0 && t>0 && (s + t)<2 * abs( Area  )) {
-			checkIn = true;
+		if ((s>=0 && t>=0 && (s + t)<=2 * abs( Area  ))) {
+			temp=false;
+			j = nP / 3;
 		}
-		else {
-			checkIn = false;
-		}		
+				
 		j++;
+	}
+	if (temp == true) {
+		checkIn = false;
 	}
 
 }
