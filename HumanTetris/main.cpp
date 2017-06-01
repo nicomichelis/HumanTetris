@@ -222,7 +222,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 			z = (short)HIWORD(wParam);
 			t = (z / WHEEL_DELTA);
 			//disabilito lo zoom in 1
-			if(Data.getCounterButtons()!=1)
+			if(Data.getCounterButtons()!=1 )
 			Data.fovy += t * 0.5;
 
 			InvalidateRect(hWnd, NULL, FALSE);
@@ -254,6 +254,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	OutputStreamPtr limit(OpenSound(device, "../Data/hurt.wav", false));
 	OutputStreamPtr stupid(OpenSound(device, "../Data/stupid.wav", false));
 	OutputStreamPtr butt(OpenSound(device, "../Data/butt.wav", false));
+	OutputStreamPtr die(OpenSound(device, "../Data/smash.wav", false));
+
 	butt->setVolume(0.4f);
 
 	while (!done) {
@@ -430,6 +432,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			}
 
 
+		}
+		if (!Data.lost()) {
+			
+			if (die->isPlaying()) die->reset();
+			else die->play();
 		}
 	}
 	//KillGLWindow();

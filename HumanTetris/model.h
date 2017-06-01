@@ -137,6 +137,7 @@ public:
 	void Collision();
 	void isInside(Vertex x);
 	void Lose(int a);
+	boolean lost();
 };
 
 extern class MyModel Data;

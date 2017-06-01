@@ -799,6 +799,10 @@ bool MyModel::DrawGLScene(void) {
 				// Cosa fare quando perso
 				wallPosition = -20.0;
 				Lose(score);
+				/*
+				if (die->isPlaying()) die->reset();
+				else die->play();
+				*/
 			}
 		}
 
@@ -917,13 +921,16 @@ void MyModel::SetLevel(void) {
 }
 
 void MyModel::Lose(int score) {
+	Perso = true;
+	glRotatef(0.0, 1.0, 0.0, 0.0);
+	glRotatef(0.0, 0.0, 1.0, 0.0);
 	Vertex a, b, c, d;
 	double l=5.0;
 	a.SetP(0.0 - (l+1), 0.0 - l/2, 10.0);
 	b.SetP(0.0 + (l + 1), 0.0 - l/2, 10.0);
 	c.SetP(0.0 + (l + 1), 0.0 + l/2*3, 10.0);
 	d.SetP(0.0 - (l + 1), 0.0 + l/2*3, 10.0);
-
+	
 	Rect lost(a,b,c,d);
 	lost.Draw();
 	glBindTexture(GL_TEXTURE_2D, texture[22]);
@@ -954,6 +961,14 @@ void MyModel::Collision() {
 		}
 	}
 }
+
+boolean MyModel::lost() {
+	if (Perso == true)
+		return true;
+	else
+		return false;
+}
+
 void MyModel::isInside(Vertex x) {
 	int j = 0;
 	double Area;
