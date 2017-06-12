@@ -988,7 +988,8 @@ boolean MyModel::lost() {
 }
 
 boolean MyModel::CheckPoint() {
-	for each (Vertex v in HoleBody) {
+	for each (Vertex v in HoleBody) { 
+	}
 }
 
 boolean MyModel::included(Vertex v) {
