@@ -25,7 +25,7 @@ public:
 	double		Full_elapsed;
 	bool		StartScreen;
 	bool		Perso;
-	GLuint		texture[25];
+	GLuint		texture[50];
 	GLuint		base;
 	GLdouble	fovy;
 	GLfloat		RotX_a;
@@ -64,6 +64,9 @@ private:
 	Vertex CheckPoints[33];
 	
 	boolean checkIn=true;
+
+	Vertex Body[4];
+	Vertex HoleBody[4];
 
 	// Difficulty
 	double size;
@@ -138,6 +141,11 @@ public:
 	void isInside(Vertex x);
 	void Lose(int a);
 	boolean lost();
+	
+	boolean CheckPoint();
+	boolean included(Vertex v);
 };
 
 extern class MyModel Data;
+
+

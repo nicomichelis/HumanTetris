@@ -69,6 +69,7 @@ public:
 		glVertex3f(c.x, c.y, c.z);
 		glEnd();
 	}
+
 	void TraslateZ(float value) {
 		// Traslate the triangle along the z axis of selected value
 		a.z += value;
@@ -106,6 +107,7 @@ public:
 		glColor3f(d.r, d.g, d.b);
 		glVertex3f(d.x, d.y, d.z);
 		glEnd();
+
 	}
 
 	void DrawTextures() {
@@ -153,25 +155,89 @@ public:
 			y = radius * sin(theta) + center.y;
 			Vertex next = center;
 			next.SetP(x, y, center.z);
-			// Front
-			Triangle front(center, current, next);
-			front.TraslateZ(width / 2);
-			front.Draw();
-			// Back
-			Triangle back(current, center, next);
-			back.TraslateZ(-width / 2);
-			back.Draw();
-			// Sides
-			Vertex nextfront = next;
-			nextfront.z += width / 2;
-			Vertex currentfront = current;
-			currentfront.z += width / 2;
-			Vertex nextback = next;
-			nextback.z -= width / 2;
-			Vertex currentback = current;
-			currentback.z -= width / 2;
-			Rect side(currentfront, currentback, nextback, nextfront);
-			side.Draw();
+			glBegin(GL_TRIANGLES);
+			glColor3f(center.r, center.g, center.b);
+			glVertex3f(center.x, center.y, center.z+width/2);
+			glColor3f(current.r, current.g, current.b);
+			glVertex3f(current.x, current.y, current.z + width/2);
+			glColor3f(next.r, next.g, next.b);
+			glVertex3f(next.x, next.y, next.z+width/2);
+			
+			glColor3f(current.r, current.g, current.b);
+			glVertex3f(current.x, current.y, current.z - width / 2);
+			glColor3f(center.r, center.g, center.b);
+			glVertex3f(center.x, center.y, center.z - width / 2);
+			glColor3f(next.r, next.g, next.b);
+			glVertex3f(next.x, next.y, next.z - width / 2);
+			
+			glColor3f(current.r, current.g, current.b);
+			glVertex3f(current.x, current.y, current.z + width / 2);
+			glColor3f(current.r, current.g, current.b);
+			glVertex3f(current.x, current.y, current.z - width / 2);
+			glColor3f(next.r, next.g, next.b);
+			glVertex3f(next.x, next.y, next.z - width / 2);
+			
+			glColor3f(current.r, current.g, current.b);
+			glVertex3f(current.x, current.y, current.z + width / 2);
+			glColor3f(next.r, next.g, next.b);
+			glVertex3f(next.x, next.y, next.z - width / 2);
+			glColor3f(next.r, next.g, next.b);
+			glVertex3f(next.x, next.y, next.z + width / 2);
+			glEnd();
 		}
 	}
+	void DrawTexture() {
+		int res = 50;
+		for (int i = 0; i < res; i++) {
+			// Current point
+			float theta = 2.0f * PI * float(i) / float(res);
+			float x = radius * cos(theta) + center.x;
+			float y = radius * sin(theta) + center.y;
+			Vertex current = center;
+			current.SetP(x, y, center.z);
+			// Next point
+			theta = 2.0f * PI * float(i + 1) / float(res);
+			x = radius * cos(theta) + center.x;
+			y = radius * sin(theta) + center.y;
+			Vertex next = center;
+			next.SetP(x, y, center.z);
+			glEnable(GL_TEXTURE_2D);
+			glBegin(GL_TRIANGLES);
+			
+			glTexCoord2f(0.5, 0.5);
+			glVertex3f(center.x, center.y, center.z + width / 2);
+			glTexCoord2f(((current.x-center.x)/radius)/2+0.5, ((current.y-center.y)/radius)/2+0.5);
+			glVertex3f(current.x, current.y, current.z + width / 2);
+			glTexCoord2f(((next.x - center.x) / radius)/2+0.5, ((next.y - center.y) / radius)/2+0.5);
+			glVertex3f(next.x, next.y, next.z + width / 2);
+
+			glTexCoord2f(((current.x - center.x) / radius)/2+0.5, ((current.y - center.y) / radius)/2+0.5);
+			glVertex3f(current.x, current.y, current.z - width / 2);
+			glTexCoord2f(0.5, 0.5);
+			glVertex3f(center.x, center.y, center.z - width / 2);
+			glTexCoord2f(((next.x - center.x) / radius)/2+0.5, ((next.y - center.y) / radius)/2+0.5);
+			glVertex3f(next.x, next.y, next.z - width / 2);
+			
+			glEnd();
+			glDisable(GL_TEXTURE_2D);
+			glBegin(GL_TRIANGLES);
+			// I lati non hanno texture
+			glColor3f(current.r, current.g, current.b);
+			glVertex3f(current.x, current.y, current.z + width / 2);
+			glColor3f(current.r, current.g, current.b);
+			glVertex3f(current.x, current.y, current.z - width / 2);
+			glColor3f(next.r, next.g, next.b);
+			glVertex3f(next.x, next.y, next.z - width / 2);
+
+			glColor3f(current.r, current.g, current.b);
+			glVertex3f(current.x, current.y, current.z + width / 2);
+			glColor3f(next.r, next.g, next.b);
+			glVertex3f(next.x, next.y, next.z - width / 2);
+			glColor3f(next.r, next.g, next.b);
+			glVertex3f(next.x, next.y, next.z + width / 2);
+			glEnd();
+			
+		}
+	}
+	
 };

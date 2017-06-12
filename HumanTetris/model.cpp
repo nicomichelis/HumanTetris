@@ -226,7 +226,11 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	hb = bb;
 	hc = bc;
 	hd = bd;
-	// Arms
+	HoleBody[0] = ba;
+	HoleBody[1] = bb;
+	HoleBody[2] = bc;
+	HoleBody[3] = bd;
+ 	// Arms
 	double PlayerArmHeight = size*PlayerBodyHeight / 5 * 3;
 	double ArmDist;
 	double angle2;
@@ -320,7 +324,15 @@ void MyModel::DrawPlayer() {
 	CheckPoints[30].SetP(HeadPosition.x - size*PlayerHeadSize / 0.6, HeadPosition.y, HeadPosition.z);
 	CheckPoints[31].SetP(HeadPosition.x + size*PlayerHeadSize / 0.6, HeadPosition.y, HeadPosition.z);
 	CheckPoints[32].SetP(HeadPosition.x, +size*PlayerHeadSize / 0.6, HeadPosition.z);
-	Head.Draw();
+	
+	
+	//Head.Draw();
+	// PROVE TEXTURE TESTA
+	glBindTexture(GL_TEXTURE_2D, texture[23]);
+	Head.DrawTexture();
+	glDisable(GL_TEXTURE);
+
+
 	// Body
 	double diag = sqrt(pow((PlayerBodyHeight / 2),2.0) + pow((PlayerThickness / 2),2.0));
 	ba = bb = bc = bd = be = bf = bg = bh = PlayerPosition;
@@ -371,7 +383,11 @@ void MyModel::DrawPlayer() {
 	b = bb;
 	c = bc;
 	d = bd;
-	
+	Body[0] = ba;
+	Body[1] = bb;
+	Body[2] = bc;
+	Body[3] = bd;
+		
 	// Arms
 	double PlayerArmHeight = PlayerBodyHeight / 4*3;
 	double ArmDist;
@@ -604,6 +620,10 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[22] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[22]);
 
+	texture[23] = SOIL_load_OGL_texture("../Data/testa.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[23] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[23]);
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	return true;
@@ -620,8 +640,6 @@ void MyModel::ReSizeGLScene(int width, int height) {
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
-
-
 
 bool MyModel::DrawGLScene(void) {
 	RECT R;
@@ -967,6 +985,14 @@ boolean MyModel::lost() {
 		return true;
 	else
 		return false;
+}
+
+boolean MyModel::CheckPoint() {
+	for each (Vertex v in HoleBody) {
+}
+
+boolean MyModel::included(Vertex v) {
+
 }
 
 void MyModel::isInside(Vertex x) {
