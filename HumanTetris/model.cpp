@@ -807,9 +807,12 @@ bool MyModel::DrawGLScene(void) {
 				glDisable(GL_TEXTURE);
 				//collisioni
 				if (wallPosition >=10 ) {
-					Collision();
+					/*Collision();
 					if (checkIn == false)
+						Perso = true;*/
+					if (CheckPoint()) {
 						Perso = true;
+					}
 				}
 				
 			}
@@ -988,12 +991,54 @@ boolean MyModel::lost() {
 }
 
 boolean MyModel::CheckPoint() {
-	for each (Vertex v in HoleBody) { 
+	for each (Vertex v in HoleBody) {
+		if (!included(v)) {
+			return false;
+		}
 	}
+	return true;
 }
 
 boolean MyModel::included(Vertex v) {
-
+	boolean t1, t2, t3, t4;
+	float x0 = v.x;
+	float y0 = v.y;
+	float x1 = Body[0].x;
+	float y1 = Body[0].y;
+	float x2 = Body[1].x;
+	float y2 = Body[1].y;
+	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
+		t1 = true;
+	else
+		t1 = false;
+	x1 = Body[1].x;
+	y1 = Body[1].y;
+	x2 = Body[2].x;
+	y2 = Body[2].y;
+	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
+		t2 = true;
+	else
+		t2 = false;
+	x1 = Body[2].x;
+	y1 = Body[2].y;
+	x2 = Body[3].x;
+	y2 = Body[3].y;
+	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
+		t3 = true;
+	else
+		t3 = false;
+	x1 = Body[3].x;
+	y1 = Body[3].y;
+	x2 = Body[4].x;
+	y2 = Body[4].y;
+	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
+		t4 = true;
+	else
+		t4 = false;
+	if (t1 == t2 == t3 == t4)
+		return true;
+	else
+		return false;
 }
 
 void MyModel::isInside(Vertex x) {
