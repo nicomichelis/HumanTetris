@@ -926,10 +926,11 @@ void MyModel::Lose(int score) {
 	glRotatef(0.0, 0.0, 1.0, 0.0);
 	Vertex a, b, c, d;
 	double l=5.0;
-	a.SetP(0.0 - (l+1), 0.0 - l/2, 10.0);
-	b.SetP(0.0 + (l + 1), 0.0 - l/2, 10.0);
-	c.SetP(0.0 + (l + 1), 0.0 + l/2*3, 10.0);
-	d.SetP(0.0 - (l + 1), 0.0 + l/2*3, 10.0);
+	
+	a.SetP(0.0 - wallLargh/2, 0.0 , 10.5);
+	b.SetP(0.0 + wallLargh / 2, 0.0 , 10.5);
+	c.SetP(0.0 + wallLargh / 2, 0.0 + wallAltezza , 10.5);
+	d.SetP(0.0 - wallLargh / 2, 0.0 + wallAltezza , 10.5);
 	
 	Rect lost(a,b,c,d);
 	lost.Draw();
