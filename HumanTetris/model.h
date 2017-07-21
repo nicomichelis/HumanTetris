@@ -154,7 +154,12 @@ public:
 	void SetCounterButtons(int n) {
 		this->buttCount = n;
 	}
-	void setScene(int n);
+	void setScene(int n) {
+		for (int i = 0; i < nbuttons; i++) {
+			selectButt[i] = 0;
+		}
+		selectButt[n] = 1;
+	}
 	
 	//reset level
 	void SetLevel(void);

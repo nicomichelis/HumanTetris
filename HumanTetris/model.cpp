@@ -466,66 +466,45 @@ void MyModel::DrawPlayer() {
 void MyModel::DrawStartscreen() {
 	// Start Screen
 	Vertex a, b, c, d, e, f, g, h, i, l, m, n;
-	Vertex cursorP;
-	Vertex ca, cb, cc, cd;
 	glRotatef(0.0, 1.0, 0.0, 0.0);
 	glRotatef(0.0, 0.0, 1.0, 0.0);
-
-
+	// Command button
 	a.SetP(-(buttonWidth / 2), buttonHeight / 2, 0.0);
 	b.SetP((+buttonWidth / 2), buttonHeight / 2, 0.0);
 	c.SetP((-buttonWidth / 2), -(buttonHeight / 2), 0.0);
 	d.SetP((+buttonWidth / 2), -(buttonHeight / 2), 0.0);
-
+	Rect commands(c, d, b, a);
+	commands.Draw();
+	if (buttCount != 1)
+		glBindTexture(GL_TEXTURE_2D, texture[4]);
+	else
+		glBindTexture(GL_TEXTURE_2D, texture[5]);
+	commands.DrawTextures();
+	// Start button
 	e.SetP(-buttonWidth / 2, buttonHeight * 2, 0.0);
 	f.SetP(buttonWidth / 2, buttonHeight * 2, 0.0);
 	g.SetP(-buttonWidth / 2, buttonHeight, 0.0);
 	h.SetP(buttonWidth / 2, buttonHeight, 0.0);
-
-
+	Rect start(g, h, f, e);
+	if (buttCount != 0)
+		glBindTexture(GL_TEXTURE_2D, texture[2]);
+	else
+		glBindTexture(GL_TEXTURE_2D, texture[3]);
+	start.DrawTextures();
+	// Quit button
 	i.SetP(-buttonWidth / 2, -buttonHeight * 2, 0.0);
 	l.SetP(buttonWidth / 2, -buttonHeight * 2, 0.0);
 	m.SetP(-buttonWidth / 2, -buttonHeight, 0.0);
 	n.SetP(buttonWidth / 2, -buttonHeight, 0.0);
-
-
-	Rect start(g, h, f, e);
-	start.Draw();
-	if (buttCount != 0) {
-
-		glBindTexture(GL_TEXTURE_2D, texture[2]);
-		start.DrawTextures();
-	}
-	else {
-		glBindTexture(GL_TEXTURE_2D, texture[3]);
-		start.DrawTextures();
-	}
-
-	Rect commands(c, d, b, a);
-	commands.Draw();
-	if (buttCount != 1) {
-		glBindTexture(GL_TEXTURE_2D, texture[4]);
-		commands.DrawTextures();
-	}
-	else {
-		glBindTexture(GL_TEXTURE_2D, texture[5]);
-		commands.DrawTextures();
-	}
-
 	Rect quit(i, l, n, m);
 	quit.Draw();
-
-	if (buttCount != 2) {
+	if (buttCount != 2)
 		glBindTexture(GL_TEXTURE_2D, texture[6]);
-		quit.DrawTextures();
-
-	}
-	else {
+	else
 		glBindTexture(GL_TEXTURE_2D, texture[7]);
-		quit.DrawTextures();
+	quit.DrawTextures();
 
-	}
-	//logo
+	// logo
 	Vertex  l1, l2, l3, l4;
 	l1.SetColor(0.0, 0.0, 0.0);
 	l2.SetColor(0.0, 0.0, 0.0);
@@ -540,11 +519,12 @@ void MyModel::DrawStartscreen() {
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	Rect log(l1, l2, l3, l4);
-	log.Draw();
 	glBindTexture(GL_TEXTURE_2D, texture[19]);
 	log.DrawTextures();
 
-
+	// Cursor
+	Vertex cursorP;
+	Vertex ca, cb, cc, cd;
 	cursorP.x = e.x - cursorWidth / 2;
 	cursorP.z = e.z;
 	cursorP.y = e.y - cursorHeight / 2;
@@ -562,10 +542,7 @@ void MyModel::DrawStartscreen() {
 	cb.SetP(cursorP.x + cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
 	cc.SetP(cursorP.x + cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
 	cd.SetP(cursorP.x - cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
-
-
 	Rect cursor(ca, cb, cc, cd);
-	cursor.Draw();
 	glBindTexture(GL_TEXTURE_2D, texture[1]);
 	cursor.DrawTextures();
 }
@@ -652,10 +629,7 @@ void MyModel::DrawGame() {
 	// Controllo posizione corretta
 	// Roba da disegnare
 	if (!Perso) {
-		glColor3f(0.0f, 0.0f, 0.0f);
-		glRasterPos3f(0.0, 0.0, 10.0);
-		this->glPrint("Score: %d", score);
-
+		
 		glBindTexture(GL_TEXTURE_2D, texture[0]);
 
 		this->DrawWall();
@@ -687,6 +661,15 @@ void MyModel::DrawGame() {
 				Perso = true;
 			}
 		}
+		this->SetProjection();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+		glPushMatrix();
+		glTranslatef(0.0, -2.0, -22.0);
+		glColor3f(1.0f, 0.0f, 0.0f);
+		glRasterPos3f(2.0, -5.0, 5.0);
+		this->glPrint("Score: %d", score);
 
 	}
 	else {
@@ -699,15 +682,6 @@ void MyModel::DrawGame() {
 		*/
 	}
 }
-
-void MyModel::setScene(int n) {
-	for (int i = 0; i < nbuttons; i++) {
-		selectButt[i] = 0;
-	}
-	selectButt[n] = 1;
-}
-
-
 
 void MyModel::Randomize() {
 	double rands = (rand() % 100)*0.01;
@@ -851,8 +825,6 @@ void MyModel::ReSizeGLScene(int width, int height) {
 }
 
 bool MyModel::DrawGLScene(void) {
-	RECT R;
-	GetClientRect(hWnd, &R);
 	this->SetProjection();
 	// timing
 	clock_t t = clock();
@@ -867,7 +839,6 @@ bool MyModel::DrawGLScene(void) {
 	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glDisable(GL_LIGHTING);
 	//POW
-
 	glPushMatrix();
 	glTranslatef(0.0, -1.0, -20.0);
 	
@@ -875,25 +846,16 @@ bool MyModel::DrawGLScene(void) {
 		this->DrawStartscreen();
 	}
 	else {
-		//0 play,1 commands,2 quit
 		if (selectButt[0] == 1) {
 			this->DrawGame();
-			
 		}
-
-	
-
-		if (selectButt[1] == 1)
-		{
+		if (selectButt[1] == 1) {
 			this->DrawCommands();
-
 		}
-		if (selectButt[2] == 1)
-		{
+		if (selectButt[2] == 1) {
 			//quit
 			PostQuitMessage(0);
 			return 0;
-			
 		}
 	}
 	return true;
