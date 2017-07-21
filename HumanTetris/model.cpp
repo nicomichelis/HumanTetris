@@ -15,8 +15,8 @@
 #pragma warning(disable:4996)
 
 MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), fps(0), cursor(true), captured(false), StartScreen(true), Perso(false), fovy(45.0), RotX_a(0), RotY_a(0) {
-	
-	
+	// stage init
+	stage = 0;
 
 	//butt
 	buttonWidth = 4.5;
@@ -461,34 +461,6 @@ void MyModel::DrawPlayer() {
 		if (i == 2)
 			alpha = PI/6*10;
 	}
-}
-
-void MyModel::SetWallPosition(double x) {
-	this->wallPosition = x;
-}
-
-double MyModel::GetWallPosition() {
-	return wallPosition;
-}
-
-Vertex MyModel::GetPlayerPosition() {
-	return PlayerPosition;
-}
-
-void MyModel::SetPlayerPosition(Vertex x) {
-	this->PlayerPosition = x;
-}
-
-double MyModel::GetPlayerRotation() {
-	return this->PlayerRotation;
-}
-
-void MyModel::SetPlayerRotation(double x) {
-	this->PlayerRotation = x;
-}
-
-void MyModel::SetCounterButtons(int n) {
-	buttCount=n;
 }
 
 void MyModel::setScene(int n) {

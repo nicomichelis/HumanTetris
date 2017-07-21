@@ -7,6 +7,13 @@
 
 class MyModel {
 public:
+	/* Stage
+	 * 0: startscreen
+	 * 1: controls
+	 * 2: game
+	 * 3: quit
+	 */
+	int stage;
 	// OpenGL
 	HDC			hDC;
 	HGLRC		hRC;
@@ -102,22 +109,48 @@ public:
 	void DrawWall();
 	void DrawPlayerOnWall(Vertex position, double rotation, double size);
 	void DrawPlayer();
-	void SetWallPosition(double x);
-	double GetWallPosition();
-	Vertex GetPlayerPosition();
-	void SetPlayerPosition(Vertex x);
-	double GetPlayerRotation();
-	double GetwallLargh() { return wallLargh; }
-	double GetwallAltezza() { return wallAltezza; }
-	void SetPlayerRotation(double x);
-	double GetPlayerBodyHeight() { return PlayerBodyHeight; }
-	double GetPlayerHeadSize() { return PlayerHeadSize; }
+	void SetWallPosition(double x) {
+		this->wallPosition = x;
+	}
+	double GetWallPosition() {
+		return wallPosition;
+	}
+	Vertex GetPlayerPosition() {
+		return PlayerPosition;
+	}
+	void SetPlayerPosition(Vertex x) {
+		this->PlayerPosition = x;
+	}
+	double GetPlayerRotation() {
+		return this->PlayerRotation;
+	}
+	double GetwallLargh() { 
+		return wallLargh; 
+	}
+	double GetwallAltezza() { 
+		return wallAltezza; 
+	}
+	void SetPlayerRotation(double x) {
+		this->PlayerRotation = x;
+	}
+	double GetPlayerBodyHeight() { 
+		return PlayerBodyHeight; 
+	}
+	double GetPlayerHeadSize() { 
+		return PlayerHeadSize; 
+	}
 	void Randomize();
 
 	//butt
-	int getNbuttons() { return nbuttons; }
-	int getCounterButtons() { return buttCount; }
-	void SetCounterButtons(int n);
+	int getNbuttons() { 
+		return this->nbuttons; 
+	}
+	int getCounterButtons() { 
+		return this->buttCount; 
+	}
+	void SetCounterButtons(int n) {
+		this->buttCount = n;
+	}
 	void setScene(int n);
 	
 	//reset level
