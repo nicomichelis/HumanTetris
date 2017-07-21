@@ -463,6 +463,243 @@ void MyModel::DrawPlayer() {
 	}
 }
 
+void MyModel::DrawStartscreen() {
+	// Start Screen
+	Vertex a, b, c, d, e, f, g, h, i, l, m, n;
+	Vertex cursorP;
+	Vertex ca, cb, cc, cd;
+	glRotatef(0.0, 1.0, 0.0, 0.0);
+	glRotatef(0.0, 0.0, 1.0, 0.0);
+
+
+	a.SetP(-(buttonWidth / 2), buttonHeight / 2, 0.0);
+	b.SetP((+buttonWidth / 2), buttonHeight / 2, 0.0);
+	c.SetP((-buttonWidth / 2), -(buttonHeight / 2), 0.0);
+	d.SetP((+buttonWidth / 2), -(buttonHeight / 2), 0.0);
+
+	e.SetP(-buttonWidth / 2, buttonHeight * 2, 0.0);
+	f.SetP(buttonWidth / 2, buttonHeight * 2, 0.0);
+	g.SetP(-buttonWidth / 2, buttonHeight, 0.0);
+	h.SetP(buttonWidth / 2, buttonHeight, 0.0);
+
+
+	i.SetP(-buttonWidth / 2, -buttonHeight * 2, 0.0);
+	l.SetP(buttonWidth / 2, -buttonHeight * 2, 0.0);
+	m.SetP(-buttonWidth / 2, -buttonHeight, 0.0);
+	n.SetP(buttonWidth / 2, -buttonHeight, 0.0);
+
+
+	Rect start(g, h, f, e);
+	start.Draw();
+	if (buttCount != 0) {
+
+		glBindTexture(GL_TEXTURE_2D, texture[2]);
+		start.DrawTextures();
+	}
+	else {
+		glBindTexture(GL_TEXTURE_2D, texture[3]);
+		start.DrawTextures();
+	}
+
+	Rect commands(c, d, b, a);
+	commands.Draw();
+	if (buttCount != 1) {
+		glBindTexture(GL_TEXTURE_2D, texture[4]);
+		commands.DrawTextures();
+	}
+	else {
+		glBindTexture(GL_TEXTURE_2D, texture[5]);
+		commands.DrawTextures();
+	}
+
+	Rect quit(i, l, n, m);
+	quit.Draw();
+
+	if (buttCount != 2) {
+		glBindTexture(GL_TEXTURE_2D, texture[6]);
+		quit.DrawTextures();
+
+	}
+	else {
+		glBindTexture(GL_TEXTURE_2D, texture[7]);
+		quit.DrawTextures();
+
+	}
+	//logo
+	Vertex  l1, l2, l3, l4;
+	l1.SetColor(0.0, 0.0, 0.0);
+	l2.SetColor(0.0, 0.0, 0.0);
+	l3.SetColor(0.0, 0.0, 0.0);
+	l4.SetColor(0.0, 0.0, 0.0);
+	l1.SetP(-9.0, 4.5, 0.0);
+	l2.SetP(9.0, 4.5, 0.0);
+	l3.SetP(9.0, 6.5, 0.0);
+	l4.SetP(-9.0, 6.5, 0.0);
+
+	//prossime due righe utili a mantenere la trasparenza delle immagini
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	Rect log(l1, l2, l3, l4);
+	log.Draw();
+	glBindTexture(GL_TEXTURE_2D, texture[19]);
+	log.DrawTextures();
+
+
+	cursorP.x = e.x - cursorWidth / 2;
+	cursorP.z = e.z;
+	cursorP.y = e.y - cursorHeight / 2;
+
+	switch (buttCount) {
+	case 1:
+		cursorP.y = a.y - cursorHeight / 2;
+		break;
+	case 2:
+		cursorP.y = m.y - cursorHeight / 2;
+		break;
+	}
+
+	ca.SetP(cursorP.x - cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
+	cb.SetP(cursorP.x + cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
+	cc.SetP(cursorP.x + cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
+	cd.SetP(cursorP.x - cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
+
+
+	Rect cursor(ca, cb, cc, cd);
+	cursor.Draw();
+	glBindTexture(GL_TEXTURE_2D, texture[1]);
+	cursor.DrawTextures();
+}
+
+void MyModel::DrawCommands() {
+	//commands
+	glRotatef(0.0, 1.0, 0.0, 0.0);
+	glRotatef(0.0, 0.0, 1.0, 0.0);
+
+	double butt = 1.0;
+	Vertex ka, kb, kc, kd;
+	double marginx, marginy;
+	static const std::string command[10] = { "Move Up","Move Down","Move left","Move right","Rotate counterclockwise","Rotate clockwise","Mute music", "Back to Menu", "Move view", "Zoom" };
+
+	marginx = 10.0;
+	marginy = 7.0;
+	ka.SetColor(0.0, 0.0, 0.0);
+	kb.SetColor(0.0, 0.0, 0.0);
+	kc.SetColor(0.0, 0.0, 0.0);
+	kd.SetColor(0.0, 0.0, 0.0);
+
+
+	kd.SetP(-marginx, marginy, 0.0);
+	ka.SetP(kd.x, kd.y - butt, kd.z);
+	kc.SetP(kd.x + butt, kd.y, kd.z);
+	kb.SetP(kd.x + butt, kd.y - butt, kd.z);
+
+	Rect com(ka, kb, kc, kd);
+	com.Draw();
+	glBindTexture(GL_TEXTURE_2D, texture[9]);
+	com.DrawTextures();
+	glColor3f(0.1f, 0.9f, 0.1f);
+	glRasterPos3f(kc.x + butt, kc.y - butt / 2, 0.0f);
+	this->glPrint("%s", command[0].c_str());
+	int d = 0;
+
+	for (int g = 0; g < 9; g++) {
+		d++;
+		if (g == 5) {
+			kd.SetP(0.0 + 2.0, marginy, 0.0);
+			ka.SetP(kd.x, kd.y - butt, kd.z);
+			kc.SetP(kd.x + butt, kd.y, kd.z);
+			kb.SetP(kd.x + butt, kd.y - butt, kd.z);
+		}
+		else {
+			ka.y -= butt * 2;
+			kb.y -= butt * 2;
+			kc.y -= butt * 2;
+			kd.y -= butt * 2;
+		}
+		Rect com(ka, kb, kc, kd);
+		com.Draw();
+		glBindTexture(GL_TEXTURE_2D, texture[10 + g]);
+		com.DrawTextures();
+
+
+
+
+		glColor3f(0.1f, 0.9f, 0.1f);
+		glRasterPos3f(kc.x + butt, kc.y - butt / 2, 0.0f);
+		this->glPrint("%s", command[d].c_str());
+
+	}
+
+
+	kd.SetP(0.0 + 2.0, marginy, 0.0);
+	ka.SetP(kd.x, kd.y - butt, kd.z);
+	kc.SetP(kd.x + butt, kd.y, kd.z);
+	kb.SetP(kd.x + butt, kd.y - butt, kd.z);
+
+	Rect com2(ka, kb, kc, kd);
+	com2.Draw();
+	glBindTexture(GL_TEXTURE_2D, texture[15]);
+	com2.DrawTextures();
+}
+
+void MyModel::DrawGame() {
+	// POW
+	glTranslatef(0.0, -2.0, 0.0);
+	glRotatef(RotX_a, 1.0, 0.0, 0.0);
+	glRotatef(RotY_a, 0.0, 1.0, 0.0);
+
+
+	// Controllo posizione corretta
+	// Roba da disegnare
+	if (!Perso) {
+		glColor3f(0.0f, 0.0f, 0.0f);
+		glRasterPos3f(0.0, 0.0, 10.0);
+		this->glPrint("Score: %d", score);
+
+		glBindTexture(GL_TEXTURE_2D, texture[0]);
+
+		this->DrawWall();
+		if (wallPosition < 10.0) {
+			wallPosition += diff;
+		}
+		else {
+			wallPosition = -10.0;
+			diff += 0.001;
+			if (size > 2)
+				size -= 0.1;
+			Randomize();
+			score++;
+		}
+		// Floor
+		this->DrawFloor();
+		// Player
+		this->DrawPlayer();
+		double limit = fabs(size*PlayerThickness - PlayerThickness);
+		double dist = fabs(PlayerPosition.x - holePosition.x);
+
+		glDisable(GL_TEXTURE);
+		//collisioni
+		if (wallPosition >= 10) {
+			/*Collision();
+			if (checkIn == false)
+			Perso = true;*/
+			if (CheckPoint()) {
+				Perso = true;
+			}
+		}
+
+	}
+	else {
+		// Cosa fare quando perso
+		wallPosition = -20.0;
+		Lose(score);
+		/*
+		if (die->isPlaying()) die->reset();
+		else die->play();
+		*/
+	}
+}
+
 void MyModel::setScene(int n) {
 	for (int i = 0; i < nbuttons; i++) {
 		selectButt[i] = 0;
@@ -633,245 +870,22 @@ bool MyModel::DrawGLScene(void) {
 
 	glPushMatrix();
 	glTranslatef(0.0, -1.0, -20.0);
-	// Start Screen
-	Vertex a, b, c, d, e, f, g, h, i, l, m, n;
-	Vertex cursorP;
-	Vertex ca, cb, cc, cd;
+	
 	if (this->StartScreen) {
-		glRotatef(0.0, 1.0, 0.0, 0.0);
-		glRotatef(0.0, 0.0, 1.0, 0.0);
-		
-
-		a.SetP(-(buttonWidth / 2), buttonHeight / 2, 0.0);
-		b.SetP((+buttonWidth / 2), buttonHeight / 2, 0.0);
-		c.SetP((-buttonWidth / 2), -(buttonHeight / 2), 0.0);
-		d.SetP((+buttonWidth / 2), -(buttonHeight / 2), 0.0);
-
-		e.SetP(-buttonWidth / 2, buttonHeight * 2, 0.0);
-		f.SetP(buttonWidth / 2, buttonHeight * 2, 0.0);
-		g.SetP(-buttonWidth / 2, buttonHeight, 0.0);
-		h.SetP(buttonWidth / 2, buttonHeight, 0.0);
-
-
-		i.SetP(-buttonWidth / 2, -buttonHeight * 2, 0.0);
-		l.SetP(buttonWidth / 2, -buttonHeight * 2, 0.0);
-		m.SetP(-buttonWidth / 2, -buttonHeight, 0.0);
-		n.SetP(buttonWidth / 2, -buttonHeight, 0.0);
-
-
-		Rect start(g, h, f, e);
-		start.Draw();
-		if (buttCount != 0) {
-
-			glBindTexture(GL_TEXTURE_2D, texture[2]);
-			start.DrawTextures();
-		}
-		else {
-			glBindTexture(GL_TEXTURE_2D, texture[3]);
-			start.DrawTextures();
-		}
-
-		Rect commands(c, d, b, a);
-		commands.Draw();
-		if (buttCount != 1) {
-			glBindTexture(GL_TEXTURE_2D, texture[4]);
-			commands.DrawTextures();
-		}
-		else {
-			glBindTexture(GL_TEXTURE_2D, texture[5]);
-			commands.DrawTextures();
-		}
-
-		Rect quit(i, l, n, m);
-		quit.Draw();
-
-		if (buttCount != 2) {
-			glBindTexture(GL_TEXTURE_2D, texture[6]);
-			quit.DrawTextures();
-
-		}
-		else {
-			glBindTexture(GL_TEXTURE_2D, texture[7]);
-			quit.DrawTextures();
-
-		}
-		//logo
-		Vertex  l1, l2, l3, l4;
-		l1.SetColor(0.0, 0.0, 0.0);
-		l2.SetColor(0.0, 0.0, 0.0);
-		l3.SetColor(0.0, 0.0, 0.0);
-		l4.SetColor(0.0, 0.0, 0.0);
-		l1.SetP(-9.0, 4.5, 0.0);
-		l2.SetP(9.0, 4.5, 0.0);
-		l3.SetP(9.0, 6.5, 0.0);
-		l4.SetP(-9.0, 6.5, 0.0);
-
-		//prossime due righe utili a mantenere la trasparenza delle immagini
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		Rect log(l1, l2, l3, l4);
-		log.Draw();
-		glBindTexture(GL_TEXTURE_2D, texture[19]);
-		log.DrawTextures();
-
-
-		cursorP.x = e.x - cursorWidth / 2;
-		cursorP.z = e.z;
-		cursorP.y = e.y - cursorHeight / 2;
-
-		switch (buttCount) {
-		case 1:
-			cursorP.y = a.y - cursorHeight / 2;
-			break;
-		case 2:
-			cursorP.y = m.y - cursorHeight / 2;
-			break;
-		}
-
-		ca.SetP(cursorP.x - cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
-		cb.SetP(cursorP.x + cursorWidth / 2, cursorP.y - cursorHeight / 2, 0.0);
-		cc.SetP(cursorP.x + cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
-		cd.SetP(cursorP.x - cursorWidth / 2, cursorP.y + cursorHeight / 2, 0.0);
-
-
-		Rect cursor(ca, cb, cc, cd);
-		cursor.Draw();
-		glBindTexture(GL_TEXTURE_2D, texture[1]);
-		cursor.DrawTextures();
+		this->DrawStartscreen();
 	}
 	else {
 		//0 play,1 commands,2 quit
 		if (selectButt[0] == 1) {
-			// POW
-			glTranslatef(0.0, -2.0, 0.0);
-			glRotatef(RotX_a, 1.0, 0.0, 0.0);
-			glRotatef(RotY_a, 0.0, 1.0, 0.0);
+			this->DrawGame();
 			
-			
-			// Controllo posizione corretta
-			// Roba da disegnare
-			if (!Perso) {
-				glColor3f(0.0f, 0.0f, 0.0f);
-				glRasterPos3f(0.0, 0.0, 10.0);
-				this->glPrint("Score: %d", score);
-
-				glBindTexture(GL_TEXTURE_2D, texture[0]);
-
-				this->DrawWall();
-				if (wallPosition < 10.0) {
-					wallPosition += diff;
-				}
-				else {
-					wallPosition = -10.0;
-					diff += 0.001;
-					if (size > 2)
-						size -= 0.1;
-					Randomize();
-					score++;
-				}
-				// Floor
-				this->DrawFloor();
-				// Player
-				this->DrawPlayer();
-				double limit = fabs(size*PlayerThickness - PlayerThickness);
-				double dist = fabs(PlayerPosition.x - holePosition.x);
-
-				glDisable(GL_TEXTURE);
-				//collisioni
-				if (wallPosition >=10 ) {
-					/*Collision();
-					if (checkIn == false)
-						Perso = true;*/
-					if (CheckPoint()) {
-						Perso = true;
-					}
-				}
-				
-			}
-			else {
-				// Cosa fare quando perso
-				wallPosition = -20.0;
-				Lose(score);
-				/*
-				if (die->isPlaying()) die->reset();
-				else die->play();
-				*/
-			}
 		}
 
 	
 
 		if (selectButt[1] == 1)
 		{
-			//commands
-			glRotatef(0.0, 1.0, 0.0, 0.0);
-			glRotatef(0.0, 0.0, 1.0, 0.0);
-
-			double butt = 1.0;
-			Vertex ka,kb,kc,kd;
-			double marginx,marginy;
-			static const std::string command[10] = {"Move Up","Move Down","Move left","Move right","Rotate counterclockwise","Rotate clockwise","Mute music", "Back to Menu", "Move view", "Zoom"};
-
-			marginx = 10.0;
-			marginy = 7.0;
-			ka.SetColor(0.0, 0.0, 0.0);
-			kb.SetColor(0.0, 0.0, 0.0);
-			kc.SetColor(0.0, 0.0, 0.0);
-			kd.SetColor(0.0, 0.0, 0.0);
-			
-
-			kd.SetP(-marginx,marginy, 0.0);
-			ka.SetP(kd.x, kd.y - butt, kd.z);
-			kc.SetP(kd.x + butt, kd.y, kd.z);
-			kb.SetP(kd.x + butt, kd.y - butt, kd.z);
-
-			Rect com(ka,kb,kc,kd);
-			com.Draw();
-			glBindTexture(GL_TEXTURE_2D, texture[9]);
-			com.DrawTextures();
-			glColor3f(0.1f, 0.9f, 0.1f);
-			glRasterPos3f(kc.x+ butt, kc.y- butt/2, 0.0f);
-			this->glPrint("%s", command[0].c_str());
-			int d = 0;
-
-			for (int g = 0; g < 9; g++) {
-				d++;
-				if (g == 5) {
-					kd.SetP(0.0 + 2.0, marginy, 0.0);
-					ka.SetP(kd.x, kd.y - butt, kd.z);
-					kc.SetP(kd.x + butt, kd.y, kd.z);
-					kb.SetP(kd.x + butt, kd.y - butt, kd.z);
-				}
-				else {
-					ka.y -= butt * 2;
-					kb.y -= butt * 2;
-					kc.y -= butt * 2;
-					kd.y -= butt * 2;
-				}
-				Rect com(ka, kb, kc, kd);
-				com.Draw();
-				glBindTexture(GL_TEXTURE_2D, texture[10+g]);
-				com.DrawTextures();
-
-				
-
-				
-				glColor3f(0.1f, 0.9f, 0.1f);
-				glRasterPos3f(kc.x + butt, kc.y - butt / 2, 0.0f);
-				this->glPrint("%s",command[d].c_str());
-				
-			}
-
-
-			kd.SetP(0.0+2.0, marginy, 0.0);
-			ka.SetP(kd.x, kd.y - butt, kd.z);
-			kc.SetP(kd.x + butt, kd.y, kd.z);
-			kb.SetP(kd.x + butt, kd.y - butt, kd.z);
-			
-			Rect com2(ka, kb, kc, kd);
-			com2.Draw();
-			glBindTexture(GL_TEXTURE_2D, texture[15]);
-			com2.DrawTextures();
+			this->DrawCommands();
 
 		}
 		if (selectButt[2] == 1)

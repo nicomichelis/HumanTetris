@@ -109,6 +109,9 @@ public:
 	void DrawWall();
 	void DrawPlayerOnWall(Vertex position, double rotation, double size);
 	void DrawPlayer();
+	void DrawStartscreen();
+	void DrawCommands();
+	void DrawGame();
 	void SetWallPosition(double x) {
 		this->wallPosition = x;
 	}
