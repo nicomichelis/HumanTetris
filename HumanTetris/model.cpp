@@ -243,26 +243,35 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	angle2 = asin(sin(90) / diag * size*PlayerThickness / 2) - alpha;
 	angle3 = acos(cos(angle2)*diag / PlayerArmHeight / 2);
 
-	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow(diag, 2.0) - 2 * diag*PlayerArmHeight / 2 * cos(PI - angle2 - angle3));
+	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow(diag, 2.0) 
+		- 2 * diag*PlayerArmHeight / 2 * cos(PI - angle2 - angle3));
 	double beta = PI / 6;
 	double angle_arm = asin((PlayerArmHeight / 2) / ArmDiag);
 	Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
 	xa = xb = xc = xd = xe = xf = xg = xh = ba;
 	for (int i = 0; i < 4; i++) {
-		xa.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + ((ArmDiag)*cos(PI + angle_arm + rotation - alpha));
-		xa.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + ((ArmDiag)*sin(PI + angle_arm + rotation - alpha));
+		xa.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + 
+			((ArmDiag)*cos(PI + angle_arm + rotation - alpha));
+		xa.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + 
+			((ArmDiag)*sin(PI + angle_arm + rotation - alpha));
 		xa.z = position.z + spessore / 2;
 
-		xb.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + ((ArmDiag)*cos(2 * PI - angle_arm + rotation - alpha));
-		xb.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + ((ArmDiag)*sin(2 * PI - angle_arm + +rotation - alpha));
+		xb.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + 
+			((ArmDiag)*cos(2 * PI - angle_arm + rotation - alpha));
+		xb.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + 
+			((ArmDiag)*sin(2 * PI - angle_arm + +rotation - alpha));
 		xb.z = position.z + spessore / 2;
 
-		xc.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + ((ArmDiag)*cos(angle_arm + rotation - alpha));
-		xc.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + ((ArmDiag)*sin(angle_arm + rotation - alpha));
+		xc.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + 
+			((ArmDiag)*cos(angle_arm + rotation - alpha));
+		xc.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + 
+			((ArmDiag)*sin(angle_arm + rotation - alpha));
 		xc.z = position.z + spessore / 2;
 
-		xd.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + (ArmDiag)*cos(PI - angle_arm + rotation - alpha);
-		xd.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + (ArmDiag)*sin(PI - angle_arm + rotation - alpha);
+		xd.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + 
+			(ArmDiag)*cos(PI - angle_arm + rotation - alpha);
+		xd.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + 
+			(ArmDiag)*sin(PI - angle_arm + rotation - alpha);
 		xd.z = position.z + spessore / 2;
 
 		Rect arm_front(xa, xb, xc, xd);
@@ -401,26 +410,35 @@ void MyModel::DrawPlayer() {
 	angle2 = asin( sin(90) / diag * PlayerThickness / 2) - alpha;
 	angle3 =acos( cos(angle2)*diag / PlayerArmHeight/2);
 	
-	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow(diag, 2.0) - 2 * diag*PlayerArmHeight/2*cos(PI -angle2 - angle3));
+	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow(diag, 2.0) -
+				2 * diag*PlayerArmHeight/2*cos(PI -angle2 - angle3));
 	double beta = PI / 6;
 	double angle_arm = asin((PlayerArmHeight / 2) / ArmDiag);
 	Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
 	xa = xb = xc = xd = xe = xf = xg = xh = ba;
 	for (int i = 0; i < 4; i++) {
-		xa.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(PI+ angle_arm + PlayerRotation - alpha));
-		xa.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + ((ArmDiag)*sin(PI + angle_arm + PlayerRotation - alpha));
+		xa.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + 
+			((ArmDiag)*cos(PI+ angle_arm + PlayerRotation - alpha));
+		xa.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + 
+			((ArmDiag)*sin(PI + angle_arm + PlayerRotation - alpha));
 		xa.z = PlayerPosition.z + ArmThickness / 2;
 		
-		xb.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(2*PI - angle_arm + PlayerRotation - alpha));
-		xb.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + ((ArmDiag)*sin(2*PI - angle_arm + + PlayerRotation - alpha));
+		xb.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + 
+			((ArmDiag)*cos(2*PI - angle_arm + PlayerRotation - alpha));
+		xb.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + 
+			((ArmDiag)*sin(2*PI - angle_arm + + PlayerRotation - alpha));
 		xb.z = PlayerPosition.z + ArmThickness / 2;
 		
-		xc.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(angle_arm + PlayerRotation - alpha));
-		xc.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + ((ArmDiag)*sin(angle_arm + PlayerRotation - alpha));
+		xc.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + 
+			((ArmDiag)*cos(angle_arm + PlayerRotation - alpha));
+		xc.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + 
+			((ArmDiag)*sin(angle_arm + PlayerRotation - alpha));
 		xc.z = PlayerPosition.z + ArmThickness / 2;
 		
-		xd.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + (ArmDiag)*cos(PI - angle_arm + PlayerRotation - alpha);
-		xd.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + (ArmDiag)*sin(PI - angle_arm + PlayerRotation - alpha);
+		xd.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + 
+			(ArmDiag)*cos(PI - angle_arm + PlayerRotation - alpha);
+		xd.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + 
+			(ArmDiag)*sin(PI - angle_arm + PlayerRotation - alpha);
 		xd.z = PlayerPosition.z + ArmThickness / 2;
 
 		Rect arm_front(xa, xb, xc, xd);
@@ -723,7 +741,7 @@ bool MyModel::DrawGLScene(void) {
 			quit.DrawTextures();
 
 		}
-		//logo
+		// Logo
 		Vertex  l1, l2, l3, l4;
 		l1.SetColor(0.0, 0.0, 0.0);
 		l2.SetColor(0.0, 0.0, 0.0);
@@ -734,7 +752,7 @@ bool MyModel::DrawGLScene(void) {
 		l3.SetP(9.0, 6.5, 0.0);
 		l4.SetP(-9.0, 6.5, 0.0);
 
-		//prossime due righe utili a mantenere la trasparenza delle immagini
+		// Prossime due righe utili a mantenere la trasparenza delle immagini
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		Rect log(l1, l2, l3, l4);
@@ -768,7 +786,7 @@ bool MyModel::DrawGLScene(void) {
 		cursor.DrawTextures();
 	}
 	else {
-		//0 play,1 commands,2 quit
+		// 0 play,1 commands,2 quit
 		if (selectButt[0] == 1) {
 			// POW
 			glTranslatef(0.0, -2.0, 0.0);
@@ -805,11 +823,11 @@ bool MyModel::DrawGLScene(void) {
 				double dist = fabs(PlayerPosition.x - holePosition.x);
 
 				glDisable(GL_TEXTURE);
-				//collisioni
+				// Collisioni
 				if (wallPosition >=10 ) {
-					/*Collision();
+					Collision();
 					if (checkIn == false)
-						Perso = true;*/
+						Perso = true;
 					if (CheckPoint()) {
 						Perso = true;
 					}
@@ -819,8 +837,9 @@ bool MyModel::DrawGLScene(void) {
 			else {
 				// Cosa fare quando perso
 				wallPosition = -20.0;
-				Lose(score);
 				/*
+				Lose(score);
+
 				if (die->isPlaying()) die->reset();
 				else die->play();
 				*/
@@ -831,14 +850,16 @@ bool MyModel::DrawGLScene(void) {
 
 		if (selectButt[1] == 1)
 		{
-			//commands
+			// Commands
 			glRotatef(0.0, 1.0, 0.0, 0.0);
 			glRotatef(0.0, 0.0, 1.0, 0.0);
 
 			double butt = 1.0;
 			Vertex ka,kb,kc,kd;
 			double marginx,marginy;
-			static const std::string command[10] = {"Move Up","Move Down","Move left","Move right","Rotate counterclockwise","Rotate clockwise","Mute music", "Back to Menu", "Move view", "Zoom"};
+			static const std::string command[10] = {"Move Up","Move Down","Move left",
+				"Move right","Rotate counterclockwise","Rotate clockwise","Mute music",
+				"Back to Menu", "Move view", "Zoom"};
 
 			marginx = 10.0;
 			marginy = 7.0;
@@ -924,7 +945,9 @@ void MyModel::BuildFont(void) {
 	HFONT font;
 	HFONT oldfont;
 	base = glGenLists(96);
-	font = CreateFont(-20, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, ANSI_CHARSET, OUT_TT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY, FF_DONTCARE | DEFAULT_PITCH, "Courier New");
+	font = CreateFont(-20, 0, 0, 0, FW_BOLD, FALSE, FALSE, FALSE, ANSI_CHARSET, 
+		OUT_TT_PRECIS, CLIP_DEFAULT_PRECIS, ANTIALIASED_QUALITY, FF_DONTCARE | 
+		DEFAULT_PITCH, "Courier New");
 	oldfont = (HFONT)SelectObject(hDC, font);
 	wglUseFontBitmaps(hDC, 32, 96, base);
 	SelectObject(hDC, oldfont);

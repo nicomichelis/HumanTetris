@@ -33,7 +33,7 @@ public:
 
 
 private:
-	//butt
+	// Butt
 	double buttonWidth;
 	double buttonHeight;
 	double cursorWidth;
@@ -114,13 +114,13 @@ public:
 	double GetPlayerHeadSize() { return PlayerHeadSize; }
 	void Randomize();
 
-	//butt
+	// Butt
 	int getNbuttons() { return nbuttons; }
 	int getCounterButtons() { return buttCount; }
 	void SetCounterButtons(int n);
 	void setScene(int n);
 	
-	//reset level
+	// Reset level
 	void SetLevel(void);
 
 	// GL
@@ -136,7 +136,7 @@ public:
 		this->KillFont();
 	}
 
-	//collision
+	// Collision
 	void Collision();
 	void isInside(Vertex x);
 	void Lose(int a);
