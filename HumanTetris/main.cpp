@@ -27,10 +27,10 @@ class MyModel Data;
 
 typedef struct CommonData {
 	bool lCaptured;
-	double lxs, lys;     // posizione iniziale / initial position0.0, 1.0, 10.0
-	double x1=0.0, y1=1.0, z1=10.0;
+	double lxs, lys;     // Posizione iniziale / initial position0.0, 1.0, 10.0
+	double x1 = 0.0, y1 = 1.0, z1 = 10.0;
 
-	double wallz = -10.0;//z iniziale del muro
+	double wallz = -10.0;// z iniziale del muro
 	int ldx, ldy;     // delta
 	double movement = 0.1; // Di quanto si muove l'omino ogni volta che premo un tasto
 	double rotation = 0.1;
@@ -221,8 +221,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		
 			z = (short)HIWORD(wParam);
 			t = (z / WHEEL_DELTA);
-			//disabilito lo zoom in 1
-			if(Data.getCounterButtons()!=1)
+			// Disabilito lo zoom in 1
+			if(Data.getCounterButtons()!=1 )
 			Data.fovy += t * 0.5;
 
 			InvalidateRect(hWnd, NULL, FALSE);
@@ -254,6 +254,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	OutputStreamPtr limit(OpenSound(device, "../Data/hurt.wav", false));
 	OutputStreamPtr stupid(OpenSound(device, "../Data/stupid.wav", false));
 	OutputStreamPtr butt(OpenSound(device, "../Data/butt.wav", false));
+	OutputStreamPtr die(OpenSound(device, "../Data/smash.wav", false));
+
 	butt->setVolume(0.4f);
 
 	while (!done) {
@@ -292,13 +294,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				else {
 
 					Vertex temp = Data.GetPlayerPosition();
-					if (temp.y <= (Data.GetwallAltezza() - (Data.GetPlayerBodyHeight() / 2 + Data.GetPlayerHeadSize() * 2)))
+					if (temp.y <= (Data.GetwallAltezza() - (Data.GetPlayerBodyHeight() / 2 
+						+ Data.GetPlayerHeadSize() * 2)))
 					{
 						temp.y += CS.movement;
 						Data.SetPlayerPosition(temp);
 					}
 					else {
-						//sonoro limite
+						// Sonoro limite
 						if (limit->isPlaying()) limit->reset();
 						else limit->play();
 					}
@@ -334,7 +337,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 						Data.SetPlayerPosition(temp);
 					}
 					else {
-						//sonoro limite
+						// Sonoro limite
 						if (limit->isPlaying()) limit->reset();
 						else limit->play();
 					}
@@ -343,13 +346,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (Data.keys[VK_LEFT]) {
 				Data.keys[VK_LEFT] = FALSE;
 				Vertex temp = Data.GetPlayerPosition();
-				if (temp.x >= (-Data.GetwallLargh() / 2 + (Data.GetPlayerBodyHeight() / 2 + Data.GetPlayerHeadSize() * 2)))
+				if (temp.x >= (-Data.GetwallLargh() / 2 + (Data.GetPlayerBodyHeight() / 2 + 
+					Data.GetPlayerHeadSize() * 2)))
 				{
 					temp.x -= CS.movement;
 					Data.SetPlayerPosition(temp);
 				}
 				else {
-					//sonoro limite
+					// Sonoro limite
 					if (limit->isPlaying()) limit->reset();
 					else limit->play();
 				}
@@ -364,7 +368,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 				else {
 
-					//sonoro limite
+					// Sonoro limite
 					if (limit->isPlaying()) limit->reset();
 					else limit->play();
 				}
@@ -375,15 +379,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					a = Data.getCounterButtons();
 					
 					Data.StartScreen = FALSE;
-					//a seconda di cosa si preme
+					// A seconda di cosa si preme
 					Data.setScene(a);
 				
 				}
 			}
 			
 			if (Data.keys[VK_ESCAPE]) {
-				//torna alla schermata iniziale
-				//modify
+				// Torna alla schermata iniziale
+				// Modify
 				Data.Perso = false;
 				Vertex x;
 				x.x = CS.x1;
@@ -396,9 +400,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				Data.SetWallPosition(CS.wallz);
 				glTranslatef(0.0, -2.0, 0.0);
 				Data.RotX_a = 0.0;
-				Data.RotY_a = 0.0; //reset perspective
+				Data.RotY_a = 0.0; // Reset perspective
 				Data.SetLevel();
-				Data.fovy = 45.0; // reset zoom
+				Data.fovy = 45.0; // Reset zoom
 				//
 				Data.StartScreen = TRUE;
 				
@@ -431,8 +435,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 		}
+		if (!Data.lost()) {
+			
+			if (die->isPlaying()) die->reset();
+			else die->play();
+		}
 	}
-	//KillGLWindow();
+	// KillGLWindow();
 	return msg.wParam;
 }
 

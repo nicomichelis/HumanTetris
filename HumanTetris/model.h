@@ -7,6 +7,13 @@
 
 class MyModel {
 public:
+	/* Stage
+	 * 0: startscreen
+	 * 1: controls
+	 * 2: game
+	 * 3: quit
+	 */
+	int stage;
 	// OpenGL
 	HDC			hDC;
 	HGLRC		hRC;
@@ -25,7 +32,7 @@ public:
 	double		Full_elapsed;
 	bool		StartScreen;
 	bool		Perso;
-	GLuint		texture[25];
+	GLuint		texture[50];
 	GLuint		base;
 	GLdouble	fovy;
 	GLfloat		RotX_a;
@@ -65,6 +72,9 @@ private:
 	
 	boolean checkIn=true;
 
+	Vertex Body[4];
+	Vertex HoleBody[20];
+
 	// Difficulty
 	double size;
 	double rotation;
@@ -99,23 +109,57 @@ public:
 	void DrawWall();
 	void DrawPlayerOnWall(Vertex position, double rotation, double size);
 	void DrawPlayer();
-	void SetWallPosition(double x);
-	double GetWallPosition();
-	Vertex GetPlayerPosition();
-	void SetPlayerPosition(Vertex x);
-	double GetPlayerRotation();
-	double GetwallLargh() { return wallLargh; }
-	double GetwallAltezza() { return wallAltezza; }
-	void SetPlayerRotation(double x);
-	double GetPlayerBodyHeight() { return PlayerBodyHeight; }
-	double GetPlayerHeadSize() { return PlayerHeadSize; }
+	void DrawStartscreen();
+	void DrawCommands();
+	void DrawGame();
+	void SetWallPosition(double x) {
+		this->wallPosition = x;
+	}
+	double GetWallPosition() {
+		return wallPosition;
+	}
+	Vertex GetPlayerPosition() {
+		return PlayerPosition;
+	}
+	void SetPlayerPosition(Vertex x) {
+		this->PlayerPosition = x;
+	}
+	double GetPlayerRotation() {
+		return this->PlayerRotation;
+	}
+	double GetwallLargh() { 
+		return wallLargh; 
+	}
+	double GetwallAltezza() { 
+		return wallAltezza; 
+	}
+	void SetPlayerRotation(double x) {
+		this->PlayerRotation = x;
+	}
+	double GetPlayerBodyHeight() { 
+		return PlayerBodyHeight; 
+	}
+	double GetPlayerHeadSize() { 
+		return PlayerHeadSize; 
+	}
 	void Randomize();
 
 	//butt
-	int getNbuttons() { return nbuttons; }
-	int getCounterButtons() { return buttCount; }
-	void SetCounterButtons(int n);
-	void setScene(int n);
+	int getNbuttons() { 
+		return this->nbuttons; 
+	}
+	int getCounterButtons() { 
+		return this->buttCount; 
+	}
+	void SetCounterButtons(int n) {
+		this->buttCount = n;
+	}
+	void setScene(int n) {
+		for (int i = 0; i < nbuttons; i++) {
+			selectButt[i] = 0;
+		}
+		selectButt[n] = 1;
+	}
 	
 	//reset level
 	void SetLevel(void);
@@ -137,6 +181,12 @@ public:
 	void Collision();
 	void isInside(Vertex x);
 	void Lose(int a);
+	boolean lost();
+	
+	boolean CheckPoint();
+	boolean included(Vertex HoleBody[], Vertex v, int j);
 };
 
 extern class MyModel Data;
+
+
