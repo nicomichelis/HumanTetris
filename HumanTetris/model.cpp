@@ -330,11 +330,7 @@ void MyModel::DrawPlayer() {
 	HeadPosition.y += (PlayerBodyHeight / 2 + PlayerHeadSize)*sin(PI / 2 + PlayerRotation);
 	HeadPosition.x += (PlayerBodyHeight / 2 + PlayerHeadSize)*cos(PI / 2 + PlayerRotation);
 	Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
-	CheckPoints[30].SetP(HeadPosition.x - size*PlayerHeadSize / 0.6, HeadPosition.y, HeadPosition.z);
-	CheckPoints[31].SetP(HeadPosition.x + size*PlayerHeadSize / 0.6, HeadPosition.y, HeadPosition.z);
-	CheckPoints[32].SetP(HeadPosition.x, +size*PlayerHeadSize / 0.6, HeadPosition.z);
-	
-	
+		
 	//Head.Draw();
 	// PROVE TEXTURE TESTA
 	glBindTexture(GL_TEXTURE_2D, texture[23]);
@@ -371,12 +367,6 @@ void MyModel::DrawPlayer() {
 	bg = bc;
 	bh = bd;
 	be.z = bf.z = bg.z = bh.z = PlayerPosition.z - PlayerThickness / 2;
-	CheckPoints[0] = ba;
-	CheckPoints[1] = bb;
-	CheckPoints[2] = bc;
-	CheckPoints[3] = bc;
-	CheckPoints[4] = bd;
-	CheckPoints[5] = ba;
 
 	Rect corpo_back(bf, be, bh, bg);
 	corpo_back.Draw();
@@ -416,8 +406,10 @@ void MyModel::DrawPlayer() {
 	Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
 	xa = xb = xc = xd = xe = xf = xg = xh = ba;
 	for (int i = 0; i < 4; i++) {
-		xa.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(PI+ angle_arm + PlayerRotation - alpha));
-		xa.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + ((ArmDiag)*sin(PI + angle_arm + PlayerRotation - alpha));
+		xa.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + 
+			((ArmDiag)*cos(PI+ angle_arm + PlayerRotation - alpha));
+		xa.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + 
+			((ArmDiag)*sin(PI + angle_arm + PlayerRotation - alpha));
 		xa.z = PlayerPosition.z + ArmThickness / 2;
 		
 		xb.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(2*PI - angle_arm + PlayerRotation - alpha));
@@ -439,12 +431,6 @@ void MyModel::DrawPlayer() {
 		xf = xb;
 		xg = xc;
 		xh = xd;
-		CheckPoints[6 + 6 * i] = xa;
-		CheckPoints[7 + 6 * i] = xb;
-		CheckPoints[8 + 6 * i] = xc;
-		CheckPoints[9 + 6 * i] = xc;
-		CheckPoints[10 + 6 * i] = xd;
-		CheckPoints[11 + 6 * i] = xa;
 
 		xe.z = xf.z = xg.z = xh.z = PlayerPosition.z - ArmThickness / 2;
 
@@ -524,7 +510,7 @@ void MyModel::DrawStartscreen() {
 	l3.SetP(9.0, 6.5, 0.0);
 	l4.SetP(-9.0, 6.5, 0.0);
 
-	//prossime due righe utili a mantenere la trasparenza delle immagini
+	// Prossime due righe utili a mantenere la trasparenza delle immagini
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	Rect log(l1, l2, l3, l4);
@@ -557,7 +543,7 @@ void MyModel::DrawStartscreen() {
 }
 
 void MyModel::DrawCommands() {
-	//commands
+	// Commands
 	glRotatef(0.0, 1.0, 0.0, 0.0);
 	glRotatef(0.0, 0.0, 1.0, 0.0);
 
@@ -607,9 +593,6 @@ void MyModel::DrawCommands() {
 		glBindTexture(GL_TEXTURE_2D, texture[10 + g]);
 		com.DrawTextures();
 
-
-
-
 		glColor3f(0.1f, 0.9f, 0.1f);
 		glRasterPos3f(kc.x + butt, kc.y - butt / 2, 0.0f);
 		this->glPrint("%s", command[d].c_str());
@@ -658,7 +641,7 @@ void MyModel::DrawGame() {
 		double dist = fabs(PlayerPosition.x - holePosition.x);
 
 		glDisable(GL_TEXTURE);
-		//collisioni
+		// Collisioni
 		if (wallPosition >= 10) {
 			if (CheckPoint()) {
 				Perso = true;
@@ -924,17 +907,6 @@ void MyModel::glPrint(const char * fmt, ...) {
 	glPopAttrib();
 }
 
-void MyModel::Collision() {
-	checkIn = true;
-	for each (Vertex x in CheckPoints)
-	{
-		isInside(x);
-		if (checkIn == false) {
-			exit;
-		}
-	}
-}
-
 boolean MyModel::lost() {
 	if (Perso == true)
 		return true;
@@ -970,10 +942,12 @@ boolean MyModel::included(Vertex HoleBody[], Vertex v, int j) {
 	float x2 = HoleBody[1+j].x;
 	float y2 = HoleBody[1+j].y;
 	float a = abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
+
 	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
 		t1 = true;
 	else
 		t1 = false;
+
 	x1 = HoleBody[1+j].x;
 	y1 = HoleBody[1+j].y;
 	x2 = HoleBody[2 + j].x;
@@ -1009,32 +983,4 @@ boolean MyModel::included(Vertex HoleBody[], Vertex v, int j) {
 		MessageBox(NULL, "False.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return false;
 	}
-}
-
-void MyModel::isInside(Vertex x) {
-	int j = 0;
-	double Area;
-	double s, t;
-	checkIn = true;
-	boolean temp = true;
-	//nP%3==0!
-	while ((j < (nP / 3)) && checkIn == true) {
-		
-		Area = 0.5 *(-HolePoints[1+(3*j)].y*HolePoints[2+ (3 * j)].x + HolePoints[0 + (3 * j)].y*(-HolePoints[1 + (3 * j)].x + HolePoints[2 + (3 * j)].x) +
-						HolePoints[0 + (3 * j)].x*(HolePoints[1 + (3 * j)].y - HolePoints[2 + (3 * j)].y) + HolePoints[1 + (3 * j)].x*HolePoints[2 + (3 * j)].y);
-		s = (HolePoints[0 + (3 * j)].y*HolePoints[2 + (3 * j)].x - HolePoints[0 + (3 * j)].x*HolePoints[2 + (3 * j)].y +
-							(HolePoints[2 + (3 * j)].y - HolePoints[0 + (3 * j)].y)*x.x + (HolePoints[0 + (3 * j)].x - HolePoints[2 + (3 * j)].x)*x.y);
-		t = (HolePoints[0 + (3 * j)].x*HolePoints[1 + (3 * j)].y - HolePoints[0 + (3 * j)].y *HolePoints[1 + (3 * j)].x + (HolePoints[0 + (3 * j)].y -
-												HolePoints[1 + (3 * j)].y)*x.x + (HolePoints[1 + (3 * j)].x - HolePoints[0 + (3 * j)].x)*x.y);
-		if ((s>=0 && t>=0 && (s + t)<=2 * abs( Area  ))) {
-			temp=false;
-			j = nP / 3;
-		}
-				
-		j++;
-	}
-	if (temp == true) {
-		checkIn = false;
-	}
-
 }

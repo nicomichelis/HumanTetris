@@ -176,10 +176,7 @@ public:
 	~MyModel() {
 		this->KillFont();
 	}
-
-	//collision
-	void Collision();
-	void isInside(Vertex x);
+	//void isInside(Vertex x);
 	void Lose(int a);
 	boolean lost();
 	
