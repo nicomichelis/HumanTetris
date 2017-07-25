@@ -73,7 +73,7 @@ private:
 	boolean checkIn=true;
 
 	Vertex Body[4];
-	Vertex HoleBody[4];
+	Vertex HoleBody[20];
 
 	// Difficulty
 	double size;
@@ -184,7 +184,7 @@ public:
 	boolean lost();
 	
 	boolean CheckPoint();
-	boolean included(Vertex v);
+	boolean included(Vertex HoleBody[], Vertex v, int j);
 };
 
 extern class MyModel Data;

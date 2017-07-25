@@ -68,8 +68,6 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	Randomize();
 }
 
-
-
 void MyModel::DrawFloor() {
 	Vertex fa, fb, fc, fd, fe, ff, fg, fh;
 	Rect floorFront, floorBack, floorSideA, floorSideB, floorTop, floorBottom;
@@ -192,7 +190,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 
 	Rect corpo_front(ba, bb, bc, bd);
 	corpo_front.Draw();
-
+	
 	be = ba;
 	bf = bb;
 	bg = bc;
@@ -203,6 +201,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	HolePoints[3] = bc;
 	HolePoints[4] = bd;
 	HolePoints[5] = ba;
+
 	be.z=bf.z=bg.z=bh.z = position.z - spessore / 2;
 
 	Rect corpo_back(bf, be, bh, bg);
@@ -226,11 +225,13 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	hb = bb;
 	hc = bc;
 	hd = bd;
-	HoleBody[0] = ba;
-	HoleBody[1] = bb;
-	HoleBody[2] = bc;
-	HoleBody[3] = bd;
+	HoleBody[0] = be;
+	HoleBody[1] = bf;
+	HoleBody[2] = bg;
+	HoleBody[3] = bh;
+
  	// Arms
+	
 	double PlayerArmHeight = size*PlayerBodyHeight / 5 * 3;
 	double ArmDist;
 	double angle2;
@@ -280,6 +281,13 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 		HolePoints[9 + (6 * i)] = xc;
 		HolePoints[10 + (6 * i)] = xd;
 		HolePoints[11 + (6 * i)] = xa;
+		
+		HoleBody[4 + (4 * i)] = xa;
+		HoleBody[5 + (4 * i)] = xb;
+		HoleBody[6 + (4 * i)] = xc;
+		HoleBody[7 + (4 * i)] = xd;
+
+
 
 		xe.z = xf.z = xg.z = xh.z = position.z - spessore / 2;
 
@@ -312,6 +320,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 		if (i == 2)
 			alpha = PI / 6 * 10;
 	}
+	
 }
 
 void MyModel::DrawPlayer() {
@@ -625,13 +634,10 @@ void MyModel::DrawGame() {
 	glRotatef(RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(RotY_a, 0.0, 1.0, 0.0);
 
-
 	// Controllo posizione corretta
 	// Roba da disegnare
 	if (!Perso) {
-		
 		glBindTexture(GL_TEXTURE_2D, texture[0]);
-
 		this->DrawWall();
 		if (wallPosition < 10.0) {
 			wallPosition += diff;
@@ -654,9 +660,6 @@ void MyModel::DrawGame() {
 		glDisable(GL_TEXTURE);
 		//collisioni
 		if (wallPosition >= 10) {
-			/*Collision();
-			if (checkIn == false)
-			Perso = true;*/
 			if (CheckPoint()) {
 				Perso = true;
 			}
@@ -670,7 +673,7 @@ void MyModel::DrawGame() {
 		glColor3f(1.0f, 0.0f, 0.0f);
 		glRasterPos3f(2.0, -5.0, 5.0);
 		this->glPrint("Score: %d", score);
-
+		Perso = false;
 	}
 	else {
 		// Cosa fare quando perso
@@ -940,54 +943,72 @@ boolean MyModel::lost() {
 }
 
 boolean MyModel::CheckPoint() {
-	for each (Vertex v in HoleBody) {
-		if (!included(v)) {
-			return false;
+	boolean temp = true;
+	for each (Vertex v in Body) {
+		temp = true;
+		for (int j = 0; j<20; j = j + 4) {
+			if (!included(HoleBody, v, j)) {
+				temp = false;
+			}
+			else {
+				temp = true;
+				break;
+			}
 		}
+		if (!temp)
+			return false;
 	}
 	return true;
 }
 
-boolean MyModel::included(Vertex v) {
+boolean MyModel::included(Vertex HoleBody[], Vertex v, int j) {
 	boolean t1, t2, t3, t4;
 	float x0 = v.x;
 	float y0 = v.y;
-	float x1 = Body[0].x;
-	float y1 = Body[0].y;
-	float x2 = Body[1].x;
-	float y2 = Body[1].y;
+	float x1 = HoleBody[0+j].x;
+	float y1 = HoleBody[0+j].y;
+	float x2 = HoleBody[1+j].x;
+	float y2 = HoleBody[1+j].y;
+	float a = abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
 	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
 		t1 = true;
 	else
 		t1 = false;
-	x1 = Body[1].x;
-	y1 = Body[1].y;
-	x2 = Body[2].x;
-	y2 = Body[2].y;
+	x1 = HoleBody[1+j].x;
+	y1 = HoleBody[1+j].y;
+	x2 = HoleBody[2 + j].x;
+	y2 = HoleBody[2 + j].y;
+	a += abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
 	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
 		t2 = true;
 	else
 		t2 = false;
-	x1 = Body[2].x;
-	y1 = Body[2].y;
-	x2 = Body[3].x;
-	y2 = Body[3].y;
+	x1 = HoleBody[2 + j].x;
+	y1 = HoleBody[2 + j].y;
+	x2 = HoleBody[3 + j].x;
+	y2 = HoleBody[3 + j].y;
+	a += abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
 	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
 		t3 = true;
 	else
 		t3 = false;
-	x1 = Body[3].x;
-	y1 = Body[3].y;
-	x2 = Body[4].x;
-	y2 = Body[4].y;
+	x1 = HoleBody[3 + j].x;
+	y1 = HoleBody[3 + j].y;
+	x2 = HoleBody[0 + j].x;
+	y2 = HoleBody[0 + j].y;
+	a += abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
 	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
 		t4 = true;
 	else
 		t4 = false;
-	if (t1 == t2 == t3 == t4)
+	if (a <= size*PlayerThickness*PlayerBodyHeight) {
+		MessageBox(NULL, "True.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return true;
-	else
+	}
+	else {
+		MessageBox(NULL, "False.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return false;
+	}
 }
 
 void MyModel::isInside(Vertex x) {
