@@ -215,41 +215,60 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	corpo_bottom.DrawTextures();
 
 	// Arms
+	// Calcolo con pitagora la lunghezza della diagonale del corpo del player (distanza centro - angolo )
 	double diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
+	// Calcolo l'angolo formato dalla diagonale nel centro
 	double angle = asin((PlayerBodyHeight / 2) / diag);
+	// Lunghezza braccia, proporzionali al corpo
 	double PlayerArmHeight = size*PlayerBodyHeight / 5 * 3;
 	double ArmDist;
 	double angle2;
 	double angle3;
+	// Spessore braccia
 	double ArmThickness = size*PlayerThickness / 1.5;
 	double ArmDiag;
 	double alpha = PI / 3;
 
+	// Calcolo diagonale braccia
 	ArmDiag = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow((ArmThickness / 2), 2.0));
-	angle2 = asin(sin(90) / diag * size*PlayerThickness / 2) - alpha;
-	angle3 = acos(cos(angle2)*diag / PlayerArmHeight / 2);
+	
+	// Calcolo angolo 'esterno' compreso fra ipotenusa(diag) e bodyHeight
+	angle2 = asin( size * PlayerThickness / 2 / diag) - alpha;
+	
+	// Calcolo il terzo angolo ( == 180-angle2-90)
+	angle3 = acos( cos ( angle2 ) * diag * ( PlayerArmHeight / 2 ));
 
-	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow(diag, 2.0) - 2 * diag*PlayerArmHeight / 2 * cos(PI - angle2 - angle3));
+	ArmDist = sqrt(pow((PlayerArmHeight / 2), 2.0) + pow(diag, 2.0) - diag*PlayerArmHeight  * cos(PI - angle2 - angle3));
+	
 	double beta = PI / 6;
+	// è l'angolo 'interno' ad arm
 	double angle_arm = asin((PlayerArmHeight / 2) / ArmDiag);
 	Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
 	xa = xb = xc = xd = xe = xf = xg = xh = ba;
+	Vertex centerArm;
 	for (int i = 0; i < 4; i++) {
-		xa.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + ((ArmDiag)*cos(PI + angle_arm + rotation - alpha));
-		xa.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + ((ArmDiag)*sin(PI + angle_arm + rotation - alpha));
-		xa.z = position.z + spessore / 2;
 
-		xb.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + ((ArmDiag)*cos(2 * PI - angle_arm + rotation - alpha));
-		xb.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + ((ArmDiag)*sin(2 * PI - angle_arm + +rotation - alpha));
-		xb.z = position.z + spessore / 2;
+		// Coordinate del centro del braccio 'i'
+		centerArm.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation);
+		centerArm.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation);
+		centerArm.z = position.z + spessore / 2;
 
-		xc.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + ((ArmDiag)*cos(angle_arm + rotation - alpha));
-		xc.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + ((ArmDiag)*sin(angle_arm + rotation - alpha));
-		xc.z = position.z + spessore / 2;
+		// Coordinate degli estremi del braccio
+		xa.x = centerArm.x + ((ArmDiag)*cos(PI + angle_arm + rotation - alpha));
+		xa.y = centerArm.y + ((ArmDiag)*sin(PI + angle_arm + rotation - alpha));
+		xa.z = centerArm.z;
 
-		xd.x = position.x + (ArmDist - ArmThickness)*cos(alpha + rotation) + (ArmDiag)*cos(PI - angle_arm + rotation - alpha);
-		xd.y = position.y + (ArmDist - ArmThickness)*sin(alpha + rotation) + (ArmDiag)*sin(PI - angle_arm + rotation - alpha);
-		xd.z = position.z + spessore / 2;
+		xb.x = centerArm.x + ((ArmDiag)*cos(2 * PI - angle_arm + rotation - alpha));
+		xb.y = centerArm.y + ((ArmDiag)*sin(2 * PI - angle_arm + +rotation - alpha));
+		xb.z = centerArm.z;
+
+		xc.x = centerArm.x + ((ArmDiag)*cos(angle_arm + rotation - alpha));
+		xc.y = centerArm.y + ((ArmDiag)*sin(angle_arm + rotation - alpha));
+		xc.z = centerArm.z;
+
+		xd.x = centerArm.x + (ArmDiag)*cos(PI - angle_arm + rotation - alpha);
+		xd.y = centerArm.y + (ArmDiag)*sin(PI - angle_arm + rotation - alpha);
+		xd.z = centerArm.z;
 
 		Rect arm_front(xa, xb, xc, xd);
 		arm_front.Draw();
@@ -390,24 +409,28 @@ void MyModel::DrawPlayer() {
 	double angle_arm = asin((PlayerArmHeight / 2) / ArmDiag);
 	Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
 	xa = xb = xc = xd = xe = xf = xg = xh = ba;
+	Vertex centerArm;
 	for (int i = 0; i < 4; i++) {
-		xa.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + 
-			((ArmDiag)*cos(PI+ angle_arm + PlayerRotation - alpha));
-		xa.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + 
-			((ArmDiag)*sin(PI + angle_arm + PlayerRotation - alpha));
-		xa.z = PlayerPosition.z + ArmThickness / 2;
+		// Coordinate del centro del braccio 'i'
+		centerArm.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation);
+		centerArm.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation);
+		centerArm.z = PlayerPosition.z + ArmThickness / 2;
+
+		xa.x = centerArm.x + ((ArmDiag)*cos(PI+ angle_arm + PlayerRotation - alpha));
+		xa.y = centerArm.y + ((ArmDiag)*sin(PI + angle_arm + PlayerRotation - alpha));
+		xa.z = centerArm.z;
 		
-		xb.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(2*PI - angle_arm + PlayerRotation - alpha));
-		xb.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + ((ArmDiag)*sin(2*PI - angle_arm + + PlayerRotation - alpha));
-		xb.z = PlayerPosition.z + ArmThickness / 2;
+		xb.x = centerArm.x + ((ArmDiag)*cos(2*PI - angle_arm + PlayerRotation - alpha));
+		xb.y = centerArm.y + ((ArmDiag)*sin(2*PI - angle_arm + + PlayerRotation - alpha));
+		xb.z = centerArm.z;
 		
-		xc.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + ((ArmDiag)*cos(angle_arm + PlayerRotation - alpha));
-		xc.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + ((ArmDiag)*sin(angle_arm + PlayerRotation - alpha));
-		xc.z = PlayerPosition.z + ArmThickness / 2;
+		xc.x = centerArm.x + ((ArmDiag)*cos(angle_arm + PlayerRotation - alpha));
+		xc.y = centerArm.y + ((ArmDiag)*sin(angle_arm + PlayerRotation - alpha));
+		xc.z = centerArm.z;
 		
-		xd.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation) + (ArmDiag)*cos(PI - angle_arm + PlayerRotation - alpha);
-		xd.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation) + (ArmDiag)*sin(PI - angle_arm + PlayerRotation - alpha);
-		xd.z = PlayerPosition.z + ArmThickness / 2;
+		xd.x = centerArm.x + (ArmDiag)*cos(PI - angle_arm + PlayerRotation - alpha);
+		xd.y = centerArm.y + (ArmDiag)*sin(PI - angle_arm + PlayerRotation - alpha);
+		xd.z = centerArm.z;
 
 		Rect arm_front(xa, xb, xc, xd);
 		arm_front.Draw();
