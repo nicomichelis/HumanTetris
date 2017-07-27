@@ -168,24 +168,22 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	Head.Draw();
 	
 	// Body
-	double diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
-	double angle = asin((PlayerBodyHeight / 2) / diag);
 	Vertex ba, bb, bc, bd, be, bf, bg, bh;
 	ba = bb = bc = bd = be = bf = bg = bh = position;
-	ba.x = position.x + ((diag)*cos(PI + angle + rotation));
-	ba.y = position.y + ((diag)*sin(PI + angle + rotation));
+
+	ba.x = position.x - (size*PlayerThickness / 2)*cos(rotation) + (PlayerBodyHeight * (size / 2) / 2)* sin(rotation);
+	bb.x = position.x + (size*PlayerThickness / 2)*cos(rotation) + (PlayerBodyHeight * (size / 2) / 2)* sin(rotation);
+	bc.x = position.x + (size*PlayerThickness / 2)*cos(rotation) - (PlayerBodyHeight * (size / 2) / 2)* sin(rotation);
+	bd.x = position.x - (size*PlayerThickness / 2)*cos(rotation) - (PlayerBodyHeight * (size / 2) / 2)* sin(rotation);
+
+	ba.y = position.y - (PlayerBodyHeight * (size / 2) / 2)*cos(rotation) - (size*PlayerThickness / 2)* sin(rotation);
+	bb.y = position.y - (PlayerBodyHeight * (size / 2) / 2)*cos(rotation) + (size*PlayerThickness / 2)* sin(rotation);
+	bc.y = position.y + (PlayerBodyHeight * (size / 2) / 2)*cos(rotation) + (size*PlayerThickness / 2)* sin(rotation);
+	bd.y = position.y + (PlayerBodyHeight * (size / 2) / 2)*cos(rotation) - (size*PlayerThickness / 2)* sin(rotation);
+
 	ba.z = position.z + spessore / 2;
-
-	bb.x = position.x + ((diag)*cos(2 * PI - angle + rotation));
-	bb.y = position.y + ((diag)*sin(-angle + 2 * PI + rotation));
 	bb.z = position.z + spessore / 2;
-
-	bc.x = position.x + ((diag)*cos(angle + rotation));
-	bc.y = position.y + ((diag)*sin(angle + rotation));
 	bc.z = position.z + spessore / 2;
-
-	bd.x = position.x + (diag)*cos(PI - angle + rotation);
-	bd.y = position.y + (diag)*sin(PI - angle + rotation);
 	bd.z = position.z + spessore / 2;
 
 	Rect corpo_front(ba, bb, bc, bd);
@@ -195,12 +193,6 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	bf = bb;
 	bg = bc;
 	bh = bd;
-	HolePoints[0] = ba;
-	HolePoints[1] = bb;
-	HolePoints[2] = bc;
-	HolePoints[3] = bc;
-	HolePoints[4] = bd;
-	HolePoints[5] = ba;
 
 	be.z=bf.z=bg.z=bh.z = position.z - spessore / 2;
 
@@ -221,17 +213,10 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	corpo_left.DrawTextures();
 	corpo_top.DrawTextures();
 	corpo_bottom.DrawTextures();
-	ha = ba;
-	hb = bb;
-	hc = bc;
-	hd = bd;
-	HoleBody[0] = be;
-	HoleBody[1] = bf;
-	HoleBody[2] = bg;
-	HoleBody[3] = bh;
 
- 	// Arms
-	
+	// Arms
+	double diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
+	double angle = asin((PlayerBodyHeight / 2) / diag);
 	double PlayerArmHeight = size*PlayerBodyHeight / 5 * 3;
 	double ArmDist;
 	double angle2;
@@ -281,7 +266,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 		HolePoints[9 + (6 * i)] = xc;
 		HolePoints[10 + (6 * i)] = xd;
 		HolePoints[11 + (6 * i)] = xa;
-		
+
 		HoleBody[4 + (4 * i)] = xa;
 		HoleBody[5 + (4 * i)] = xb;
 		HoleBody[6 + (4 * i)] = xc;

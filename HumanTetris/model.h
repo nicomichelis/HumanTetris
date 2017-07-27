@@ -94,7 +94,6 @@ private:
 	// Hole
 	Vertex holePosition;
 	double holeRotation;
-	Vertex ha, hb, hc, hd;
 	Vertex HolePoints[nP];
 
 	// TEST
