@@ -213,6 +213,12 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	corpo_left.DrawTextures();
 	corpo_top.DrawTextures();
 	corpo_bottom.DrawTextures();
+	// salvataggio punti per check
+	puntimuro[0] = ba;
+	puntimuro[1] = bb;
+	puntimuro[2] = bc;
+	puntimuro[3] = bd;
+
 
 	// Arms
 	double diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
@@ -363,15 +369,11 @@ void MyModel::DrawPlayer() {
 	corpo_top.Draw();
 	Rect corpo_bottom(be, bf, bb, ba);
 	corpo_bottom.Draw();
-	a = ba;
-	b = bb;
-	c = bc;
-	d = bd;
-	Body[0] = ba;
-	Body[1] = bb;
-	Body[2] = bc;
-	Body[3] = bd;
-		
+	puntiuomo[0] = ba;
+	puntiuomo[1] = bb;
+	puntiuomo[2] = bc;
+	puntiuomo[3] = bd;
+
 	// Arms
 	double PlayerArmHeight = PlayerBodyHeight / 4*3;
 	double ArmDist;
@@ -628,7 +630,7 @@ void MyModel::DrawGame() {
 		glDisable(GL_TEXTURE);
 		// Collisioni
 		if (wallPosition >= 10) {
-			if (CheckPoint()) {
+			if (!CheckPoint()) {
 				Perso = true;
 			}
 		}
@@ -641,7 +643,6 @@ void MyModel::DrawGame() {
 		glColor3f(1.0f, 0.0f, 0.0f);
 		glRasterPos3f(2.0, -5.0, 5.0);
 		this->glPrint("Score: %d", score);
-		Perso = false;
 	}
 	else {
 		// Cosa fare quando perso
@@ -862,15 +863,17 @@ void MyModel::SetLevel(void) {
 
 void MyModel::Lose(int score) {
 	Perso = true;
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, -2.0);
 	glRotatef(0.0, 1.0, 0.0, 0.0);
 	glRotatef(0.0, 0.0, 1.0, 0.0);
 	Vertex a, b, c, d;
 	double l=5.0;
 	
-	a.SetP(0.0 - wallLargh/2, 0.0 , 10.5);
-	b.SetP(0.0 + wallLargh / 2, 0.0 , 10.5);
-	c.SetP(0.0 + wallLargh / 2, 0.0 + wallAltezza , 10.5);
-	d.SetP(0.0 - wallLargh / 2, 0.0 + wallAltezza , 10.5);
+	a.SetP(-1.0, -1.0 , 0.0);
+	b.SetP(1.0, -1.0 , 0.0);
+	c.SetP(1.0, 1.0 , 0.0);
+	d.SetP(-1.0, 1.0 , 0.0);
 	
 	Rect lost(a,b,c,d);
 	lost.Draw();
@@ -900,72 +903,63 @@ boolean MyModel::lost() {
 }
 
 boolean MyModel::CheckPoint() {
-	boolean temp = true;
-	for each (Vertex v in Body) {
-		temp = true;
-		for (int j = 0; j<20; j = j + 4) {
-			if (!included(HoleBody, v, j)) {
-				temp = false;
-			}
-			else {
-				temp = true;
-				break;
-			}
-		}
-		if (!temp)
+	for (int i = 0; i < 4; i++) {
+		if (!included(puntiuomo[i], puntimuro))
 			return false;
 	}
 	return true;
 }
 
-boolean MyModel::included(Vertex HoleBody[], Vertex v, int j) {
+boolean MyModel::included(Vertex v, Vertex* po) {
 	boolean t1, t2, t3, t4;
 	float x0 = v.x;
 	float y0 = v.y;
-	float x1 = HoleBody[0+j].x;
-	float y1 = HoleBody[0+j].y;
-	float x2 = HoleBody[1+j].x;
-	float y2 = HoleBody[1+j].y;
+	float x1 = po[0].x;
+	float y1 = po[0].y;
+	float x2 = po[1].x;
+	float y2 = po[1].y;
 	float a = abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
-
 	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
 		t1 = true;
 	else
 		t1 = false;
 
-	x1 = HoleBody[1+j].x;
-	y1 = HoleBody[1+j].y;
-	x2 = HoleBody[2 + j].x;
-	y2 = HoleBody[2 + j].y;
-	a += abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
+	x1 = po[1].x;
+	y1 = po[1].y;
+	x2 = po[2].x;
+	y2 = po[2].y;
+	float b = abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
 	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
 		t2 = true;
 	else
 		t2 = false;
-	x1 = HoleBody[2 + j].x;
-	y1 = HoleBody[2 + j].y;
-	x2 = HoleBody[3 + j].x;
-	y2 = HoleBody[3 + j].y;
-	a += abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
+
+	x1 = po[2].x;
+	y1 = po[2].y;
+	x2 = po[3].x;
+	y2 = po[3].y;
+	float c = abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
 	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
 		t3 = true;
 	else
 		t3 = false;
-	x1 = HoleBody[3 + j].x;
-	y1 = HoleBody[3 + j].y;
-	x2 = HoleBody[0 + j].x;
-	y2 = HoleBody[0 + j].y;
-	a += abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
+
+	x1 = po[3].x;
+	y1 = po[3].y;
+	x2 = po[0].x;
+	y2 = po[0].y;
+	float d = abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
 	if ((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1) > 0)
 		t4 = true;
 	else
 		t4 = false;
-	if (a <= size*PlayerThickness*PlayerBodyHeight) {
-		MessageBox(NULL, "True.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
+	float area = (0.5)*(po[0].x*po[1].y - po[1].x*po[0].y + po[1].x*po[2].y - po[2].x*po[1].y + po[2].x*po[3].y - po[3].x*po[2].y + po[3].x*po[0].y - po[0].x*po[1].y);
+	area = abs(area);
+	float area2 = a + b + c + d;
+	if (area2 <= area) {
 		return true;
 	}
 	else {
-		MessageBox(NULL, "False.", "ERROR", MB_OK | MB_ICONEXCLAMATION);
 		return false;
 	}
 }

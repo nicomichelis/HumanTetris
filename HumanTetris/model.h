@@ -1,6 +1,7 @@
 #pragma once
 
 #include "vertex.h"
+#include <vector>
 #include <ctime>
 #define nP 33
 
@@ -180,7 +181,10 @@ public:
 	boolean lost();
 	
 	boolean CheckPoint();
-	boolean included(Vertex HoleBody[], Vertex v, int j);
+	boolean included(Vertex v, Vertex* po);
+
+	Vertex puntimuro[4];
+	Vertex puntiuomo[4];
 };
 
 extern class MyModel Data;
