@@ -976,10 +976,10 @@ boolean MyModel::included(Vertex v, Vertex* po) {
 		t4 = true;
 	else
 		t4 = false;
-	float area = (0.5)*(po[0].x*po[1].y - po[1].x*po[0].y + po[1].x*po[2].y - po[2].x*po[1].y + po[2].x*po[3].y - po[3].x*po[2].y + po[3].x*po[0].y - po[0].x*po[1].y);
+	float area = (0.5)*(po[0].x*po[1].y - po[1].x*po[0].y + po[1].x*po[2].y - po[2].x*po[1].y + po[2].x*po[3].y - po[3].x*po[2].y + po[3].x*po[0].y - po[0].x*po[3].y);
 	area = abs(area);
 	float area2 = a + b + c + d;
-	if (area2 <= area) {
+	if (area2 <= area+0.001) {
 		return true;
 	}
 	else {
