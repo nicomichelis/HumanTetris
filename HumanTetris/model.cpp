@@ -284,7 +284,6 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 		xg = xc;
 		xh = xd;
 
-
 		HolePoints[6 + (6 * i)] = xa;
 		HolePoints[7 + (6 * i)] = xb;
 		HolePoints[8 + (6 * i)] = xc;
@@ -300,7 +299,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 
 
 		xe.z = xf.z = xg.z = xh.z = position.z - spessore / 2;
-
+		
 		Rect arm_back(xh, xg, xf, xe);
 		arm_back.Draw();
 
@@ -323,12 +322,37 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 		arm_estremo_a.DrawTextures();
 		arm_estremo_b.DrawTextures();
 
-		if (i == 0)
+		if (i == 0) {
 			alpha = PI / 6 * 4;
-		if (i == 1)
+			braccioURmuro[0] = xa;
+			braccioURmuro[1] = xb;
+			braccioURmuro[2] = xc;
+			braccioURmuro[3] = xd;
+		}
+			
+		if (i == 1) {
 			alpha = PI / 3 * 4;
-		if (i == 2)
+			braccioULmuro[0] = xa;
+			braccioULmuro[1] = xb;
+			braccioULmuro[2] = xc;
+			braccioULmuro[3] = xd;
+		}
+			
+		if (i == 2) {
 			alpha = PI / 6 * 10;
+			braccioLLmuro[0] = xa;
+			braccioLLmuro[1] = xb;
+			braccioLLmuro[2] = xc;
+			braccioLLmuro[3] = xd;
+		}
+
+		if (i == 3) {
+			braccioLRmuro[0] = xa;
+			braccioLRmuro[1] = xb;
+			braccioLRmuro[2] = xc;
+			braccioLRmuro[3] = xd;
+		}
+			
 	}
 	
 }
@@ -458,6 +482,11 @@ void MyModel::DrawPlayer() {
 
 		Rect arm_estremo_b(xe, xf, xb, xa);
 		arm_estremo_b.Draw();
+
+		puntiuomo[4 + 4*i] = xa;
+		puntiuomo[5 + 4*i] = xa;
+		puntiuomo[6 + 4*i] = xa;
+		puntiuomo[7 + 4*i] = xa;
 
 		if (i == 0)
 			alpha = PI/6*4;
@@ -926,9 +955,18 @@ boolean MyModel::lost() {
 }
 
 boolean MyModel::CheckPoint() {
-	for (int i = 0; i < 4; i++) {
-		if (!included(puntiuomo[i], puntimuro))
-			return false;
+	for (int i = 0; i < 20; i++) {
+		if (included(puntiuomo[i], puntimuro))
+			continue;
+		else if (included(puntiuomo[i], braccioULmuro))
+			continue;
+		else if (included(puntiuomo[i], braccioURmuro))
+			continue;
+		else if (included(puntiuomo[i], braccioLLmuro))
+			continue;
+		else if (included(puntiuomo[i], braccioLRmuro))
+			continue;
+		return false;
 	}
 	return true;
 }

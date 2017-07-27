@@ -184,7 +184,11 @@ public:
 	boolean included(Vertex v, Vertex* po);
 
 	Vertex puntimuro[4];
-	Vertex puntiuomo[4];
+	Vertex braccioULmuro[4];
+	Vertex braccioURmuro[4];
+	Vertex braccioLLmuro[4];
+	Vertex braccioLRmuro[4];
+	Vertex puntiuomo[20];
 };
 
 extern class MyModel Data;
