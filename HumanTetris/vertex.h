@@ -141,7 +141,7 @@ public:
 		this->width = w;
 	}
 	void Draw() {
-		int res = 1000;
+		int res = 25;
 		for (int i = 0; i < res; i++) {
 			// Current point
 			float theta = 2.0f * PI * float(i) / float(res);
@@ -187,7 +187,7 @@ public:
 		}
 	}
 	void DrawTexture() {
-		int res = 50;
+		int res = 25;
 		for (int i = 0; i < res; i++) {
 			// Current point
 			float theta = 2.0f * PI * float(i) / float(res);

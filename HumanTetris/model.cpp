@@ -15,9 +15,6 @@
 #pragma warning(disable:4996)
 
 MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), fps(0), cursor(true), captured(false), StartScreen(true), Perso(false), fovy(45.0), RotX_a(0), RotY_a(0) {
-	// stage init
-	stage = 0;
-
 	//butt
 	buttonWidth = 4.5;
 	buttonHeight = 1.5;
@@ -56,7 +53,7 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 
 	// Difficulty
 	size = 4; // da 4 si scende a max 2
-	diff = 0.01;
+	diff = 0.002;
 	score = 0;
 
 	// Init limits
@@ -158,14 +155,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	Vertex HeadPosition = position;
 	HeadPosition.y += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*sin(PI / 2 + rotation);
 	HeadPosition.x += (PlayerBodyHeight / 2 + size*PlayerHeadSize)*cos(PI / 2 + rotation);
-	Cylinder Head(HeadPosition, size*PlayerHeadSize/1.2, spessore);
-
-	HolePoints[30].SetP(HeadPosition.x - size*PlayerHeadSize/0.6,HeadPosition.y,HeadPosition.z);
-	HolePoints[31].SetP(HeadPosition.x + size*PlayerHeadSize / 0.6, HeadPosition.y, HeadPosition.z);
-	HolePoints[32].SetP(HeadPosition.x, +size*PlayerHeadSize / 0.6, HeadPosition.z);
-	
-	
-	Head.Draw();
+	drawHeadWall(HeadPosition, size*PlayerHeadSize/1.2, spessore);
 	
 	// Body
 	Vertex ba, bb, bc, bd, be, bf, bg, bh;
@@ -284,19 +274,6 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 		xg = xc;
 		xh = xd;
 
-		HolePoints[6 + (6 * i)] = xa;
-		HolePoints[7 + (6 * i)] = xb;
-		HolePoints[8 + (6 * i)] = xc;
-		HolePoints[9 + (6 * i)] = xc;
-		HolePoints[10 + (6 * i)] = xd;
-		HolePoints[11 + (6 * i)] = xa;
-
-		HoleBody[4 + (4 * i)] = xa;
-		HoleBody[5 + (4 * i)] = xb;
-		HoleBody[6 + (4 * i)] = xc;
-		HoleBody[7 + (4 * i)] = xd;
-
-
 
 		xe.z = xf.z = xg.z = xh.z = position.z - spessore / 2;
 		
@@ -363,14 +340,7 @@ void MyModel::DrawPlayer() {
 	Vertex HeadPosition = PlayerPosition;
 	HeadPosition.y += (PlayerBodyHeight / 2 + PlayerHeadSize)*sin(PI / 2 + PlayerRotation);
 	HeadPosition.x += (PlayerBodyHeight / 2 + PlayerHeadSize)*cos(PI / 2 + PlayerRotation);
-	Cylinder Head(HeadPosition, PlayerHeadSize, PlayerThickness);
-		
-	//Head.Draw();
-	// PROVE TEXTURE TESTA
-	glBindTexture(GL_TEXTURE_2D, texture[23]);
-	Head.DrawTexture();
-	glDisable(GL_TEXTURE);
-
+	drawHead(HeadPosition, PlayerHeadSize, PlayerThickness);
 
 	// Body
 	double diag = sqrt(pow((PlayerBodyHeight / 2),2.0) + pow((PlayerThickness / 2),2.0));
@@ -955,7 +925,7 @@ boolean MyModel::lost() {
 }
 
 boolean MyModel::CheckPoint() {
-	for (int i = 0; i < 20; i++) {
+	for (int i = 0; i < 23; i++) {
 		if (included(puntiuomo[i], puntimuro))
 			continue;
 		else if (included(puntiuomo[i], braccioULmuro))
@@ -966,9 +936,43 @@ boolean MyModel::CheckPoint() {
 			continue;
 		else if (included(puntiuomo[i], braccioLRmuro))
 			continue;
+		else if (checkIncludedT(puntiuomo[i], puntitesta))
+			continue;
 		return false;
 	}
 	return true;
+}
+
+boolean MyModel::includedT(Vertex v, Vertex* po) {
+	float x0 = v.x;
+	float y0 = v.y;
+	float x1 = po[0].x;
+	float y1 = po[0].y;
+	float x2 = po[1].x;
+	float y2 = po[1].y;
+	float a = abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
+	
+	x1 = po[1].x;
+	y1 = po[1].y;
+	x2 = po[2].x;
+	y2 = po[2].y;
+	float b = abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
+
+	x1 = po[2].x;
+	y1 = po[2].y;
+	x2 = po[0].x;
+	y2 = po[0].y;
+	float c = abs((0.5)*(x1*y2 - y1*x2 - x0*y2 + y0*x2 + x0*y1 - y0*x1));
+
+	float area = (0.5)*(po[0].x*po[1].y - po[1].x*po[0].y + po[1].x*po[2].y - po[2].x*po[1].y + po[2].x*po[0].y - po[0].x*po[2].y);
+	area = abs(area);
+	float area2 = a + b + c;
+	if (area2 <= area+0.001) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
 
 boolean MyModel::included(Vertex v, Vertex* po) {
@@ -1017,10 +1021,128 @@ boolean MyModel::included(Vertex v, Vertex* po) {
 	float area = (0.5)*(po[0].x*po[1].y - po[1].x*po[0].y + po[1].x*po[2].y - po[2].x*po[1].y + po[2].x*po[3].y - po[3].x*po[2].y + po[3].x*po[0].y - po[0].x*po[3].y);
 	area = abs(area);
 	float area2 = a + b + c + d;
-	if (area2 <= area+0.001) {
+	if (area2 <= area + 0.001) {
 		return true;
 	}
 	else {
 		return false;
+	}
+}
+
+boolean MyModel::checkIncludedT(Vertex v, Vertex* po) {
+	Vertex ch[3];
+	ch[0] = centrotesta;
+	for (int i = 0; i < 39; i++) {
+		ch[1] = po[i];
+		ch[2] = po[i + 1];
+		if (includedT(v, ch))
+			return true;
+	}
+	return false;
+}
+
+void MyModel::drawHead(Vertex center, float radius, float width) {
+	int res = 40;
+	centrotesta = center;
+	for (int i = 0; i < res; i++) {
+		// Current point
+		float theta = 2.0f * PI * float(i) / float(res);
+		float x = radius * cos(theta) + center.x;
+		float y = radius * sin(theta) + center.y;
+		Vertex current = center;
+		current.SetP(x, y, center.z);
+		// Next point
+		theta = 2.0f * PI * float(i + 1) / float(res);
+		x = radius * cos(theta) + center.x;
+		y = radius * sin(theta) + center.y;
+		Vertex next = center;
+		next.SetP(x, y, center.z);
+		glBegin(GL_TRIANGLES);
+		glColor3f(center.r, center.g, center.b);
+		glVertex3f(center.x, center.y, center.z + width / 2);
+		glColor3f(current.r, current.g, current.b);
+		glVertex3f(current.x, current.y, current.z + width / 2);
+		glColor3f(next.r, next.g, next.b);
+		glVertex3f(next.x, next.y, next.z + width / 2);
+
+		glColor3f(current.r, current.g, current.b);
+		glVertex3f(current.x, current.y, current.z - width / 2);
+		glColor3f(center.r, center.g, center.b);
+		glVertex3f(center.x, center.y, center.z - width / 2);
+		glColor3f(next.r, next.g, next.b);
+		glVertex3f(next.x, next.y, next.z - width / 2);
+
+		glColor3f(current.r, current.g, current.b);
+		glVertex3f(current.x, current.y, current.z + width / 2);
+		glColor3f(current.r, current.g, current.b);
+		glVertex3f(current.x, current.y, current.z - width / 2);
+		glColor3f(next.r, next.g, next.b);
+		glVertex3f(next.x, next.y, next.z - width / 2);
+
+		glColor3f(current.r, current.g, current.b);
+		glVertex3f(current.x, current.y, current.z + width / 2);
+		glColor3f(next.r, next.g, next.b);
+		glVertex3f(next.x, next.y, next.z - width / 2);
+		glColor3f(next.r, next.g, next.b);
+		glVertex3f(next.x, next.y, next.z + width / 2);
+		glEnd();
+		if (i == 0) {
+			puntiuomo[20] = current;
+		}
+		if (i == floor(res / 4)) {
+			puntiuomo[21] = current;
+		}
+		if (i == floor(res / 2)) {
+			puntiuomo[22] = current;
+		}
+	}
+}
+
+void MyModel::drawHeadWall(Vertex center, float radius, float width) {
+	int res = 40;
+	centrotesta = center;
+	for (int i = 0; i < res; i++) {
+		// Current point
+		float theta = 2.0f * PI * float(i) / float(res);
+		float x = radius * cos(theta) + center.x;
+		float y = radius * sin(theta) + center.y;
+		Vertex current = center;
+		current.SetP(x, y, center.z);
+		// Next point
+		theta = 2.0f * PI * float(i + 1) / float(res);
+		x = radius * cos(theta) + center.x;
+		y = radius * sin(theta) + center.y;
+		Vertex next = center;
+		next.SetP(x, y, center.z);
+		glBegin(GL_TRIANGLES);
+		glColor3f(center.r, center.g, center.b);
+		glVertex3f(center.x, center.y, center.z + width / 2);
+		glColor3f(current.r, current.g, current.b);
+		glVertex3f(current.x, current.y, current.z + width / 2);
+		glColor3f(next.r, next.g, next.b);
+		glVertex3f(next.x, next.y, next.z + width / 2);
+
+		glColor3f(current.r, current.g, current.b);
+		glVertex3f(current.x, current.y, current.z - width / 2);
+		glColor3f(center.r, center.g, center.b);
+		glVertex3f(center.x, center.y, center.z - width / 2);
+		glColor3f(next.r, next.g, next.b);
+		glVertex3f(next.x, next.y, next.z - width / 2);
+
+		glColor3f(current.r, current.g, current.b);
+		glVertex3f(current.x, current.y, current.z + width / 2);
+		glColor3f(current.r, current.g, current.b);
+		glVertex3f(current.x, current.y, current.z - width / 2);
+		glColor3f(next.r, next.g, next.b);
+		glVertex3f(next.x, next.y, next.z - width / 2);
+
+		glColor3f(current.r, current.g, current.b);
+		glVertex3f(current.x, current.y, current.z + width / 2);
+		glColor3f(next.r, next.g, next.b);
+		glVertex3f(next.x, next.y, next.z - width / 2);
+		glColor3f(next.r, next.g, next.b);
+		glVertex3f(next.x, next.y, next.z + width / 2);
+		glEnd();
+		puntitesta[i] = current;
 	}
 }

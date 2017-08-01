@@ -3,18 +3,10 @@
 #include "vertex.h"
 #include <vector>
 #include <ctime>
-#define nP 33
 
 
 class MyModel {
 public:
-	/* Stage
-	 * 0: startscreen
-	 * 1: controls
-	 * 2: game
-	 * 3: quit
-	 */
-	int stage;
 	// OpenGL
 	HDC			hDC;
 	HGLRC		hRC;
@@ -69,12 +61,6 @@ private:
 	double PlayerThickness;
 	double PlayerBodyHeight;
 	Vertex a, b, c, d;
-	Vertex CheckPoints[33];
-	
-	boolean checkIn=true;
-
-	Vertex Body[4];
-	Vertex HoleBody[20];
 
 	// Difficulty
 	double size;
@@ -95,7 +81,6 @@ private:
 	// Hole
 	Vertex holePosition;
 	double holeRotation;
-	Vertex HolePoints[nP];
 
 	// TEST
 	double Rotx = 0.0;
@@ -176,19 +161,26 @@ public:
 	~MyModel() {
 		this->KillFont();
 	}
-	//void isInside(Vertex x);
+
 	void Lose(int a);
 	boolean lost();
 	
 	boolean CheckPoint();
 	boolean included(Vertex v, Vertex* po);
+	boolean includedT(Vertex v, Vertex* po);
+	boolean checkIncludedT(Vertex v, Vertex* po);
 
 	Vertex puntimuro[4];
 	Vertex braccioULmuro[4];
 	Vertex braccioURmuro[4];
 	Vertex braccioLLmuro[4];
 	Vertex braccioLRmuro[4];
-	Vertex puntiuomo[20];
+	Vertex puntiuomo[23];
+	Vertex puntitesta[40];
+	Vertex centrotesta;
+
+	void drawHead(Vertex center, float radius, float width);
+	void drawHeadWall(Vertex center, float radius, float width);
 };
 
 extern class MyModel Data;
