@@ -15,7 +15,7 @@
 #pragma warning(disable:4996)
 
 MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), fps(0), cursor(true), captured(false), StartScreen(true), Perso(false), fovy(45.0), RotX_a(0), RotY_a(0) {
-	//butt
+	// butt
 	buttonWidth = 4.5;
 	buttonHeight = 1.5;
 	cursorWidth = 1.2;
@@ -159,7 +159,9 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	
 	// Body
 	Vertex ba, bb, bc, bd, be, bf, bg, bh;
+	position.SetColor(0.0, 0.0, 0.0);
 	ba = bb = bc = bd = be = bf = bg = bh = position;
+
 
 	ba.x = position.x - (size*PlayerThickness / 2)*cos(rotation) + (PlayerBodyHeight * (size / 2) / 2)* sin(rotation);
 	bb.x = position.x + (size*PlayerThickness / 2)*cos(rotation) + (PlayerBodyHeight * (size / 2) / 2)* sin(rotation);
@@ -196,13 +198,7 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	corpo_top.Draw();
 	Rect corpo_bottom(be, bf, bb, ba);
 	corpo_bottom.Draw();
-	glBindTexture(GL_TEXTURE_2D, texture[20]);
-	corpo_front.DrawTextures();
-	corpo_back.DrawTextures();
-	corpo_right.DrawTextures();
-	corpo_left.DrawTextures();
-	corpo_top.DrawTextures();
-	corpo_bottom.DrawTextures();
+
 	// salvataggio punti per check
 	puntimuro[0] = ba;
 	puntimuro[1] = bb;
@@ -291,13 +287,6 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 
 		Rect arm_estremo_b(xe, xf, xb, xa);
 		arm_estremo_b.Draw();
-
-		arm_front.DrawTextures();
-		arm_back.DrawTextures();
-		arm_right.DrawTextures();
-		arm_left.DrawTextures();
-		arm_estremo_a.DrawTextures();
-		arm_estremo_b.DrawTextures();
 
 		if (i == 0) {
 			alpha = PI / 6 * 4;
@@ -664,7 +653,9 @@ void MyModel::DrawGame() {
 		glTranslatef(0.0, -2.0, -22.0);
 		glColor3f(1.0f, 0.0f, 0.0f);
 		glRasterPos3f(2.0, -5.0, 5.0);
+		glDisable(GL_DEPTH_TEST);
 		this->glPrint("Score: %d", score);
+		glEnable(GL_DEPTH_TEST);
 	}
 	else {
 		// Cosa fare quando perso
@@ -793,13 +784,17 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[21] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[21]);
 
-	texture[22] = SOIL_load_OGL_texture("../Data/lose.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[22] = SOIL_load_OGL_texture("../Data/blood.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[22] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[22]);
 
 	texture[23] = SOIL_load_OGL_texture("../Data/testa.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[23] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[23]);
+
+	texture[24] = SOIL_load_OGL_texture("../Data/lose.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[24] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[24]);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -885,22 +880,71 @@ void MyModel::SetLevel(void) {
 
 void MyModel::Lose(int score) {
 	Perso = true;
-	glLoadIdentity();
-	glTranslatef(0.0, 0.0, -2.0);
-	glRotatef(0.0, 1.0, 0.0, 0.0);
-	glRotatef(0.0, 0.0, 1.0, 0.0);
+	glTranslatef(0.0, 0.0, -7.0);
+	glRotatef(RotX_a, 1.0, 0.0, 0.0);
+	glRotatef(RotY_a, 0.0, 1.0, 0.0);
+
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	wallPosition = 10.0 - wallProf;
+
+
 	Vertex a, b, c, d;
-	double l=5.0;
-	
-	a.SetP(-1.0, -1.0 , 0.0);
-	b.SetP(1.0, -1.0 , 0.0);
-	c.SetP(1.0, 1.0 , 0.0);
-	d.SetP(-1.0, 1.0 , 0.0);
+
+	double l = 1.5;
+	//per essere sicuri non 'sbordi'
+	l = abs(size*PlayerBodyHeight / 5 * 2 * cos(45));
+
+
+	Vertex center;
+
+	center.x = PlayerPosition.x;
+	center.y = PlayerPosition.y;
+	center.z = PlayerPosition.z;
+
+
+
+	a.SetP(center.x - l, center.y - l, center.z);
+	b.SetP(center.x + l, center.y - l, center.z);
+	c.SetP(center.x + l, center.y + l, center.z);
+	d.SetP(center.x - l, center.y + l, center.z);
 	
 	Rect lost(a,b,c,d);
 	lost.Draw();
+
+	
+	glBindTexture(GL_TEXTURE_2D, texture[0]);
+	this->DrawWall();
+	this->DrawFloor();
+
+	
 	glBindTexture(GL_TEXTURE_2D, texture[22]);
 	lost.DrawTextures();
+
+	this->DrawPlayerOnWall(holePosition, randomR, size);
+
+
+
+	// GameOver
+	// includere glut!
+	/*
+	Vertex e, f, g, h;
+	e.z=f.z=g.z=h.z=10.0;
+	float width = glutGet(GLUT_WINDOW_WIDTH);
+	float eight = glutGet(GLUT_WINDOW_HEIGHT);
+	e.x = center.x - width/2;
+	e.y = center.y - eight/2;
+	f.x = center.x + width/2;
+	f.y = center.y - eight/2;
+	g.x = center.x + width/2;
+	g.y = center.y + eight/2;
+	h.x = center.x - width/2;
+	h.y = center.y + eight/2;
+
+	Rect gameover(e, f, g, h);
+	gameover.Draw();
+	glBindTexture(GL_TEXTURE_2D, texture[24]);
+	gameover.DrawTextures();
+	*/
 }
 
 void MyModel::glPrint(const char * fmt, ...) {

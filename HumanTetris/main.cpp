@@ -436,9 +436,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		}
 		if (!Data.lost()) {
-			
+
 			if (die->isPlaying()) die->reset();
 			else die->play();
+			
 		}
 	}
 	// KillGLWindow();
