@@ -254,7 +254,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	OutputStreamPtr limit(OpenSound(device, "../Data/hurt.wav", false));
 	OutputStreamPtr stupid(OpenSound(device, "../Data/stupid.wav", false));
 	OutputStreamPtr butt(OpenSound(device, "../Data/butt.wav", false));
-	OutputStreamPtr die(OpenSound(device, "../Data/smash.wav", false));
+	OutputStreamPtr die(OpenSound(device, "../Data/Nelson.wav", false));
 
 	butt->setVolume(0.4f);
 
@@ -435,10 +435,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 
 		}
-		if (!Data.lost()) {
+		if (Data.PersoAudio) {
 
 			if (die->isPlaying()) die->reset();
 			else die->play();
+			Data.PersoAudio = false;
 			
 		}
 	}

@@ -25,6 +25,7 @@ public:
 	double		Full_elapsed;
 	bool		StartScreen;
 	bool		Perso;
+	bool		PersoAudio;
 	GLuint		texture[50];
 	GLuint		base;
 	GLdouble	fovy;

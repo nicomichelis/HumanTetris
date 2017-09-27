@@ -625,7 +625,7 @@ void MyModel::DrawGame() {
 		}
 		else {
 			wallPosition = -10.0;
-			diff += 0.001;
+			diff += 0.0001;
 			if (size > 2)
 				size -= 0.1;
 			Randomize();
@@ -643,6 +643,7 @@ void MyModel::DrawGame() {
 		if (wallPosition >= 10) {
 			if (!CheckPoint()) {
 				Perso = true;
+				PersoAudio = true;
 			}
 		}
 		this->SetProjection();
@@ -880,7 +881,7 @@ void MyModel::SetLevel(void) {
 }
 
 void MyModel::Lose(int score) {
-	Perso = true;
+	// Perso = true;
 	glTranslatef(0.0, 0.0, -7.0);
 	glRotatef(RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(RotY_a, 0.0, 1.0, 0.0);
@@ -892,7 +893,7 @@ void MyModel::Lose(int score) {
 	Vertex a, b, c, d;
 
 	double l = 1.5;
-	//per essere sicuri non 'sbordi'
+	// Per essere sicuri non 'sbordi'
 	l = abs(size*PlayerBodyHeight / 5 * 2 * cos(45));
 
 
