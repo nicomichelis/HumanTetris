@@ -680,6 +680,7 @@ bool MyModel::InitGL(void) {
 	if (!this->LoadGLTextures()) {
 		return false;
 	}
+
 	glEnable(GL_TEXTURE_2D);
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);
