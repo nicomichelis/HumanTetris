@@ -216,6 +216,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	case WM_SIZE:
 		Data.ReSizeGLScene(LOWORD(lParam), HIWORD(lParam));
 		return 0;
+		/*
 	case WM_MOUSEWHEEL:
 		int t, z;
 		
@@ -229,6 +230,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 		
 			return 0;
 		
+
+	*/
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }

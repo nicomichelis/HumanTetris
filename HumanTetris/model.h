@@ -87,6 +87,12 @@ private:
 	double Rotx = 0.0;
 	double Roty = 0.0;
 
+	// Die
+	Vertex bloodDie;
+	boolean PersoBlood;
+	// Coordinate per il sangue
+	Vertex centerBlood;
+
 
 public:
 	

@@ -644,6 +644,7 @@ void MyModel::DrawGame() {
 			if (!CheckPoint()) {
 				Perso = true;
 				PersoAudio = true;
+				PersoBlood = true;
 			}
 		}
 		this->SetProjection();
@@ -897,18 +898,20 @@ void MyModel::Lose(int score) {
 	l = abs(size*PlayerBodyHeight / 5 * 2 * cos(45));
 
 
-	Vertex center;
+	
 
-	center.x = PlayerPosition.x;
-	center.y = PlayerPosition.y;
-	center.z = PlayerPosition.z;
+	if (PersoBlood) {
+		centerBlood.x = PlayerPosition.x;
+		centerBlood.y = PlayerPosition.y;
+		centerBlood.z = PlayerPosition.z;
+		PersoBlood = false;
+	}
 
 
-
-	a.SetP(center.x - l, center.y - l, center.z);
-	b.SetP(center.x + l, center.y - l, center.z);
-	c.SetP(center.x + l, center.y + l, center.z);
-	d.SetP(center.x - l, center.y + l, center.z);
+	a.SetP(centerBlood.x - l, centerBlood.y - l, centerBlood.z);
+	b.SetP(centerBlood.x + l, centerBlood.y - l, centerBlood.z);
+	c.SetP(centerBlood.x + l, centerBlood.y + l, centerBlood.z);
+	d.SetP(centerBlood.x - l, centerBlood.y + l, centerBlood.z);
 	
 	Rect lost(a,b,c,d);
 	lost.Draw();
@@ -921,7 +924,9 @@ void MyModel::Lose(int score) {
 	
 	glBindTexture(GL_TEXTURE_2D, texture[22]);
 	lost.DrawTextures();
-
+	// if perché prenda il punto in cui è morto e non si possa più modificare
+	
+	// Per non avere sangue sul buco
 	this->DrawPlayerOnWall(holePosition, randomR, size);
 
 
