@@ -388,6 +388,28 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					Data.setScene(a);
 				
 				}
+				if (Data.Perso == true) {
+					if (!stream->isPlaying()) {
+						stream->reset();
+						stream->play();
+					}
+					Data.Perso = false;
+					Vertex x;
+					x.x = CS.x1;
+					x.y = CS.y1;
+					x.z = CS.z1;
+
+					x.SetColor(1.0, 0.5, 0.5);
+					Data.SetPlayerPosition(x);
+					Data.SetPlayerRotation(0.0);
+					Data.SetWallPosition(CS.wallz);
+					glTranslatef(0.0, -2.0, 0.0);
+					Data.RotX_a = 0.0;
+					Data.RotY_a = 0.0; // Reset perspective
+					Data.SetLevel();
+					Data.fovy = 45.0; // Reset zoom
+					Data.setScene(0);
+				}
 			}
 			
 			if (Data.keys[VK_ESCAPE]) {
