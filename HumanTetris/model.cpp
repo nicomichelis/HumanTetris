@@ -611,7 +611,7 @@ void MyModel::DrawCommands() {
 
 void MyModel::DrawGame() {
 	// POW
-	glTranslatef(0.0, -2.0, 0.0);
+	glTranslatef(0.0, -2.0, -5.0);
 	glRotatef(RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(RotY_a, 0.0, 1.0, 0.0);
 
@@ -654,7 +654,7 @@ void MyModel::DrawGame() {
 		glPushMatrix();
 		glTranslatef(0.0, -2.0, -22.0);
 		glColor3f(1.0f, 0.0f, 0.0f);
-		glRasterPos3f(2.0, -5.0, 5.0);
+		glRasterPos3f(5.0, 8.0, 5.0);
 		glDisable(GL_DEPTH_TEST);
 		this->glPrint("Score: %d", score);
 		glEnable(GL_DEPTH_TEST);
