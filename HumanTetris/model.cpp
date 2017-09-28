@@ -640,7 +640,7 @@ void MyModel::DrawGame() {
 
 		glDisable(GL_TEXTURE);
 		// Collisioni
-		if (wallPosition >= 10) {
+		if (wallPosition >= (10 - wallProf)) {
 			if (!CheckPoint()) {
 				Perso = true;
 				PersoAudio = true;
@@ -883,10 +883,11 @@ void MyModel::SetLevel(void) {
 
 void MyModel::Lose(int score) {
 	// Perso = true;
+	/*
 	glTranslatef(0.0, 0.0, -7.0);
 	glRotatef(RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(RotY_a, 0.0, 1.0, 0.0);
-
+	*/
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	wallPosition = 10.0 - wallProf;
 
