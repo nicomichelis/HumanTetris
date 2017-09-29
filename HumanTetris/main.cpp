@@ -379,6 +379,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 			}
 			if (Data.keys[VK_RETURN]) {
+
 				if (Data.StartScreen == TRUE) {
 					int a;
 					a = Data.getCounterButtons();
@@ -389,7 +390,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				
 				}
 				if (Data.Perso == true) {
-					if (!stream->isPlaying()) {
+					if (!stream->isPlaying() && Data.musicON) {
 						stream->reset();
 						stream->play();
 					}
@@ -415,10 +416,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (Data.keys[VK_ESCAPE]) {
 				// Torna alla schermata iniziale
 				// Modify
-				if (!stream->isPlaying()) {
+				if (!stream->isPlaying() && Data.musicON) {
 					stream->reset();
 					stream->play();
 				}
+				Data.gameOver.y = 8;
 
 				Data.Perso = false;
 				Vertex x;
@@ -457,10 +459,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (Data.keys['M']) {
 				Data.keys['M'] = FALSE;
 				if (stream->isPlaying()) {
-					stream->stop();				
+					stream->stop();	
+					Data.musicON = false;
 				}
 				else {
 					stream->play();
+					Data.musicON = true;
 					}
 				
 			}
@@ -468,12 +472,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		}
 		if (Data.PersoAudio) {
-
+			Data.gameOver.y = 8;
 			if (die->isPlaying()) die->reset();
 			else die->play();
 			Data.PersoAudio = false;
-			stream->stop();
-			
+			stream->stop();			
 		}
 
 	}

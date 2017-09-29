@@ -56,6 +56,14 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 	diff = 0.002;
 	score = 0;
 
+	// GameOver texture
+	gameOver.x = 0;
+	gameOver.y = 4;
+	gameOver.z = - 6.2;
+
+	// Music
+	musicON = true;
+
 	// Init limits
 	srand((unsigned)time(NULL));
 	limitesuperiore = wallAltezza - (size*PlayerBodyHeight / 2 + size*PlayerHeadSize * 2);
@@ -653,16 +661,32 @@ void MyModel::DrawGame() {
 		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 		glPushMatrix();
 		glTranslatef(0.0, -2.0, -22.0);
-		glColor3f(1.0f, 0.0f, 0.0f);
-		glRasterPos3f(5.0, 8.0, 5.0);
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glRasterPos3f(-8.5, 8.0, 5.0);
 		glDisable(GL_DEPTH_TEST);
 		this->glPrint("Score: %d", score);
+		glRasterPos3f(-8.5, 7.5, 5.0);
+		this->glPrint("Best Score: ");
+		glRasterPos3f(-8.5, 7.0, 5.0);
+		if(musicON)
+			this->glPrint("Music ON");
+		else
+			this->glPrint("Music OFF");
 		glEnable(GL_DEPTH_TEST);
 	}
 	else {
 		// Cosa fare quando perso
 		wallPosition = -20.0;
 		Lose(score);
+
+		
+
+		/*
+		for (loseCamera = 0; loseCamera < gameOver.y; loseCamera = loseCamera + 0.1 ) {
+			glTranslatef(0.0,0.1,0.0);
+		}
+		*/
+
 		/*
 		if (die->isPlaying()) die->reset();
 		else die->play();
@@ -799,6 +823,7 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[24] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[24]);
 
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	return true;
@@ -888,6 +913,9 @@ void MyModel::Lose(int score) {
 	glRotatef(RotX_a, 1.0, 0.0, 0.0);
 	glRotatef(RotY_a, 0.0, 1.0, 0.0);
 	*/
+
+
+
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	wallPosition = 10.0 - wallProf;
 
@@ -931,28 +959,52 @@ void MyModel::Lose(int score) {
 	this->DrawPlayerOnWall(holePosition, randomR, size);
 
 
+	// Spostare punto di vista
+	if (gameOver.y > wallAltezza / 2) {
+		gameOver.y -= 0.001;
+	}
+	this->SetProjection();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glPushMatrix();
+	glTranslatef(0.0, -3.2, 0.0);
 
-	// GameOver
-	// includere glut!
-	/*
-	Vertex e, f, g, h;
-	e.z=f.z=g.z=h.z=10.0;
-	float width = glutGet(GLUT_WINDOW_WIDTH);
-	float eight = glutGet(GLUT_WINDOW_HEIGHT);
-	e.x = center.x - width/2;
-	e.y = center.y - eight/2;
-	f.x = center.x + width/2;
-	f.y = center.y - eight/2;
-	g.x = center.x + width/2;
-	g.y = center.y + eight/2;
-	h.x = center.x - width/2;
-	h.y = center.y + eight/2;
+	Vertex g0, g1, g2, g3;
+	double step = 1.0;
+		
+	g0.SetP(gameOver.x - 4.4, gameOver.y - 2.9, gameOver.z);
+	g1.SetP(gameOver.x + 4.4, gameOver.y - 2.9, gameOver.z);
+	g2.SetP(gameOver.x + 4.4, gameOver.y + 2.9, gameOver.z);
+	g3.SetP(gameOver.x - 4.4, gameOver.y + 2.9, gameOver.z);
 
-	Rect gameover(e, f, g, h);
-	gameover.Draw();
+	// Disegno scritta GameOver
+	Rect loseDraw(g0, g1, g2, g3);
+	loseDraw.Draw();
 	glBindTexture(GL_TEXTURE_2D, texture[24]);
-	gameover.DrawTextures();
-	*/
+	loseDraw.DrawTextures();
+
+	if (gameOver.y <= wallAltezza / 2) {
+		this->SetProjection();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+		glPushMatrix();
+		glTranslatef(0.0, 0.0, 0.0);
+		glColor3f(0.0f, 1.0f, 0.0f);
+		glRasterPos3f(-0.7, -1.15, -5.0);
+		glDisable(GL_DEPTH_TEST);
+		this->glPrint("Your score: %d", score);	
+		glRasterPos3f(-0.7, -1.35, -5.0);
+		this->glPrint("Best score:");
+		glRasterPos3f(-2.05, -1.8, -5.0);
+		this->glPrint("Press ENTER to retry or ESC to return");
+		glEnable(GL_DEPTH_TEST);
+	}
+
+	
+
+	
 }
 
 void MyModel::glPrint(const char * fmt, ...) {

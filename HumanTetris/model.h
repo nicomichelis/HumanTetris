@@ -31,6 +31,10 @@ public:
 	GLdouble	fovy;
 	GLfloat		RotX_a;
 	GLfloat		RotY_a;
+	double		loseCamera;
+	Vertex		gameOver;
+	bool		musicON;
+	
 
 
 private:
