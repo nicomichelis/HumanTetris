@@ -219,7 +219,6 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 	puntimuro[2] = bc;
 	puntimuro[3] = bd;
 
-
 	// Arms
 	// Calcolo con pitagora la lunghezza della diagonale del corpo del player (distanza centro - angolo )
 	double diag = sqrt(pow((PlayerBodyHeight / 2), 2.0) + pow((size*PlayerThickness / 2), 2.0));
@@ -284,7 +283,6 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 		xg = xc;
 		xh = xd;
 
-
 		xe.z = xf.z = xg.z = xh.z = position.z - spessore / 2;
 		
 		Rect arm_back(xh, xg, xf, xe);
@@ -331,10 +329,8 @@ void MyModel::DrawPlayerOnWall(Vertex position, double rotation, double size) {
 			braccioLRmuro[1] = xb;
 			braccioLRmuro[2] = xc;
 			braccioLRmuro[3] = xd;
-		}
-			
+		}		
 	}
-	
 }
 
 void MyModel::DrawPlayer() {
@@ -571,7 +567,6 @@ void MyModel::DrawCommands() {
 	kc.SetColor(0.0, 0.0, 0.0);
 	kd.SetColor(0.0, 0.0, 0.0);
 
-
 	kd.SetP(-marginx, marginy, 0.0);
 	ka.SetP(kd.x, kd.y - butt, kd.z);
 	kc.SetP(kd.x + butt, kd.y, kd.z);
@@ -684,19 +679,6 @@ void MyModel::DrawGame() {
 		// Cosa fare quando perso
 		wallPosition = -20.0;
 		Lose(score);
-
-		
-
-		/*
-		for (loseCamera = 0; loseCamera < gameOver.y; loseCamera = loseCamera + 0.1 ) {
-			glTranslatef(0.0,0.1,0.0);
-		}
-		*/
-
-		/*
-		if (die->isPlaying()) die->reset();
-		else die->play();
-		*/
 	}
 }
 
@@ -734,7 +716,6 @@ bool MyModel::InitGL(void) {
 		bestscore = 0;
 	}
 	myfile.close();
-
 
 	glEnable(GL_TEXTURE_2D);
 	glShadeModel(GL_SMOOTH);
@@ -852,7 +833,6 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[24] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[24]);
 
-
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	return true;
@@ -940,7 +920,6 @@ void MyModel::Lose(int score) {
 	wallPosition = 10.0 - wallProf;
 
 	Vertex a, b, c, d;
-
 	double l = 1.5;
 	// Per essere sicuri non 'sbordi'
 	l = abs(size*PlayerBodyHeight / 5 * 2 * cos(45));
@@ -952,7 +931,6 @@ void MyModel::Lose(int score) {
 		PersoBlood = false;
 	}
 
-
 	a.SetP(centerBlood.x - l, centerBlood.y - l, centerBlood.z);
 	b.SetP(centerBlood.x + l, centerBlood.y - l, centerBlood.z);
 	c.SetP(centerBlood.x + l, centerBlood.y + l, centerBlood.z);
@@ -960,12 +938,10 @@ void MyModel::Lose(int score) {
 	
 	Rect lost(a,b,c,d);
 	lost.Draw();
-
 	
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	this->DrawWall();
 	this->DrawFloor();
-
 	
 	glBindTexture(GL_TEXTURE_2D, texture[22]);
 	lost.DrawTextures();

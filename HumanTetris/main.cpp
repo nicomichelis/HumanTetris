@@ -1,10 +1,3 @@
-//	Cosi` vede la rotella del mouse ...
-//	needed to operate the mouse wheel..
-#if(_WIN32_WINNT < 0x400)
-#define _WIN32_WINNT	0x0400
-#endif
-
-
 //  INCLUDE
 #include <windows.h>      // all windows..
 #include <gl\gl.h>        // OPENGL
@@ -190,10 +183,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 			CS.ldy = HIWORD(lParam) - CS.lys;
 			CS.lxs = LOWORD(lParam);
 			CS.lys = HIWORD(lParam);
-			Data.RotX_a += (GLfloat)(CS.ldy * 0.4);
-			Data.RotY_a += (GLfloat)(CS.ldx * 0.4);
+			if (!Data.StartScreen) {
+				Data.RotX_a += (GLfloat)(CS.ldy * 0.4);
+				Data.RotY_a += (GLfloat)(CS.ldx * 0.4);
+			}
 			InvalidateRect(hWnd, NULL, FALSE);
-			
+		
 		}
 		break;
 	case WM_SYSCOMMAND:
@@ -218,22 +213,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 	case WM_SIZE:
 		Data.ReSizeGLScene(LOWORD(lParam), HIWORD(lParam));
 		return 0;
-		/*
-	case WM_MOUSEWHEEL:
-		int t, z;
-		
-			z = (short)HIWORD(wParam);
-			t = (z / WHEEL_DELTA);
-			// Disabilito lo zoom in 1
-			if(Data.getCounterButtons()!=1 )
-			Data.fovy += t * 0.5;
-
-			InvalidateRect(hWnd, NULL, FALSE);
-		
-			return 0;
-		
-
-	*/
 	}
 	return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
@@ -244,8 +223,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (!CreateGLWindow("Human Tetris", 640, 480, 16)) {
 		return 0;
 	}
-
-
 	//  AUDIO - start
 	AudioDevicePtr device(OpenDevice());
 	if (!device) {
@@ -319,16 +296,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (Data.keys[VK_DOWN]) {
 				Data.keys[VK_DOWN] = FALSE;
 				
-				if (Data.StartScreen ==TRUE) {
-					
+				if (Data.StartScreen ==TRUE) {					
 					butt->play();
 					int a, b;
 					a = Data.getCounterButtons();
 					b = Data.getNbuttons();
 					
-						if (a==b)
-						{
-
+						if (a==b){
 							Data.SetCounterButtons(0);
 						}
 						else
@@ -376,14 +350,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					Data.SetPlayerPosition(temp);
 				}
 				else {
-
 					// Sonoro limite
 					if (limit->isPlaying()) limit->reset();
 					else limit->play();
 				}
 			}
 			if (Data.keys[VK_RETURN]) {
-
 				if (Data.StartScreen == TRUE) {
 					int a;
 					a = Data.getCounterButtons();
@@ -412,7 +384,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					Data.RotX_a = 0.0;
 					Data.RotY_a = 0.0; // Reset perspective
 					Data.SetLevel();
-					Data.fovy = 45.0; // Reset zoom
 					Data.setScene(0);
 				}
 			}
@@ -440,7 +411,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				Data.RotX_a = 0.0;
 				Data.RotY_a = 0.0; // Reset perspective
 				Data.SetLevel();
-				//Data.fovy = 45.0; // Reset zoom
 				Data.StartScreen = TRUE;
 				
 			}
