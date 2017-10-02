@@ -34,6 +34,7 @@ public:
 	double		loseCamera;
 	Vertex		gameOver;
 	bool		musicON;
+	int			bestscore;
 	
 
 

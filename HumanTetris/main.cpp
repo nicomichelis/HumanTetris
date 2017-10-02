@@ -15,6 +15,7 @@
 #include "model.h"
 #include "audiere.h"
 #include <iostream>
+#include <fstream>
 #include "SOIL.h"
 
 using namespace audiere;
@@ -27,7 +28,8 @@ class MyModel Data;
 
 typedef struct CommonData {
 	bool lCaptured;
-	double lxs, lys;     // Posizione iniziale / initial position0.0, 1.0, 10.0
+	double lxs, lys;    
+	// Posizione iniziale / initial position0.0, 1.0, 10.0
 	double x1 = 0.0, y1 = 1.0, z1 = 10.0;
 
 	double wallz = -10.0;// z iniziale del muro
@@ -242,6 +244,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (!CreateGLWindow("Human Tetris", 640, 480, 16)) {
 		return 0;
 	}
+
+
 	//  AUDIO - start
 	AudioDevicePtr device(OpenDevice());
 	if (!device) {

@@ -7,6 +7,10 @@
 #include <stdio.h>
 #include <string>
 #include <math.h>
+#include <iostream>
+#include <fstream>
+
+using namespace std;
 
 #pragma comment( lib, "opengl32.lib" )			
 #pragma comment( lib, "glu32.lib" )					
@@ -666,7 +670,7 @@ void MyModel::DrawGame() {
 		glDisable(GL_DEPTH_TEST);
 		this->glPrint("Score: %d", score);
 		glRasterPos3f(-8.5, 7.5, 5.0);
-		this->glPrint("Best Score: ");
+		this->glPrint("Best score: %d", bestscore);
 		glRasterPos3f(-8.5, 7.0, 5.0);
 		if(musicON)
 			this->glPrint("Music ON");
@@ -706,6 +710,29 @@ bool MyModel::InitGL(void) {
 	if (!this->LoadGLTextures()) {
 		return false;
 	}
+
+
+	// Lettura best score
+	ifstream myfile;
+
+	myfile.open("score.txt");
+	if (myfile.is_open()) {
+		string s;
+		string::size_type sz;
+		getline(myfile,s);
+		if (s.empty()) {
+			bestscore = 0;
+		}
+		else {
+
+			bestscore = stoi(s, &sz);
+		}
+	}
+	else {
+		bestscore = 0;
+	}
+	myfile.close();
+
 
 	glEnable(GL_TEXTURE_2D);
 	glShadeModel(GL_SMOOTH);
@@ -907,27 +934,14 @@ void MyModel::SetLevel(void) {
 }
 
 void MyModel::Lose(int score) {
-	// Perso = true;
-	/*
-	glTranslatef(0.0, 0.0, -7.0);
-	glRotatef(RotX_a, 1.0, 0.0, 0.0);
-	glRotatef(RotY_a, 0.0, 1.0, 0.0);
-	*/
-
-
-
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
 	wallPosition = 10.0 - wallProf;
-
 
 	Vertex a, b, c, d;
 
 	double l = 1.5;
 	// Per essere sicuri non 'sbordi'
 	l = abs(size*PlayerBodyHeight / 5 * 2 * cos(45));
-
-
-	
 
 	if (PersoBlood) {
 		centerBlood.x = PlayerPosition.x;
@@ -978,6 +992,16 @@ void MyModel::Lose(int score) {
 	g2.SetP(gameOver.x + 4.4, gameOver.y + 2.9, gameOver.z);
 	g3.SetP(gameOver.x - 4.4, gameOver.y + 2.9, gameOver.z);
 
+	// Bestscore valutazione, memorizzazione nuovo bestscore
+	if (bestscore < score) {
+		bestscore = score;
+		ofstream myfile;
+		myfile.open("score.txt");
+		if (myfile.is_open()) 
+			myfile << bestscore;
+
+	}
+
 	// Disegno scritta GameOver
 	Rect loseDraw(g0, g1, g2, g3);
 	loseDraw.Draw();
@@ -996,7 +1020,7 @@ void MyModel::Lose(int score) {
 		glDisable(GL_DEPTH_TEST);
 		this->glPrint("Your score: %d", score);	
 		glRasterPos3f(-0.7, -1.35, -5.0);
-		this->glPrint("Best score:");
+		this->glPrint("Best score: %d", bestscore);
 		glRasterPos3f(-2.05, -1.8, -5.0);
 		this->glPrint("Press ENTER to retry or ESC to return");
 		glEnable(GL_DEPTH_TEST);
