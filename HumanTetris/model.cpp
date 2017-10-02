@@ -825,13 +825,9 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[22] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[22]);
 
-	texture[23] = SOIL_load_OGL_texture("../Data/testa.jpg", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[23] = SOIL_load_OGL_texture("../Data/lose.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[23] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[23]);
-
-	texture[24] = SOIL_load_OGL_texture("../Data/lose.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
-	if (texture[24] == 0) return false;
-	glBindTexture(GL_TEXTURE_2D, texture[24]);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -983,7 +979,7 @@ void MyModel::Lose(int score) {
 	// Disegno scritta GameOver
 	Rect loseDraw(g0, g1, g2, g3);
 	loseDraw.Draw();
-	glBindTexture(GL_TEXTURE_2D, texture[24]);
+	glBindTexture(GL_TEXTURE_2D, texture[23]);
 	loseDraw.DrawTextures();
 
 	if (gameOver.y <= wallAltezza / 2) {

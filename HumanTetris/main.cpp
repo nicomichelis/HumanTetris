@@ -228,7 +228,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (!device) {
 		return 0;
 	}
-	OutputStreamPtr stream(OpenSound(device, "../Data/space.wav", true));
+	OutputStreamPtr stream(OpenSound(device, "../Data/song3.wav", true));
 	if (!stream) {
 		return 0;
 	}
@@ -236,7 +236,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	stream->setVolume(0.5f);
 	stream->play();
 	OutputStreamPtr limit(OpenSound(device, "../Data/hurt.wav", false));
-	OutputStreamPtr stupid(OpenSound(device, "../Data/stupid.wav", false));
 	OutputStreamPtr butt(OpenSound(device, "../Data/butt.wav", false));
 	OutputStreamPtr die(OpenSound(device, "../Data/Nelson.wav", false));
 
@@ -286,8 +285,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					}
 					else {
 						// Sonoro limite
-						if (limit->isPlaying()) limit->reset();
-						else limit->play();
+						if (Data.Perso==false){
+							if (limit->isPlaying()) limit->reset();
+							else limit->play();
+						}
 					}
 				}
 
@@ -321,8 +322,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					}
 					else {
 						// Sonoro limite
-						if (limit->isPlaying()) limit->reset();
-						else limit->play();
+						if (Data.Perso == false) {
+							if (limit->isPlaying()) limit->reset();
+							else limit->play();
+						}
 					}
 				}
 			}
@@ -337,8 +340,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 				else {
 					// Sonoro limite
-					if (limit->isPlaying()) limit->reset();
-					else limit->play();
+					if (Data.Perso == false) {
+						if (limit->isPlaying()) limit->reset();
+						else limit->play();
+					}
 				}
 			}
 			if (Data.keys[VK_RIGHT]) {
@@ -351,8 +356,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 				else {
 					// Sonoro limite
-					if (limit->isPlaying()) limit->reset();
-					else limit->play();
+					if (Data.Perso == false) {
+						if (limit->isPlaying()) limit->reset();
+						else limit->play();
+					}
 				}
 			}
 			if (Data.keys[VK_RETURN]) {
@@ -449,7 +456,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (die->isPlaying()) die->reset();
 			else die->play();
 			Data.PersoAudio = false;
-			stream->stop();			
+			stream->stop();	
 		}
 
 	}
