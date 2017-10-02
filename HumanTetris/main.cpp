@@ -440,8 +440,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				Data.RotX_a = 0.0;
 				Data.RotY_a = 0.0; // Reset perspective
 				Data.SetLevel();
-				Data.fovy = 45.0; // Reset zoom
-				//
+				//Data.fovy = 45.0; // Reset zoom
 				Data.StartScreen = TRUE;
 				
 			}

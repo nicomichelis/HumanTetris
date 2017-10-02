@@ -10,6 +10,8 @@
 #include <iostream>
 #include <fstream>
 
+#define diffinit 0.002
+
 using namespace std;
 
 #pragma comment( lib, "opengl32.lib" )			
@@ -57,7 +59,7 @@ MyModel::MyModel(): hDC(NULL), hRC(NULL), hWnd(NULL), active(true), frames(0), f
 
 	// Difficulty
 	size = 4; // da 4 si scende a max 2
-	diff = 0.002;
+	diff = diffinit;
 	score = 0;
 
 	// GameOver texture
@@ -637,7 +639,7 @@ void MyModel::DrawGame() {
 		}
 		else {
 			wallPosition = -10.0;
-			diff += 0.0001;
+			diff += 0.0005;
 			if (size > 2)
 				size -= 0.1;
 			Randomize();
@@ -929,7 +931,7 @@ void MyModel::KillFont(void) {
 
 void MyModel::SetLevel(void) {
 	size = 4; // da 4 si scende a max 2
-	diff = 0.01;
+	diff = diffinit;
 	score = 0;
 }
 
