@@ -419,6 +419,24 @@ void MyModel::DrawPlayer() {
 	xa = xb = xc = xd = xe = xf = xg = xh = ba;
 	Vertex centerArm;
 	for (int i = 0; i < 4; i++) {
+		// 0: braccio dx
+		if (i == 0) {
+			glBindTexture(GL_TEXTURE_2D, texture[28]);
+		}
+		// 1: braccio sx
+		if (i == 1) {
+			glBindTexture(GL_TEXTURE_2D, texture[28]);
+		}
+		// 2: gamba sx
+		if (i == 2) {
+			glBindTexture(GL_TEXTURE_2D, texture[29]);
+		}
+		// 3: gamba dx
+		if (i == 3) {
+			glBindTexture(GL_TEXTURE_2D, texture[28]);
+		}
+
+
 		// Coordinate del centro del braccio 'i'
 		centerArm.x = PlayerPosition.x + (ArmDist - ArmThickness)*cos(alpha + PlayerRotation);
 		centerArm.y = PlayerPosition.y + (ArmDist - ArmThickness)*sin(alpha + PlayerRotation);
@@ -442,7 +460,7 @@ void MyModel::DrawPlayer() {
 
 		Rect arm_front(xa, xb, xc, xd);
 
-		glBindTexture(GL_TEXTURE_2D, texture[28]);
+		
 		arm_front.DrawTextures();
 		
 		xe = xa;
@@ -867,6 +885,9 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[28] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[28]);
 
+	texture[29] = SOIL_load_OGL_texture("../Data/shoe2.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[29] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[29]);
 
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
