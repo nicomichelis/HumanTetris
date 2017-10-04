@@ -441,7 +441,9 @@ void MyModel::DrawPlayer() {
 		xd.z = centerArm.z;
 
 		Rect arm_front(xa, xb, xc, xd);
-		arm_front.Draw();
+
+		glBindTexture(GL_TEXTURE_2D, texture[28]);
+		arm_front.DrawTextures();
 		
 		xe = xa;
 		xf = xb;
@@ -450,20 +452,23 @@ void MyModel::DrawPlayer() {
 
 		xe.z = xf.z = xg.z = xh.z = PlayerPosition.z - ArmThickness / 2;
 
+	
 		Rect arm_back(xh, xg, xf, xe);
-		arm_back.Draw();
+		arm_back.DrawTextures();
 
 		Rect arm_left(xb, xf, xg, xc);
-		arm_left.Draw();
+		arm_left.DrawTextures();
 
 		Rect arm_right(xe, xa, xd, xh);
-		arm_right.Draw();
+		arm_right.DrawTextures();
 
 		Rect arm_estremo_a(xg, xh, xd, xc);
-		arm_estremo_a.Draw();
+		arm_estremo_a.DrawTextures();
 
 		Rect arm_estremo_b(xe, xf, xb, xa);
-		arm_estremo_b.Draw();
+		arm_estremo_b.DrawTextures();
+
+		glDisable(GL_TEXTURE_2D);
 
 		puntiuomo[4 + 4*i] = xa;
 		puntiuomo[5 + 4*i] = xa;
@@ -857,6 +862,10 @@ bool MyModel::LoadGLTextures(void) {
 	texture[27] = SOIL_load_OGL_texture("../Data/base3.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[27] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[27]);
+
+	texture[28] = SOIL_load_OGL_texture("../Data/shoe1.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[28] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[28]);
 
 
 
