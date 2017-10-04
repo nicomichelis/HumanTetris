@@ -26,7 +26,7 @@ public:
 	bool		StartScreen;
 	bool		Perso;
 	bool		PersoAudio;
-	GLuint		texture[50];
+	GLuint		texture[52];
 	GLuint		base;
 	GLdouble	fovy;
 	GLfloat		RotX_a;

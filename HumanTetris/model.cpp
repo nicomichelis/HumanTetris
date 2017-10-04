@@ -362,8 +362,11 @@ void MyModel::DrawPlayer() {
 	bd.y = PlayerPosition.y + (diag)*sin(PI - angle + PlayerRotation);
 	bd.z = PlayerPosition.z + PlayerThickness / 2;
 	
+
+	glBindTexture(GL_TEXTURE_2D, texture[25]);
+
 	Rect corpo_front(ba, bb, bc, bd);
-	corpo_front.Draw();
+	corpo_front.DrawTextures();
 	
 	be = ba;
 	bf = bb;
@@ -372,19 +375,29 @@ void MyModel::DrawPlayer() {
 	be.z = bf.z = bg.z = bh.z = PlayerPosition.z - PlayerThickness / 2;
 
 	Rect corpo_back(bf, be, bh, bg);
-	corpo_back.Draw();
-	Rect corpo_right(bb, bf, bg, bc);
-	corpo_right.Draw();
-	Rect corpo_left(be, ba, bd, bh);
-	corpo_left.Draw();
+	corpo_back.DrawTextures();
+
+	//top corpo
+	glBindTexture(GL_TEXTURE_2D, texture[27]);
 	Rect corpo_top(bd, bc, bg, bh);
-	corpo_top.Draw();
+	corpo_top.DrawTextures();
+
+	//sotto corpo
 	Rect corpo_bottom(be, bf, bb, ba);
-	corpo_bottom.Draw();
+	corpo_bottom.DrawTextures();
+
+	glBindTexture(GL_TEXTURE_2D, texture[26]);
+	// lati corpo
+	Rect corpo_right(bb, bf, bg, bc);
+	corpo_right.DrawTextures();
+	Rect corpo_left(be, ba, bd, bh);
+	corpo_left.DrawTextures();
 	puntiuomo[0] = ba;
 	puntiuomo[1] = bb;
 	puntiuomo[2] = bc;
 	puntiuomo[3] = bd;
+
+	glDisable(GL_TEXTURE_2D);
 
 	// Arms
 	double PlayerArmHeight = PlayerBodyHeight / 4*3;
@@ -829,6 +842,24 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[23] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[23]);
 
+	texture[24] = SOIL_load_OGL_texture("../Data/smile.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[24] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[24]);
+
+	texture[25] = SOIL_load_OGL_texture("../Data/base.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[25] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[25]);
+
+	texture[26] = SOIL_load_OGL_texture("../Data/base2.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[26] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[26]);
+
+	texture[27] = SOIL_load_OGL_texture("../Data/base3.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[27] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[27]);
+
+
+
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	return true;
@@ -1159,21 +1190,28 @@ void MyModel::drawHead(Vertex center, float radius, float width) {
 		y = radius * sin(theta) + center.y;
 		Vertex next = center;
 		next.SetP(x, y, center.z);
+		glBindTexture(GL_TEXTURE_2D,texture[24]);
+		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_TRIANGLES);
-		glColor3f(center.r, center.g, center.b);
+
+		glTexCoord2f(0.5, 0.5);
 		glVertex3f(center.x, center.y, center.z + width / 2);
-		glColor3f(current.r, current.g, current.b);
+		glTexCoord2f(((current.x - center.x) / radius) / 2 + 0.5, ((current.y - center.y) / radius) / 2 + 0.5);
 		glVertex3f(current.x, current.y, current.z + width / 2);
-		glColor3f(next.r, next.g, next.b);
+		glTexCoord2f(((next.x - center.x) / radius) / 2 + 0.5, ((next.y - center.y) / radius) / 2 + 0.5);
 		glVertex3f(next.x, next.y, next.z + width / 2);
 
-		glColor3f(current.r, current.g, current.b);
+		glTexCoord2f(((current.x - center.x) / radius) / 2 + 0.5, ((current.y - center.y) / radius) / 2 + 0.5);
 		glVertex3f(current.x, current.y, current.z - width / 2);
-		glColor3f(center.r, center.g, center.b);
+		glTexCoord2f(0.5, 0.5);
 		glVertex3f(center.x, center.y, center.z - width / 2);
-		glColor3f(next.r, next.g, next.b);
+		glTexCoord2f(((next.x - center.x) / radius) / 2 + 0.5, ((next.y - center.y) / radius) / 2 + 0.5);
 		glVertex3f(next.x, next.y, next.z - width / 2);
 
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+		glBegin(GL_TRIANGLES);
+		// I lati non hanno texture
 		glColor3f(current.r, current.g, current.b);
 		glVertex3f(current.x, current.y, current.z + width / 2);
 		glColor3f(current.r, current.g, current.b);
@@ -1188,15 +1226,6 @@ void MyModel::drawHead(Vertex center, float radius, float width) {
 		glColor3f(next.r, next.g, next.b);
 		glVertex3f(next.x, next.y, next.z + width / 2);
 		glEnd();
-		if (i == 0) {
-			puntiuomo[20] = current;
-		}
-		if (i == floor(res / 4)) {
-			puntiuomo[21] = current;
-		}
-		if (i == floor(res / 2)) {
-			puntiuomo[22] = current;
-		}
 	}
 }
 
