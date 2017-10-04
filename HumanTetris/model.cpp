@@ -421,11 +421,11 @@ void MyModel::DrawPlayer() {
 	for (int i = 0; i < 4; i++) {
 		// 0: braccio dx
 		if (i == 0) {
-			glBindTexture(GL_TEXTURE_2D, texture[28]);
+			glBindTexture(GL_TEXTURE_2D, texture[31]);
 		}
 		// 1: braccio sx
 		if (i == 1) {
-			glBindTexture(GL_TEXTURE_2D, texture[28]);
+			glBindTexture(GL_TEXTURE_2D, texture[30]);
 		}
 		// 2: gamba sx
 		if (i == 2) {
@@ -888,6 +888,14 @@ bool MyModel::LoadGLTextures(void) {
 	texture[29] = SOIL_load_OGL_texture("../Data/shoe2.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[29] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[29]);
+
+	texture[30] = SOIL_load_OGL_texture("../Data/arm1.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[30] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[30]);
+
+	texture[31] = SOIL_load_OGL_texture("../Data/arm2.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[31] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[31]);
 
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
