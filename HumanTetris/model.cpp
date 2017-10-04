@@ -418,7 +418,8 @@ void MyModel::DrawPlayer() {
 	Vertex ArmPos, xa, xb, xc, xd, xe, xf, xg, xh;
 	xa = xb = xc = xd = xe = xf = xg = xh = ba;
 	Vertex centerArm;
-	for (int i = 0; i < 4; i++) {
+	int i;
+	for (i = 0; i < 4; i++) {
 		// 0: braccio dx
 		if (i == 0) {
 			glBindTexture(GL_TEXTURE_2D, texture[31]);
@@ -471,15 +472,28 @@ void MyModel::DrawPlayer() {
 		xe.z = xf.z = xg.z = xh.z = PlayerPosition.z - ArmThickness / 2;
 
 	
-		Rect arm_back(xh, xg, xf, xe);
-		arm_back.DrawTextures();
-
 		Rect arm_left(xb, xf, xg, xc);
 		arm_left.DrawTextures();
 
 		Rect arm_right(xe, xa, xd, xh);
 		arm_right.DrawTextures();
 
+		if(i==0)
+			glBindTexture(GL_TEXTURE_2D, texture[30]);
+		if(i==1)
+			glBindTexture(GL_TEXTURE_2D, texture[31]);
+		if (i == 2)
+			glBindTexture(GL_TEXTURE_2D, texture[28]);
+		if (i == 3)
+			glBindTexture(GL_TEXTURE_2D, texture[29]);
+
+		Rect arm_back(xh, xg, xf, xe);
+		arm_back.DrawTextures();
+
+		if (i == 0 || i == 1)
+			glBindTexture(GL_TEXTURE_2D,texture[32]);
+		else
+			glBindTexture(GL_TEXTURE_2D, texture[33]);
 		Rect arm_estremo_a(xg, xh, xd, xc);
 		arm_estremo_a.DrawTextures();
 
@@ -896,6 +910,16 @@ bool MyModel::LoadGLTextures(void) {
 	texture[31] = SOIL_load_OGL_texture("../Data/arm2.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[31] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[31]);
+
+	texture[32] = SOIL_load_OGL_texture("../Data/arm3.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[32] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[32]);
+
+	texture[33] = SOIL_load_OGL_texture("../Data/shoe3.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	if (texture[33] == 0) return false;
+	glBindTexture(GL_TEXTURE_2D, texture[32]);
+
+
 
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
