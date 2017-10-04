@@ -1226,6 +1226,15 @@ void MyModel::drawHead(Vertex center, float radius, float width) {
 		glColor3f(next.r, next.g, next.b);
 		glVertex3f(next.x, next.y, next.z + width / 2);
 		glEnd();
+		if (i == 0) {
+			puntiuomo[20] = current;
+		}
+		if (i == floor(res / 4)) {
+			puntiuomo[21] = current;
+		}
+		if (i == floor(res / 2)) {
+			puntiuomo[22] = current;
+		}
 	}
 }
 
