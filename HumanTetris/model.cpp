@@ -1241,18 +1241,30 @@ void MyModel::drawHead(Vertex center, float radius, float width) {
 	int res = 40;
 	centrotesta = center;
 	for (int i = 0; i < res; i++) {
-		// Current point
+		// Current point for texture
 		float theta = 2.0f * PI * float(i) / float(res);
 		float x = radius * cos(theta) + center.x;
 		float y = radius * sin(theta) + center.y;
 		Vertex current = center;
 		current.SetP(x, y, center.z);
-		// Next point
+		// Current point
+		float theta2 = 2.0f * PI * float(i) / float(res) + this->PlayerRotation;
+		float xx = radius * cos(theta2) + center.x;
+		float yy = radius * sin(theta2) + center.y;
+		Vertex currentNT = center;
+		currentNT.SetP(xx, yy, center.z);
+		// Next point for texture
 		theta = 2.0f * PI * float(i + 1) / float(res);
 		x = radius * cos(theta) + center.x;
 		y = radius * sin(theta) + center.y;
 		Vertex next = center;
 		next.SetP(x, y, center.z);
+		// Next point
+		theta2 = 2.0f * PI * float(i + 1) / float(res) + this->PlayerRotation;
+		xx = radius * cos(theta2) + center.x;
+		yy = radius * sin(theta2) + center.y;
+		Vertex nextNT = center;
+		nextNT.SetP(xx, yy, center.z);
 		glBindTexture(GL_TEXTURE_2D,texture[24]);
 		glEnable(GL_TEXTURE_2D);
 		glBegin(GL_TRIANGLES);
@@ -1260,16 +1272,16 @@ void MyModel::drawHead(Vertex center, float radius, float width) {
 		glTexCoord2f(0.5, 0.5);
 		glVertex3f(center.x, center.y, center.z + width / 2);
 		glTexCoord2f(((current.x - center.x) / radius) / 2 + 0.5, ((current.y - center.y) / radius) / 2 + 0.5);
-		glVertex3f(current.x, current.y, current.z + width / 2);
+		glVertex3f(currentNT.x, currentNT.y, currentNT.z + width / 2);
 		glTexCoord2f(((next.x - center.x) / radius) / 2 + 0.5, ((next.y - center.y) / radius) / 2 + 0.5);
-		glVertex3f(next.x, next.y, next.z + width / 2);
+		glVertex3f(nextNT.x, nextNT.y, nextNT.z + width / 2);
 
 		glTexCoord2f(((current.x - center.x) / radius) / 2 + 0.5, ((current.y - center.y) / radius) / 2 + 0.5);
-		glVertex3f(current.x, current.y, current.z - width / 2);
+		glVertex3f(currentNT.x, currentNT.y, currentNT.z - width / 2);
 		glTexCoord2f(0.5, 0.5);
 		glVertex3f(center.x, center.y, center.z - width / 2);
 		glTexCoord2f(((next.x - center.x) / radius) / 2 + 0.5, ((next.y - center.y) / radius) / 2 + 0.5);
-		glVertex3f(next.x, next.y, next.z - width / 2);
+		glVertex3f(nextNT.x, nextNT.y, nextNT.z - width / 2);
 
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
