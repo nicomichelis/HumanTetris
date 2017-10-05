@@ -1276,6 +1276,7 @@ void MyModel::drawHead(Vertex center, float radius, float width) {
 		glTexCoord2f(((next.x - center.x) / radius) / 2 + 0.5, ((next.y - center.y) / radius) / 2 + 0.5);
 		glVertex3f(nextNT.x, nextNT.y, nextNT.z + width / 2);
 
+
 		glTexCoord2f(((current.x - center.x) / radius) / 2 + 0.5, ((current.y - center.y) / radius) / 2 + 0.5);
 		glVertex3f(currentNT.x, currentNT.y, currentNT.z - width / 2);
 		glTexCoord2f(0.5, 0.5);
@@ -1284,23 +1285,19 @@ void MyModel::drawHead(Vertex center, float radius, float width) {
 		glVertex3f(nextNT.x, nextNT.y, nextNT.z - width / 2);
 
 		glEnd();
-		glDisable(GL_TEXTURE_2D);
 		glBegin(GL_TRIANGLES);
-		// I lati non hanno texture
-		glColor3f(current.r, current.g, current.b);
-		glVertex3f(current.x, current.y, current.z + width / 2);
-		glColor3f(current.r, current.g, current.b);
-		glVertex3f(current.x, current.y, current.z - width / 2);
-		glColor3f(next.r, next.g, next.b);
-		glVertex3f(next.x, next.y, next.z - width / 2);
 
-		glColor3f(current.r, current.g, current.b);
-		glVertex3f(current.x, current.y, current.z + width / 2);
-		glColor3f(next.r, next.g, next.b);
-		glVertex3f(next.x, next.y, next.z - width / 2);
-		glColor3f(next.r, next.g, next.b);
-		glVertex3f(next.x, next.y, next.z + width / 2);
+		glVertex3f(currentNT.x, currentNT.y, currentNT.z + width / 2);
+		glVertex3f(currentNT.x, currentNT.y, currentNT.z - width / 2);
+		glVertex3f(nextNT.x, nextNT.y, nextNT.z - width / 2);
+		glVertex3f(currentNT.x, currentNT.y, currentNT.z + width / 2);
+		glVertex3f(nextNT.x, nextNT.y, nextNT.z - width / 2);
+		glVertex3f(nextNT.x, nextNT.y, nextNT.z + width / 2);
+
 		glEnd();
+
+		glDisable(GL_TEXTURE_2D);
+
 		if (i == 0) {
 			puntiuomo[20] = current;
 		}
