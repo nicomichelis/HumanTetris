@@ -383,6 +383,7 @@ void MyModel::DrawPlayer() {
 	corpo_top.DrawTextures();
 
 	//sotto corpo
+	glBindTexture(GL_TEXTURE_2D, texture[18]);
 	Rect corpo_bottom(be, bf, bb, ba);
 	corpo_bottom.DrawTextures();
 
@@ -608,7 +609,7 @@ void MyModel::DrawCommands() {
 	double butt = 1.0;
 	Vertex ka, kb, kc, kd;
 	double marginx, marginy;
-	static const std::string command[10] = { "Move Up","Move Down","Move left","Move right","Rotate counterclockwise","Rotate clockwise","Mute music", "Back to Menu", "Move view", "Zoom" };
+	static const std::string command[10] = { "Move Up","Move Down","Move left","Move right","Rotate counterclockwise","Rotate clockwise","Mute music", "Back to Menu", "Move view" };
 
 	marginx = 10.0;
 	marginy = 7.0;
@@ -631,7 +632,7 @@ void MyModel::DrawCommands() {
 	this->glPrint("%s", command[0].c_str());
 	int d = 0;
 
-	for (int g = 0; g < 9; g++) {
+	for (int g = 0; g < 8; g++) {
 		d++;
 		if (g == 5) {
 			kd.SetP(0.0 + 2.0, marginy, 0.0);
@@ -851,11 +852,11 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[16] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[16]);
 
-	texture[17] = SOIL_load_OGL_texture("../Data/scroll.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[17] = SOIL_load_OGL_texture("../Data/click.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[17] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[17]);
 
-	texture[18] = SOIL_load_OGL_texture("../Data/click.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[18] = SOIL_load_OGL_texture("../Data/base4.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[18] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[18]);
 
@@ -879,7 +880,7 @@ bool MyModel::LoadGLTextures(void) {
 	if (texture[23] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[23]);
 
-	texture[24] = SOIL_load_OGL_texture("../Data/smile.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texture[24] = SOIL_load_OGL_texture("../Data/smile2.png", SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	if (texture[24] == 0) return false;
 	glBindTexture(GL_TEXTURE_2D, texture[24]);
 
