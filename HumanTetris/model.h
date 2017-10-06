@@ -26,6 +26,7 @@ public:
 	bool		StartScreen;
 	bool		Perso;
 	bool		PersoAudio;
+	bool		musicON;
 	GLuint		texture[52];
 	GLuint		base;
 	GLdouble	fovy;
@@ -33,10 +34,8 @@ public:
 	GLfloat		RotY_a;
 	double		loseCamera;
 	Vertex		gameOver;
-	bool		musicON;
 	int			bestscore;
 	
-
 
 private:
 	//butt
